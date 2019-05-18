@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2036
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Calculator - Alternate", "Calculator - Alternate\Calculator - Alternate.vcxproj", "{6FCDB751-5E87-495F-B4B4-3D9A0CDF036D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConsoleCalculatorTests", "ConsoleCalculatorTests\ConsoleCalculatorTests.vcxproj", "{CF627D4D-9C60-4DD9-90C5-724FB408B19D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6FCDB751-5E87-495F-B4B4-3D9A0CDF036D} = {6FCDB751-5E87-495F-B4B4-3D9A0CDF036D}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{68C9EB86-A16D-4E9A-92CE-BED67A9DD8B9}"
+	ProjectSection(SolutionItems) = preProject
+		Calculator.vsmdi = Calculator.vsmdi
+		Local.testsettings = Local.testsettings
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6FCDB751-5E87-495F-B4B4-3D9A0CDF036D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6FCDB751-5E87-495F-B4B4-3D9A0CDF036D}.Debug|Win32.Build.0 = Debug|Win32
+		{6FCDB751-5E87-495F-B4B4-3D9A0CDF036D}.Release|Win32.ActiveCfg = Release|Win32
+		{6FCDB751-5E87-495F-B4B4-3D9A0CDF036D}.Release|Win32.Build.0 = Release|Win32
+		{CF627D4D-9C60-4DD9-90C5-724FB408B19D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{CF627D4D-9C60-4DD9-90C5-724FB408B19D}.Debug|Win32.Build.0 = Debug|Win32
+		{CF627D4D-9C60-4DD9-90C5-724FB408B19D}.Release|Win32.ActiveCfg = Release|Win32
+		{CF627D4D-9C60-4DD9-90C5-724FB408B19D}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {368F92A8-EE65-445A-99BF-B1C8EC382A03}
+	EndGlobalSection
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = Calculator.vsmdi
+	EndGlobalSection
+EndGlobal
