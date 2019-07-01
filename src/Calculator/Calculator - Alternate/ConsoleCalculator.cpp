@@ -492,10 +492,10 @@ void ConsoleCalculator::setConfiguration(wstring configFilePath)
 				switch(decFracMode)
 				{
 				case decimalFractionMode::DECIMAL_VALUE:
-					cout << calcObj::decimalFormat;
+					cout << CalcObj::decimalFormat;
 					break;
 				case decimalFractionMode::FRACTION_VALUE:
-					cout << calcObj::fractionFormat;
+					cout << CalcObj::fractionFormat;
 					break;
 				}
 			}
@@ -601,7 +601,7 @@ void ConsoleCalculator::setConfiguration(wstring configFilePath)
 					}
 					else
 					{
-						this->baseParsingContext.setVariable(userConstantPair[0], calcObj(userConstantPair[1], true));
+						this->baseParsingContext.setVariable(userConstantPair[0], CalcObj(userConstantPair[1], true));
 						this->constantNames.emplace(userConstantPair[0]);
 					}
 				}
@@ -655,7 +655,7 @@ void ConsoleCalculator::saveConfiguration()
 
 		configTree.put(OUTPUT_MODE_KEY, enumToString<outputMode>(this->calcOutputMode, OUTPUT_MODE_TO_SHORT_STRING));
 
-		decimalFractionMode decFracMode = calcObj::getStreamSettings(cout).decFracMode;
+		decimalFractionMode decFracMode = CalcObj::getStreamSettings(cout).decFracMode;
 		configTree.put(DEC_FRAC_KEY, enumToString<decimalFractionMode>(decFracMode, DEC_FRAC_MODE_TO_STRING));
 
 #ifdef MULTIPRECISION
@@ -672,7 +672,7 @@ void ConsoleCalculator::saveConfiguration()
 #endif
 		configTree.add(CONSTANTS_KEY, "");
 
-		calcObj::StreamSettings stringGenerationSettings;
+		CalcObj::StreamSettings stringGenerationSettings;
 		stringGenerationSettings.CSVOutputMode = false;
 		stringGenerationSettings.decFracMode = DECIMAL_VALUE;
 		stringGenerationSettings.fullPrecision = true;
@@ -859,13 +859,13 @@ bool ConsoleCalculator::parseUserStringAux(string userString, bool csvFormat)
 
 							iterContext.setVariable(iterVariable, iterVal);
 
-							calcObj calcResult = this->calculatorParser.parseArithmetic(iterExpression, iterContext);
+							CalcObj calcResult = this->calculatorParser.parseArithmetic(iterExpression, iterContext);
 
 							if(!csvFormat)
 							{
 								cout << setw(columnWidth) << iterVal << " | ";
 
-								calcObj::StreamSettings outputSettings = calcObj::getStreamSettings(cout);
+								CalcObj::StreamSettings outputSettings = CalcObj::getStreamSettings(cout);
 
 								string valueStr = calcResult.getString(outputSettings, outputPrecision);
 
@@ -916,7 +916,7 @@ bool ConsoleCalculator::parseUserStringAux(string userString, bool csvFormat)
 					{
 						if(this->calculatorParser.resultHistory.size() > 0)
 						{
-							string cpyString = this->calculatorParser.resultHistory.back().getString(calcObj::getStreamSettings(cout), outputPrecision);
+							string cpyString = this->calculatorParser.resultHistory.back().getString(CalcObj::getStreamSettings(cout), outputPrecision);
 
 							toClipboard(cpyString);
 							cout << "Last result copied to clipboard." << endl;
@@ -1036,7 +1036,7 @@ bool ConsoleCalculator::parseUserStringAux(string userString, bool csvFormat)
 					{
 						if(validVarName(userStringParts[1], true, false))
 						{
-							calcObj varValue = this->calculatorParser.parseArithmetic(userStringParts[2], this->baseParsingContext);
+							CalcObj varValue = this->calculatorParser.parseArithmetic(userStringParts[2], this->baseParsingContext);
 
 							this->baseParsingContext.setVariable(userStringParts[1], varValue);
 
@@ -1053,7 +1053,7 @@ bool ConsoleCalculator::parseUserStringAux(string userString, bool csvFormat)
 					{
 						if(validVarName(userStringParts[1], false, true))
 						{
-							calcObj constValue = this->calculatorParser.parseArithmetic(userStringParts[2], this->baseParsingContext);
+							CalcObj constValue = this->calculatorParser.parseArithmetic(userStringParts[2], this->baseParsingContext);
 
 							setUserFlags(cout, calcOutputMode);
 
@@ -1147,7 +1147,7 @@ bool ConsoleCalculator::parseUserStringAux(string userString, bool csvFormat)
 					{
 						if(this->constantNames.size() < this->baseParsingContext.getNumVariables())
 						{
-							cout << calcObj::setFullPrecision;
+							cout << CalcObj::setFullPrecision;
 
 							for (ExpressionParser::ParsingContext::VariableIteratorConst iter = this->baseParsingContext.beginVariableConst(); iter != this->baseParsingContext.endVariableConst(); ++iter)
 							{
@@ -1157,7 +1157,7 @@ bool ConsoleCalculator::parseUserStringAux(string userString, bool csvFormat)
 								}
 							}
 
-							cout << calcObj::unsetFullPrecision;
+							cout << CalcObj::unsetFullPrecision;
 						}
 						else
 						{
@@ -1168,7 +1168,7 @@ bool ConsoleCalculator::parseUserStringAux(string userString, bool csvFormat)
 					{
 						if(this->constantNames.size() > 0)
 						{
-							cout << calcObj::setFullPrecision;
+							cout << CalcObj::setFullPrecision;
 
 							for (ExpressionParser::ParsingContext::VariableIteratorConst iter = this->baseParsingContext.beginVariableConst(); iter != this->baseParsingContext.endVariableConst(); ++iter)
 							{
@@ -1178,7 +1178,7 @@ bool ConsoleCalculator::parseUserStringAux(string userString, bool csvFormat)
 								}
 							}
 
-							cout << calcObj::unsetFullPrecision;
+							cout << CalcObj::unsetFullPrecision;
 						}
 						else
 						{
@@ -1210,21 +1210,21 @@ bool ConsoleCalculator::parseUserStringAux(string userString, bool csvFormat)
 					}
 					else if(userStringParts[0] == "frac")
 					{
-						cout << calcObj::fractionFormat;
+						cout << CalcObj::fractionFormat;
 						saveConfiguration();
 
 						cout << "Calculator set to fraction output mode." << endl;
 					}
 					else if(userStringParts[0] == "dec")
 					{
-						cout << calcObj::decimalFormat;
+						cout << CalcObj::decimalFormat;
 						saveConfiguration();
 
 						cout << "Calculator set to decimal output mode." << endl;
 					}
 					else
 					{
-						calcObj calcResult = this->calculatorParser.parseArithmetic(userString, this->baseParsingContext);
+						CalcObj calcResult = this->calculatorParser.parseArithmetic(userString, this->baseParsingContext);
 
 						setUserFlags(cout, calcOutputMode);
 
@@ -1267,7 +1267,7 @@ void ConsoleCalculator::runPromptLoop()
 	{
 		angleString = enumToString<ExpressionParser::angleMode>(this->calculatorParser.parsingSettings.parseAngleMode, ANGLE_MODE_TO_SHORT_ANGLE_STRING);
 
-		decimalFractionMode currentDecimalFractionMode = calcObj::getStreamSettings(cout).decFracMode;
+		decimalFractionMode currentDecimalFractionMode = CalcObj::getStreamSettings(cout).decFracMode;
 		fractionDecimalString = enumToString<decimalFractionMode>(currentDecimalFractionMode, DEC_FRAC_MODE_TO_STRING);
 
 		cout << '[' << angleString << ' ' << enumToString<outputMode>(calcOutputMode, OUTPUT_MODE_TO_SHORT_STRING) << ' ' << fractionDecimalString << ' ' << outputPrecision << ']' << " >> ";

@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-#include "calcObj.h"
+#include "CalcObj.h"
 #include "ParserMathematicalFunctions.h"
 #include "CalculatorNumericTypes.h"
 #include "ParserErrors.h"
@@ -19,7 +19,7 @@ namespace ParserOperators
 
 		virtual string getOperatorStr() = 0;
 		virtual OperatorStrMode getOperatorStrMode() = 0;
-		virtual void applyOperator(calcObj& base) = 0;
+		virtual void applyOperator(CalcObj& base) = 0;
 	};
 
 	struct BinaryOperatorParseOverride;
@@ -28,7 +28,7 @@ namespace ParserOperators
 	{
 	public:
 		virtual string getOperatorStr() = 0;
-		virtual void applyOperator(calcObj& base, const calcObj& value) = 0;
+		virtual void applyOperator(CalcObj& base, const CalcObj& value) = 0;
 		vector<BinaryOperatorParseOverride> overrides;
 	};
 
@@ -64,63 +64,63 @@ namespace ParserOperators
 	{
 	public:
 		string getOperatorStr();
-		void applyOperator(calcObj& base, const calcObj& value);
+		void applyOperator(CalcObj& base, const CalcObj& value);
 	};
 
 	class SubtractionOperator : public BinaryOperator
 	{
 	public:
 		string getOperatorStr();
-		void applyOperator(calcObj& base, const calcObj& value);
+		void applyOperator(CalcObj& base, const CalcObj& value);
 	};
 
 	class MultiplicationOperator : public BinaryOperator
 	{
 	public:
 		string getOperatorStr();
-		void applyOperator(calcObj& base, const calcObj& value);
+		void applyOperator(CalcObj& base, const CalcObj& value);
 	};
 
 	class DivisionOperator : public BinaryOperator
 	{
 	public:
 		string getOperatorStr();
-		void applyOperator(calcObj& base, const calcObj& value);
+		void applyOperator(CalcObj& base, const CalcObj& value);
 	};
 
 	class ModuloOperator : public BinaryOperator
 	{
 	public:
 		string getOperatorStr();
-		void applyOperator(calcObj& base, const calcObj& value);
+		void applyOperator(CalcObj& base, const CalcObj& value);
 	};
 
 	class PowerOperator : public BinaryOperator
 	{
 	public:
 		string getOperatorStr();
-		void applyOperator(calcObj& base, const calcObj& value);
+		void applyOperator(CalcObj& base, const CalcObj& value);
 	};
 
 	class LessThanOperator : public BinaryOperator
 	{
 	public:
 		string getOperatorStr();
-		void applyOperator(calcObj& base, const calcObj& value);
+		void applyOperator(CalcObj& base, const CalcObj& value);
 	};
 
 	class LessThanOrEqualOperator : public BinaryOperator
 	{
 	public:
 		string getOperatorStr();
-		void applyOperator(calcObj& base, const calcObj& value);
+		void applyOperator(CalcObj& base, const CalcObj& value);
 	};
 
 	class GreaterThanOperator : public BinaryOperator
 	{
 	public:
 		string getOperatorStr();
-		void applyOperator(calcObj& base, const calcObj& value);
+		void applyOperator(CalcObj& base, const CalcObj& value);
 	};
 
 
@@ -128,21 +128,21 @@ namespace ParserOperators
 	{
 	public:
 		string getOperatorStr();
-		void applyOperator(calcObj& base, const calcObj& value);
+		void applyOperator(CalcObj& base, const CalcObj& value);
 	};
 
 	class EqualityOperator : public BinaryOperator
 	{
 	public:
 		string getOperatorStr();
-		void applyOperator(calcObj& base, const calcObj& value);
+		void applyOperator(CalcObj& base, const CalcObj& value);
 	};
 
 	class InequalityOperator : public BinaryOperator
 	{
 	public:
 		string getOperatorStr();
-		void applyOperator(calcObj& base, const calcObj& value);
+		void applyOperator(CalcObj& base, const CalcObj& value);
 	};
 
 	class NegationOperator : public UnaryOperator
@@ -150,7 +150,7 @@ namespace ParserOperators
 	public:
 		string getOperatorStr();
 		OperatorStrMode getOperatorStrMode();
-		void applyOperator(calcObj& base);
+		void applyOperator(CalcObj& base);
 	};
 
 	class FactorialOperator : public UnaryOperator
@@ -158,6 +158,6 @@ namespace ParserOperators
 	public:
 		string getOperatorStr();
 		OperatorStrMode getOperatorStrMode();
-		void applyOperator(calcObj& base);
+		void applyOperator(CalcObj& base);
 	};
 }

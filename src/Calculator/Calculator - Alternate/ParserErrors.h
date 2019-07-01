@@ -74,7 +74,7 @@ public:
 		this->generateOutputStr();
 	}
 
-	std::string getExpressionDescription()
+	std::string getExpressionDescription() const
 	{
 		return this->expressionDescription;
 	}
@@ -85,7 +85,7 @@ public:
 		this->generateOutputStr();
 	}
 
-	std::string getSpecificInformation()
+	std::string getSpecificInformation() const
 	{
 		return this->specificInformation;
 	}

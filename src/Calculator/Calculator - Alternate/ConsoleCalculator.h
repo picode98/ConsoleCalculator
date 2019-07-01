@@ -21,7 +21,7 @@
 #include "GlobalBuildVariables.h"
 #include "CalculatorNumericTypes.h"
 #include "parseArithmetic.h"
-#include "calcObj.h"
+#include "CalcObj.h"
 #include "StringUtils.h"
 
 using namespace std;

@@ -123,7 +123,7 @@ void stringToInt(const std::string& stringValue, calcSignedInt& destination)
 {
 	errno = 0;
 
-	char* lastCharPtr = NULL;
+	char* lastCharPtr = nullptr;
 	long long resultValue = strtoll(stringValue.c_str(), &lastCharPtr, 10);
 
 	if (errno == 0 && lastCharPtr == stringValue.c_str() + stringValue.length())
@@ -138,7 +138,7 @@ void stringToInt(const std::string& stringValue, calcSignedInt& destination)
 
 void stringToFloat(const std::string& stringValue, calcFloat& destination)
 {
-	char* parseEndPtr = NULL;
+	char* parseEndPtr = nullptr;
 
 	errno = 0;
 
@@ -159,7 +159,7 @@ unsigned stringToUnsigned(const string& stringValue)
 {
 	errno = 0;
 
-	char* lastCharPtr = NULL;
+	char* lastCharPtr = nullptr;
 	unsigned long resultValue = strtoul(stringValue.c_str(), &lastCharPtr, 10);
 
 	if (errno == 0 && lastCharPtr == stringValue.c_str() + stringValue.length()

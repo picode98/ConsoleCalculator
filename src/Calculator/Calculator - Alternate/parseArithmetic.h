@@ -15,7 +15,7 @@
 
 #include "GlobalBuildVariables.h"
 #include "CalculatorNumericTypes.h"
-#include "calcObj.h"
+#include "CalcObj.h"
 #include "ParserOperators.h"
 #include "ParserMathematicalFunctions.h"
 #include "ParserErrors.h"
@@ -33,7 +33,7 @@
 #include <boost/multiprecision/cpp_int.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 
-#include "calcObj.h"
+#include "CalcObj.h"
 
 #define UNSIGNED_BITS 128
 
@@ -84,20 +84,20 @@ public:
 	class ParsingContext
 	{
 	private:
-		std::map<std::string, calcObj> valueMap;
+		std::map<std::string, CalcObj> valueMap;
 		std::multimap<std::string, FunctionSignature> functionNameMap;
 		std::map<FunctionSignature, FunctionDefinition> functionMap;
-		std::vector<calcObj> resultHistory;
+		std::vector<CalcObj> resultHistory;
 
-		const ParsingContext* inheritedContext = NULL;
+		const ParsingContext* inheritedContext = nullptr;
 	public:
 		/* class VariableIterator
 		{
 		private:
 			bool isEndIterator;
-			std::map<std::string, calcObj>::iterator mapIterator;
+			std::map<std::string, CalcObj>::iterator mapIterator;
 		public:
-			calcObj& operator*();
+			CalcObj& operator*();
 			VariableIterator& operator++();
 			bool operator==(const VariableIterator& otherIterator);
 			bool operator!=(const VariableIterator& otherIterator);
@@ -122,11 +122,11 @@ public:
 			bool isEndIterator;
 			const ParsingContext* parsingContext;
 			const ParsingContext* baseContext;
-			std::map<std::string, calcObj>::const_iterator constMapIterator;
+			std::map<std::string, CalcObj>::const_iterator constMapIterator;
 		public:
-			VariableIteratorConst(bool isEndIterator, const ParsingContext* parsingContext, const ParsingContext* baseContext, std::map<std::string, calcObj>::const_iterator variableMapIterator);
+			VariableIteratorConst(bool isEndIterator, const ParsingContext* parsingContext, const ParsingContext* baseContext, std::map<std::string, CalcObj>::const_iterator variableMapIterator);
 			string getVariableName() const;
-			const calcObj& operator*() const;
+			const CalcObj& operator*() const;
 			VariableIteratorConst& operator++();
 			bool operator==(const VariableIteratorConst& otherIterator);
 			bool operator!=(const VariableIteratorConst& otherIterator);
@@ -149,7 +149,7 @@ public:
 		};
 
 		ParsingContext();
-		ParsingContext(const std::map<std::string, calcObj>& valueMap, const std::map<FunctionSignature, FunctionDefinition>& functionMap, const std::vector<calcObj>& resultHistory);
+		ParsingContext(const std::map<std::string, CalcObj>& valueMap, const std::map<FunctionSignature, FunctionDefinition>& functionMap, const std::vector<CalcObj>& resultHistory);
 		ParsingContext(const ParsingContext* inheritedContext);
 
 		// VariableIterator beginVariable() const;
@@ -159,7 +159,7 @@ public:
 		FunctionIteratorConst beginFunctionConst() const;
 		FunctionIteratorConst endFunctionConst() const;
 
-		void setVariable(const string& newVariableName, const calcObj& newVariable);
+		void setVariable(const string& newVariableName, const CalcObj& newVariable);
 		void setFunction(const FunctionSignature& newFunctionSignature, const FunctionDefinition& newFunction);
 
 		bool variableExists(const string& variableName) const;
@@ -180,26 +180,26 @@ public:
 	static calcFloat get_e_value();
 
 	ParsingSettings parsingSettings;
-	vector<calcObj> resultHistory;
+	vector<CalcObj> resultHistory;
 private:
 	struct FnResult
 	{
 		bool validFn;
 		bool validDomain;
 		std::string specificErrorStr;
-		calcObj result;
+		CalcObj result;
 	};
 
-	bool parseListString(const std::string& listStr, calcObj& parsedObj, const ParsingContext& parsingContext) const;
+	bool parseListString(const std::string& listStr, CalcObj& parsedObj, const ParsingContext& parsingContext) const;
 
 	bool isValidImplicitTerm(string expression, unsigned basePosition, const ParsingContext& parsingContext) const;
 
 	bool parseOperators(string expression,
-		calcObj& result,
+		CalcObj& result,
 		const ParsingContext& parsingContext,
 		std::string parentExpression) const;
 
-	// calcObj parseMultDivOperator(char currentOperation, calcObj currentTotal, std::string currentArg, std::string expression, const std::map<std::string, calcObj>& valueMap, const std::multimap<std::string, functionDefinition> functionMap, const parseSettings& settings, const std::vector<calcObj>& resultHistory = vector<calcObj>());
+	// CalcObj parseMultDivOperator(char currentOperation, CalcObj currentTotal, std::string currentArg, std::string expression, const std::map<std::string, CalcObj>& valueMap, const std::multimap<std::string, functionDefinition> functionMap, const parseSettings& settings, const std::vector<CalcObj>& resultHistory = vector<CalcObj>());
 	FnResult evalFn(std::string expression, const ParsingContext& parsingContext) const;
 	// multimap<string, functionDefinition>::const_iterator findFunctionConst(const multimap<string, functionDefinition>& functionMap, string functionName, unsigned numParams);
 	// multimap<string, functionDefinition>::iterator findFunction(multimap<string, functionDefinition>& functionMap, string functionName, unsigned numParams);
@@ -229,7 +229,7 @@ private:
 		std::string parentExpression = "") const;
 	static calcFloat scaleNum(calcFloat oldMin, calcFloat oldMax, calcFloat newMin, calcFloat newMax, calcFloat value);
 
-	void evalSeq(std::vector<calcObj>& result,
+	void evalSeq(std::vector<CalcObj>& result,
 		std::string expression,
 		std::string variable,
 		calcFloat lower,
@@ -281,7 +281,7 @@ public:
 		const ParsingContext& parsingContext,
 		std::string parentExpression = "") const;
 
-	calcObj parseArithmetic(std::string expression,
+	CalcObj parseArithmetic(std::string expression,
 		const ParsingContext& parsingContext,
 		std::string parentExpression = "") const;
 };

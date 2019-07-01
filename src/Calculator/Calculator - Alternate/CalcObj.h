@@ -68,7 +68,7 @@ public:
 	friend std::ostream& operator<<(std::ostream& outputStream, Fraction value);
 };
 
-class calcObj
+class CalcObj
 {
 public:
 	struct StreamSettings
@@ -112,29 +112,29 @@ public:
 	static bool getFullPrecision(std::ostream& outputStream);
 	*/
 
-	calcObj();
-	calcObj(const std::string& objString, bool preservePrecision);
-	calcObj(const calcFloat& objFloat);
+	CalcObj();
+	CalcObj(const std::string& objString, bool preservePrecision);
+	CalcObj(const calcFloat& objFloat);
 #ifdef MULTIPRECISION
-	calcObj(const int& objInt);
+	CalcObj(const int& objInt);
 #endif
-	calcObj operator+(const calcObj& addObj);
-	calcObj operator-(const calcObj& subObj);
-	calcObj operator*(const calcObj& multObj);
-	calcObj operator/(const calcObj& divObj);
-	calcObj operator+=(const calcObj& addObj);
-	calcObj operator-=(const calcObj& subObj);
-	calcObj operator*=(const calcObj& multObj);
-	calcObj operator/=(const calcObj& divObj);
-	calcObj operator=(const calcObj& assignObj);
-	calcObj operator=(const calcFloat& assignObj);
-	calcObj operator-();
-	bool operator==(const calcObj& compareObj);
-	bool operator!=(const calcObj& compareObj);
-	bool operator<(const calcObj& compareObj);
-	bool operator>(const calcObj& compareObj);
-	bool operator<=(const calcObj& compareObj);
-	bool operator>=(const calcObj& compareObj);
+	CalcObj operator+(const CalcObj& addObj);
+	CalcObj operator-(const CalcObj& subObj);
+	CalcObj operator*(const CalcObj& multObj);
+	CalcObj operator/(const CalcObj& divObj);
+	CalcObj operator+=(const CalcObj& addObj);
+	CalcObj operator-=(const CalcObj& subObj);
+	CalcObj operator*=(const CalcObj& multObj);
+	CalcObj operator/=(const CalcObj& divObj);
+	CalcObj operator=(const CalcObj& assignObj);
+	CalcObj operator=(const calcFloat& assignObj);
+	CalcObj operator-();
+	bool operator==(const CalcObj& compareObj);
+	bool operator!=(const CalcObj& compareObj);
+	bool operator<(const CalcObj& compareObj);
+	bool operator>(const CalcObj& compareObj);
+	bool operator<=(const CalcObj& compareObj);
+	bool operator>=(const CalcObj& compareObj);
 
 	calcFloat getVerifiedFloat(std::string typeErrorMsg);
 	void set_list(const std::vector<calcFloat>& assignObj);
@@ -143,22 +143,22 @@ public:
 	calcFloat get_list_index(unsigned index);
 	void set_list_index(unsigned index, calcFloat value);
 	unsigned get_list_length();
-	void concat_list(const calcObj& concatObj);
+	void concat_list(const CalcObj& concatObj);
 	void sublist(std::vector<calcFloat>& buffer, unsigned startIndex, unsigned endIndex);
 
 #ifdef MULTIPRECISION
-	calcObj& set_precision(long newPrecision);
+	CalcObj& set_precision(long newPrecision);
 #endif
 
-	std::string calcObj::getString(StreamSettings settings, unsigned precision) const;
+	std::string CalcObj::getString(StreamSettings settings, unsigned precision) const;
 	// void getString(std::string& destination, decimalFractionMode decimalFractionFormat, bool csvMode);
 
-	friend std::ostream& operator<<(std::ostream& out, const calcObj& outObj);
-	friend calcObj pow(const calcObj& base, const calcObj& power);
-	friend calcObj fmod(const calcObj& base, const calcObj& power);
+	friend std::ostream& operator<<(std::ostream& out, const CalcObj& outObj);
+	friend CalcObj pow(const CalcObj& base, const CalcObj& power);
+	friend CalcObj fmod(const CalcObj& base, const CalcObj& power);
 };
 
 bool floatToFraction(Fraction* result, calcFloat value, calcSignedInt maximumDenominator, calcFloat maximumErrorMultiple);
-void toVerifiedFloatVector(std::vector<calcObj>& calcObjVec, std::vector<calcFloat>& calcFloatVec, std::string typeErrorMsg);
+void toVerifiedFloatVector(std::vector<CalcObj>& calcObjVec, std::vector<calcFloat>& calcFloatVec, std::string typeErrorMsg);
 
 #endif

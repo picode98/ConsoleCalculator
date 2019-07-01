@@ -51,7 +51,7 @@ int main(int argc, char* argv[])
 		}
 		else if(checkFlag(argc, (const char**)argv, "-csv"))
 		{
-			cout << calcObj::CSVFormat;
+			cout << CalcObj::CSVFormat;
 
 			calcApplication.parseUserString(string(argv[1]), true);
 		}

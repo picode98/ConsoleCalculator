@@ -123,7 +123,7 @@ namespace ConsoleCalculatorTests
 			Assert::IsTrue(checkFloatResult("-0.5(10)6+100(0.1)^2", "-29", false, true));
 
 			vector<calcFloat> resultVector;
-			calcObj compareObj, result;
+			CalcObj compareObj, result;
 			calcFloat lastValue;
 			stringToFloat("3.5", lastValue);
 
@@ -246,7 +246,7 @@ namespace ConsoleCalculatorTests
 		[TestMethod]
 		void AnsFunctionTest()
 		{
-			this->testParser->resultHistory.push_back(calcObj("120", true));
+			this->testParser->resultHistory.push_back(CalcObj("120", true));
 
 			Assert::IsTrue(checkFloatResult("ans(1)", "120", false, true));
 
@@ -319,7 +319,7 @@ namespace ConsoleCalculatorTests
 		[TestMethod]
 		void ParsingContextVariableTest()
 		{
-			calcObj result, compareObj;
+			CalcObj result, compareObj;
 
 			vector<calcFloat> resultVector;
 			calcFloat firstValue;
@@ -333,12 +333,12 @@ namespace ConsoleCalculatorTests
 
 			ExpressionParser::ParsingContext firstInheritedContext = ExpressionParser::ParsingContext(testContext);
 
-			firstInheritedContext.setVariable("firstContextOne", calcObj("3.5", false));
+			firstInheritedContext.setVariable("firstContextOne", CalcObj("3.5", false));
 
 			ExpressionParser::ParsingContext secondInheritedContext = ExpressionParser::ParsingContext(&firstInheritedContext);
 			string secondVariableStr = "{4.5,-18,6}";
 
-			secondInheritedContext.setVariable("firstContextTwo", calcObj(secondVariableStr, false));
+			secondInheritedContext.setVariable("firstContextTwo", CalcObj(secondVariableStr, false));
 
 			result = testParser->parseArithmetic("firstContextOne*firstContextTwo", secondInheritedContext);
 			Assert::IsTrue(result == compareObj);

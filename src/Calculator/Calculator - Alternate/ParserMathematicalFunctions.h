@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "calcObj.h"
+#include "CalcObj.h"
 
 namespace ParserMathematicalFunctions
 {

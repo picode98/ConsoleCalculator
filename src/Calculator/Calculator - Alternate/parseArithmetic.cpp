@@ -194,7 +194,7 @@ bool ExpressionParser::FunctionSignature::operator!=(const FunctionSignature & o
 	return !(*this == otherSignature);
 }
 
-ExpressionParser::ParsingContext::VariableIteratorConst::VariableIteratorConst(bool isEndIterator, const ParsingContext* parsingContext, const ParsingContext* baseContext, std::map<std::string, calcObj>::const_iterator variableMapIterator):
+ExpressionParser::ParsingContext::VariableIteratorConst::VariableIteratorConst(bool isEndIterator, const ParsingContext* parsingContext, const ParsingContext* baseContext, std::map<std::string, CalcObj>::const_iterator variableMapIterator):
 	isEndIterator(isEndIterator),
 	parsingContext(parsingContext),
 	baseContext(baseContext),
@@ -208,7 +208,7 @@ string ExpressionParser::ParsingContext::VariableIteratorConst::getVariableName(
 	return this->constMapIterator->first;
 }
 
-const calcObj& ExpressionParser::ParsingContext::VariableIteratorConst::operator*() const
+const CalcObj& ExpressionParser::ParsingContext::VariableIteratorConst::operator*() const
 {
 	return this->constMapIterator->second;
 }
@@ -223,9 +223,9 @@ ExpressionParser::ParsingContext::VariableIteratorConst& ExpressionParser::Parsi
 			do
 			{
 				this->parsingContext = this->parsingContext->inheritedContext;
-			} while (this->parsingContext != NULL && this->parsingContext->valueMap.empty());
+			} while (this->parsingContext != nullptr && this->parsingContext->valueMap.empty());
 
-			if (this->parsingContext != NULL)
+			if (this->parsingContext != nullptr)
 			{
 				this->constMapIterator = this->parsingContext->valueMap.begin();
 			}
@@ -293,9 +293,9 @@ ExpressionParser::ParsingContext::FunctionIteratorConst& ExpressionParser::Parsi
 			do
 			{
 				this->parsingContext = this->parsingContext->inheritedContext;
-			} while (this->parsingContext != NULL && this->parsingContext->functionMap.empty());
+			} while (this->parsingContext != nullptr && this->parsingContext->functionMap.empty());
 
-			if (this->parsingContext != NULL)
+			if (this->parsingContext != nullptr)
 			{
 				this->constMapIterator = this->parsingContext->functionMap.begin();
 			}
@@ -340,7 +340,7 @@ ExpressionParser::ParsingContext::ParsingContext()
 
 }
 
-ExpressionParser::ParsingContext::ParsingContext(const std::map<std::string, calcObj>& valueMap, const std::map<FunctionSignature, FunctionDefinition>& functionMap, const std::vector<calcObj>& resultHistory):
+ExpressionParser::ParsingContext::ParsingContext(const std::map<std::string, CalcObj>& valueMap, const std::map<FunctionSignature, FunctionDefinition>& functionMap, const std::vector<CalcObj>& resultHistory):
 	valueMap(valueMap),
 	functionMap(functionMap),
 	resultHistory(resultHistory)
@@ -358,12 +358,12 @@ ExpressionParser::ParsingContext::VariableIteratorConst ExpressionParser::Parsin
 {
 	const ParsingContext* firstNonEmptyContext = this;
 
-	while (firstNonEmptyContext != NULL && firstNonEmptyContext->valueMap.empty())
+	while (firstNonEmptyContext != nullptr && firstNonEmptyContext->valueMap.empty())
 	{
 		firstNonEmptyContext = firstNonEmptyContext->inheritedContext;
 	}
 
-	if (firstNonEmptyContext != NULL)
+	if (firstNonEmptyContext != nullptr)
 	{
 		return VariableIteratorConst(false, firstNonEmptyContext, this, firstNonEmptyContext->valueMap.begin());
 	}
@@ -375,19 +375,19 @@ ExpressionParser::ParsingContext::VariableIteratorConst ExpressionParser::Parsin
 
 ExpressionParser::ParsingContext::VariableIteratorConst ExpressionParser::ParsingContext::endVariableConst() const
 {
-	return VariableIteratorConst(true, NULL, this, this->valueMap.begin());
+	return VariableIteratorConst(true, nullptr, this, this->valueMap.begin());
 }
 
 ExpressionParser::ParsingContext::FunctionIteratorConst ExpressionParser::ParsingContext::beginFunctionConst() const
 {
 	const ParsingContext* firstNonEmptyContext = this;
 
-	while (firstNonEmptyContext != NULL && firstNonEmptyContext->functionMap.empty())
+	while (firstNonEmptyContext != nullptr && firstNonEmptyContext->functionMap.empty())
 	{
 		firstNonEmptyContext = firstNonEmptyContext->inheritedContext;
 	}
 
-	if (firstNonEmptyContext != NULL)
+	if (firstNonEmptyContext != nullptr)
 	{
 		return FunctionIteratorConst(false, firstNonEmptyContext, this, firstNonEmptyContext->functionMap.begin());
 	}
@@ -399,10 +399,10 @@ ExpressionParser::ParsingContext::FunctionIteratorConst ExpressionParser::Parsin
 
 ExpressionParser::ParsingContext::FunctionIteratorConst ExpressionParser::ParsingContext::endFunctionConst() const
 {
-	return FunctionIteratorConst(true, NULL, this, this->functionMap.begin());
+	return FunctionIteratorConst(true, nullptr, this, this->functionMap.begin());
 }
 
-void ExpressionParser::ParsingContext::setVariable(const string & newVariableName, const calcObj & newVariable)
+void ExpressionParser::ParsingContext::setVariable(const string & newVariableName, const CalcObj & newVariable)
 {
 	valueMap[newVariableName] = newVariable;
 }
@@ -432,7 +432,7 @@ bool ExpressionParser::ParsingContext::variableExists(const string & variableNam
 		{
 			currentContext = currentContext->inheritedContext;
 		}
-	} while (currentContext != NULL && !foundVariable);
+	} while (currentContext != nullptr && !foundVariable);
 
 	return foundVariable;
 }
@@ -452,7 +452,7 @@ bool ExpressionParser::ParsingContext::functionExists(const string & functionNam
 		{
 			currentContext = currentContext->inheritedContext;
 		}
-	} while (currentContext != NULL && !foundFunction);
+	} while (currentContext != nullptr && !foundFunction);
 
 	return foundFunction;
 }
@@ -472,14 +472,14 @@ bool ExpressionParser::ParsingContext::functionExists(const FunctionSignature & 
 		{
 			currentContext = currentContext->inheritedContext;
 		}
-	} while (currentContext != NULL && !foundFunction);
+	} while (currentContext != nullptr && !foundFunction);
 
 	return foundFunction;
 }
 
 ExpressionParser::ParsingContext::VariableIteratorConst ExpressionParser::ParsingContext::findVariable(const string & variableName) const
 {
-	map<string, calcObj>::const_iterator varIterator;
+	map<string, CalcObj>::const_iterator varIterator;
 	const ParsingContext* currentContext = this;
 	bool varFound = false;
 
@@ -496,7 +496,7 @@ ExpressionParser::ParsingContext::VariableIteratorConst ExpressionParser::Parsin
 			varFound = true;
 		}
 
-	} while (currentContext != NULL && !varFound);
+	} while (currentContext != nullptr && !varFound);
 
 	if (varFound)
 	{
@@ -527,7 +527,7 @@ ExpressionParser::ParsingContext::FunctionIteratorConst ExpressionParser::Parsin
 			functionFound = true;
 		}
 
-	} while (currentContext != NULL && !functionFound);
+	} while (currentContext != nullptr && !functionFound);
 
 	if (functionFound)
 	{
@@ -588,7 +588,7 @@ bool ExpressionParser::ParsingContext::deleteFunctionFromCurrent(const FunctionS
 	return resultValue;
 }
 
-bool ExpressionParser::parseListString(const std::string& listStr, calcObj& parsedObj, const ParsingContext& parsingContext) const
+bool ExpressionParser::parseListString(const std::string& listStr, CalcObj& parsedObj, const ParsingContext& parsingContext) const
 {
 	int parenNestLevel = 0, braceNestLevel = 0;
 	string thisItem = "";
@@ -623,7 +623,7 @@ bool ExpressionParser::parseListString(const std::string& listStr, calcObj& pars
 			{
 				if(trimmedStr[i] == ',')
 				{
-					calcObj thisObj = parseArithmetic(thisItem, parsingContext, listStr);
+					CalcObj thisObj = parseArithmetic(thisItem, parsingContext, listStr);
 
 					parsedValues.push_back(thisObj.getVerifiedFloat("List literal type error"));
 
@@ -642,7 +642,7 @@ bool ExpressionParser::parseListString(const std::string& listStr, calcObj& pars
 
 		if(thisItem.length() > 0)
 		{
-			calcObj thisObj = parseArithmetic(thisItem, parsingContext, listStr);
+			CalcObj thisObj = parseArithmetic(thisItem, parsingContext, listStr);
 
 			parsedValues.push_back(thisObj.getVerifiedFloat("List literal type error"));
 		}
@@ -751,7 +751,7 @@ bool ExpressionParser::isValidImplicitTerm(string expression, unsigned basePosit
 }
 
 bool ExpressionParser::parseOperators(string expression,
-						  calcObj& result,
+						  CalcObj& result,
 						  const ParsingContext& parsingContext,
 						  std::string parentExpression) const
 {
@@ -766,7 +766,7 @@ bool ExpressionParser::parseOperators(string expression,
 	{
 		if(operatorLists[thisLevel].operatorType == ParserOperators::PrecedenceLevel::OperatorType::BINARY_TYPE)
 		{
-			string currentArgument = "";
+			string currentArgument;
 
 			unsigned i = 0;
 			vector<ParserOperators::BinaryParsingBlock> parsingBlocks;
@@ -794,9 +794,9 @@ bool ExpressionParser::parseOperators(string expression,
 
 				if(parenNestLevel == 0 && braceNestLevel == 0)
 				{
-					ParserOperators::BinaryOperator* currentOperator = NULL;
+					ParserOperators::BinaryOperator* currentOperator = nullptr;
 
-					for(unsigned thisOperator = 0; thisOperator < operatorLists[thisLevel].binaryOperators.size() && currentOperator == NULL; thisOperator++)
+					for(unsigned thisOperator = 0; thisOperator < operatorLists[thisLevel].binaryOperators.size() && currentOperator == nullptr; thisOperator++)
 					{
 						string thisOperatorStr = operatorLists[thisLevel].binaryOperators[thisOperator]->getOperatorStr();
 
@@ -816,14 +816,14 @@ bool ExpressionParser::parseOperators(string expression,
 									}
 									else
 									{
-										currentOperator = NULL;
+										currentOperator = nullptr;
 									}
 								}
 							}
 						}
 					}
 
-					if(currentOperator != NULL)
+					if(currentOperator != nullptr)
 					{
 						if (!(i >= 2 && currentOperator->getOperatorStr() == "-" && expression[i - 1] == 'E' && !isVarChar(expression[i - 2])))
 						{
@@ -889,7 +889,7 @@ bool ExpressionParser::parseOperators(string expression,
 			if(foundOperator)
 			{
 				ParserOperators::BinaryParsingBlock endingBlock = ParserOperators::BinaryParsingBlock();
-				endingBlock.terminatingOperator = NULL;
+				endingBlock.terminatingOperator = nullptr;
 				endingBlock.argument = currentArgument;
 
 				parsingBlocks.emplace_back(endingBlock);
@@ -900,7 +900,7 @@ bool ExpressionParser::parseOperators(string expression,
 
 					for(unsigned blockIndex = 1; blockIndex < parsingBlocks.size(); blockIndex++)
 					{
-						calcObj currentArgumentValue = parseArithmetic(parsingBlocks[blockIndex].argument, parsingContext, expression);
+						CalcObj currentArgumentValue = parseArithmetic(parsingBlocks[blockIndex].argument, parsingContext, expression);
 
 						parsingBlocks[blockIndex - 1].terminatingOperator->applyOperator(result, currentArgumentValue);
 					}
@@ -911,7 +911,7 @@ bool ExpressionParser::parseOperators(string expression,
 
 					for(int blockIndex = parsingBlocks.size() - 2; blockIndex >= 0; blockIndex--)
 					{
-						calcObj currentArgumentValue = parseArithmetic(parsingBlocks[blockIndex].argument, parsingContext, expression);
+						CalcObj currentArgumentValue = parseArithmetic(parsingBlocks[blockIndex].argument, parsingContext, expression);
 
 						parsingBlocks[blockIndex].terminatingOperator->applyOperator(result, currentArgumentValue);
 					}
@@ -920,11 +920,11 @@ bool ExpressionParser::parseOperators(string expression,
 		}
 		else
 		{
-			ParserOperators::UnaryOperator* prefixOperator = NULL;
-			ParserOperators::UnaryOperator* postfixOperator = NULL;
+			ParserOperators::UnaryOperator* prefixOperator = nullptr;
+			ParserOperators::UnaryOperator* postfixOperator = nullptr;
 			string argumentStr = expression;
 
-			for(unsigned operatorIndex = 0; operatorIndex < operatorLists[thisLevel].unaryOperators.size() && !(prefixOperator != NULL && postfixOperator != NULL); operatorIndex++)
+			for(unsigned operatorIndex = 0; operatorIndex < operatorLists[thisLevel].unaryOperators.size() && !(prefixOperator != nullptr && postfixOperator != nullptr); operatorIndex++)
 			{
 				ParserOperators::UnaryOperator* currentOperator = operatorLists[thisLevel].unaryOperators[operatorIndex];
 
@@ -944,28 +944,28 @@ bool ExpressionParser::parseOperators(string expression,
 				}
 			}
 
-			if(prefixOperator != NULL)
+			if(prefixOperator != nullptr)
 			{
 				argumentStr = argumentStr.substr(prefixOperator->getOperatorStr().length());
 			}
 
-			if(postfixOperator != NULL)
+			if(postfixOperator != nullptr)
 			{
 				argumentStr = argumentStr.substr(0, argumentStr.length() - postfixOperator->getOperatorStr().length());
 			}
 
-			if(prefixOperator != NULL || postfixOperator != NULL)
+			if(prefixOperator != nullptr || postfixOperator != nullptr)
 			{
 				foundOperator = true;
 
 				result = parseArithmetic(argumentStr, parsingContext, expression);
 
-				if(prefixOperator != NULL)
+				if(prefixOperator != nullptr)
 				{
 					prefixOperator->applyOperator(result);
 				}
 
-				if(postfixOperator != NULL)
+				if(postfixOperator != nullptr)
 				{
 					postfixOperator->applyOperator(result);
 				}
@@ -976,12 +976,12 @@ bool ExpressionParser::parseOperators(string expression,
 	return foundOperator;
 }
 
-calcObj ExpressionParser::parseArithmetic(std::string expression,
+CalcObj ExpressionParser::parseArithmetic(std::string expression,
 						const ParsingContext& parsingContext,
 						std::string parentExpression) const
 {
 	FnResult fnResult;
-	calcObj parsedList;
+	CalcObj parsedList;
 
 	try
 	{
@@ -1013,7 +1013,7 @@ calcObj ExpressionParser::parseArithmetic(std::string expression,
 		else if(parsingContext.variableExists(expression)) // Handle variables
 		{
 #ifdef MULTIPRECISION
-			return calcObj(*(parsingContext.findVariable(expression))).set_precision(mpfr::mpreal::get_default_prec());
+			return CalcObj(*(parsingContext.findVariable(expression))).set_precision(mpfr::mpreal::get_default_prec());
 #else
 			return *(parsingContext.findVariable(expression));
 #endif
@@ -1049,7 +1049,7 @@ calcObj ExpressionParser::parseArithmetic(std::string expression,
 
 		string currentArg = "";
 		char currentOperation = '\0';
-		calcObj currentTotal = 0;
+		CalcObj currentTotal = 0;
 
 		for(int i = 0; i < expression.length(); i++) // Addition/subtraction recursive splitting block
 		{
@@ -1101,7 +1101,7 @@ calcObj ExpressionParser::parseArithmetic(std::string expression,
 						}
 						else
 						{
-							currentTotal = calcObj(0);
+							currentTotal = CalcObj(0);
 						}
 					}
 					else if(currentOperation == '+')
@@ -1144,7 +1144,7 @@ calcObj ExpressionParser::parseArithmetic(std::string expression,
 		parenNestLevel = braceNestLevel = 0;
 		currentArg = "";
 		currentOperation = '\0';
-		currentTotal = calcObj(0);
+		currentTotal = CalcObj(0);
 
 		//string prevArg;
 
@@ -1237,7 +1237,7 @@ calcObj ExpressionParser::parseArithmetic(std::string expression,
 		parenNestLevel = braceNestLevel = 0;
 		currentArg = "";
 		currentOperation = '\0';
-		currentTotal = calcObj(0);
+		currentTotal = CalcObj(0);
 
 		for(int i = 0; i < expression.length(); i++) // Exponent recursive splitting block
 		{
@@ -1297,7 +1297,7 @@ calcObj ExpressionParser::parseArithmetic(std::string expression,
 			return currentTotal;
 		} */
 
-		calcObj operatorParseResult;
+		CalcObj operatorParseResult;
 
 		bool operatorParseSuccess = parseOperators(expression, operatorParseResult, parsingContext, expression);
 
@@ -1308,7 +1308,7 @@ calcObj ExpressionParser::parseArithmetic(std::string expression,
 
 		/* if(expression[expression.size() - 1] == '!')
 		{
-			calcObj operand = parseArithmetic(expression.substr(0, expression.size() - 1), valueMap, functionMap, settings, resultHistory, expression), result;
+			CalcObj operand = parseArithmetic(expression.substr(0, expression.size() - 1), valueMap, functionMap, settings, resultHistory, expression), result;
 
 			result = factorial(operand.getVerifiedFloat("Factorial type error"));
 
@@ -1327,14 +1327,14 @@ calcObj ExpressionParser::parseArithmetic(std::string expression,
 		// throw exception((string(e.what()) + " in expression \"" + expression + "\".").c_str());
 		throw ExpressionTypeError(expression, e.what());
 	}
-	catch(const DivisionByZeroError)
+	catch(const DivisionByZeroError&)
 	{
 		// throw exception((string(e.what()) + " in expression \"" + expression + "\".").c_str());
 		throw ExpressionDivisionByZeroError(expression);
 	}
 	catch(ExpressionError& e)
 	{
-		if(e.getExpression() == "")
+		if(e.getExpression().empty())
 		{
 			e.setExpression(expression);
 		}
@@ -1361,7 +1361,7 @@ calcObj ExpressionParser::parseArithmetic(std::string expression,
 }
 
 /*
-calcObj parseMultDivOperator(char currentOperation, calcObj currentTotal, std::string currentArg, std::string expression, const std::map<std::string, calcObj>& valueMap, const std::multimap<std::string, functionDefinition> functionMap, const parseSettings& settings, const std::vector<calcObj>& resultHistory)
+CalcObj parseMultDivOperator(char currentOperation, CalcObj currentTotal, std::string currentArg, std::string expression, const std::map<std::string, CalcObj>& valueMap, const std::multimap<std::string, functionDefinition> functionMap, const parseSettings& settings, const std::vector<CalcObj>& resultHistory)
 {
 	if(currentOperation == '\0')
 	{
@@ -1373,7 +1373,7 @@ calcObj parseMultDivOperator(char currentOperation, calcObj currentTotal, std::s
 	}
 	else if (currentOperation == '%')
 	{
-		calcObj secondArg = parseArithmetic(currentArg, valueMap, functionMap, settings, resultHistory, expression);
+		CalcObj secondArg = parseArithmetic(currentArg, valueMap, functionMap, settings, resultHistory, expression);
 
 		// if(fmod(currentTotal, calcFloat(1.0)) == calcFloat(0.0) && fmod(secondArg, calcFloat(1.0)) == calcFloat(0.0))
 		// {
@@ -1387,7 +1387,7 @@ calcObj parseMultDivOperator(char currentOperation, calcObj currentTotal, std::s
 	}
 	else
 	{
-		calcObj denominator = parseArithmetic(currentArg, valueMap, functionMap, settings, resultHistory, expression);
+		CalcObj denominator = parseArithmetic(currentArg, valueMap, functionMap, settings, resultHistory, expression);
 		if(denominator != 0)
 		{
 			currentTotal /= denominator;
@@ -1489,7 +1489,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 		string fnString = expression.substr(0, openParenIndex);
 		string fnExpression = expression.substr(openParenIndex + 1, expression.length() - openParenIndex - 2);
 		vector<string> params;
-		string currentStr = "";
+		string currentStr;
 
 		{
 			unsigned i = 0;
@@ -1791,7 +1791,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 				expressionValInt = floatToUnsigned(expressionVal);
 				result.validDomain = true;
 			}
-			catch (NumericConversionError ex)
+			catch (const NumericConversionError&)
 			{
 				result.validDomain = false;
 			}
@@ -1837,7 +1837,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 				derivNum = floatToUnsigned(parseArithmetic(params[3], parsingContext, expression).getVerifiedFloat(typeErrorMsg));
 				result.validDomain = true;
 			}
-			catch (NumericConversionError ex)
+			catch (const NumericConversionError&)
 			{
 				result.validDomain = false;
 			}
@@ -1862,7 +1862,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 				derivNum = floatToUnsigned(parseArithmetic(params[3], parsingContext, expression).getVerifiedFloat(typeErrorMsg));
 				result.validDomain = true;
 			}
-			catch (NumericConversionError ex)
+			catch (const NumericConversionError&)
 			{
 				result.validDomain = false;
 			}
@@ -1890,7 +1890,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 		}
 		else if (fnString == "solve" && (params.size() == 4 || params.size() == 5))
 		{
-			string expression = params[0],
+			string solveExpression = params[0],
 				   variable = params[1];
 			vector<calcFloat> results;
 			
@@ -1909,7 +1909,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 				{
 					intervals = floatToUnsigned(intervalsFloat);
 				}
-				catch (NumericConversionError)
+				catch (const NumericConversionError&)
 				{
 					result.validDomain = false;
 					result.specificErrorStr = "invalid number of intervals specified";
@@ -1922,7 +1922,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 			
 			if (result.validDomain)
 			{
-				this->bisectionSolve(expression, variable, lBound, hBound, results, intervals, parsingContext, expression);
+				this->bisectionSolve(solveExpression, variable, lBound, hBound, results, intervals, parsingContext, solveExpression);
 				result.result.set_list(results);
 			}
 		}
@@ -2116,7 +2116,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 
 					// cout << firstValInt << ' ' << secondValInt << endl;
 				}
-				catch(NumericConversionError ex)
+				catch(const NumericConversionError&)
 				{
 					nonInteger = true;
 				}
@@ -2167,7 +2167,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 
 					// cout << firstValInt << ' ' << secondValInt << endl;
 				}
-				catch(NumericConversionError ex)
+				catch(const NumericConversionError&)
 				{
 					nonInteger = true;
 				}
@@ -2246,7 +2246,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 					floatToInt(minVal, minValInt);
 					floatToInt(maxVal, maxValInt);
 				}
-				catch(NumericConversionError ex)
+				catch(const NumericConversionError&)
 				{
 					nonInteger = true;
 				}
@@ -2299,7 +2299,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 		}
 		else if(fnString == "seq" && (params.size() == 4 || params.size() == 5))
 		{
-			vector<calcObj> values;
+			vector<CalcObj> values;
 			vector<calcFloat> floatValues;
 
 			string typeErrorMsg = "Sequence type error";
@@ -2318,7 +2318,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 					evalSeq(values, params[0], params[1], lower, upper, parsingContext, expression, false, delta);
 					result.validDomain = true;
 				}
-				catch (DomainError ex)
+				catch (const DomainError& ex)
 				{
 					result.validDomain = false;
 					result.specificErrorStr = ex.getSpecificInformation();
@@ -2331,7 +2331,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 					evalSeq(values, params[0], params[1], lower, upper, parsingContext, expression);
 					result.validDomain = true;
 				}
-				catch (DomainError ex)
+				catch (const DomainError& ex)
 				{
 					result.validDomain = false;
 					result.specificErrorStr = ex.getSpecificInformation();
@@ -2344,7 +2344,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 		}
 		else if(fnString == "foreach" && params.size() == 2)
 		{
-			calcObj listObj = parseArithmetic(params[0], parsingContext, expression),
+			CalcObj listObj = parseArithmetic(params[0], parsingContext, expression),
 					newObj;
 
 			vector<calcFloat> listValues, newValues;
@@ -2364,9 +2364,9 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 
 				for(unsigned i = 0; i < listValues.size(); i++)
 				{
-					functionContext.setVariable("index", calcObj(i));
+					functionContext.setVariable("index", CalcObj(i));
 					functionContext.setVariable("value", listValues[i]);
-					functionContext.setVariable("length", calcObj(listValues.size()));
+					functionContext.setVariable("length", CalcObj(listValues.size()));
 
 					newValues[i] = parseArithmetic(params[1], functionContext, expression).getVerifiedFloat(valueTypeErrorStr);
 				}
@@ -2380,7 +2380,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 		}
 		else if(fnString == "getIndex" && params.size() == 2)
 		{
-			calcObj listObj = parseArithmetic(params[0], parsingContext, expression);
+			CalcObj listObj = parseArithmetic(params[0], parsingContext, expression);
 
 			result.validFn = true;
 
@@ -2397,7 +2397,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 					intIndex = floatToUnsigned(index);
 					result.validDomain = true;
 				}
-				catch (NumericConversionError ex)
+				catch (const NumericConversionError&)
 				{
 					result.validDomain = false;
 				}
@@ -2414,7 +2414,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 		}
 		else if(fnString == "setIndex" && params.size() == 3)
 		{
-			calcObj listObj = parseArithmetic(params[0], parsingContext, expression);
+			CalcObj listObj = parseArithmetic(params[0], parsingContext, expression);
 
 			result.validFn = true;
 
@@ -2431,7 +2431,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 					intIndex = floatToUnsigned(index);
 					result.validDomain = true;
 				}
-				catch (NumericConversionError ex)
+				catch (const NumericConversionError&)
 				{
 					result.validDomain = false;
 				}
@@ -2452,7 +2452,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 		}
 		else if(fnString == "length" && params.size() == 1)
 		{
-			calcObj listObj = parseArithmetic(params[0], parsingContext, expression);
+			CalcObj listObj = parseArithmetic(params[0], parsingContext, expression);
 
 			result.validFn = result.validDomain = true;
 
@@ -2460,7 +2460,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 
 			if(listObj.get_type() == TYPE_LIST)
 			{
-				result.result = calcObj(listObj.get_list_length());
+				result.result = CalcObj(listObj.get_list_length());
 			}
 			else
 			{
@@ -2469,7 +2469,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 		}
 		else if(fnString == "concat" && params.size() >= 2)
 		{
-			calcObj concatResult = parseArithmetic(params[0], parsingContext, expression);
+			CalcObj concatResult = parseArithmetic(params[0], parsingContext, expression);
 
 			result.validFn = result.validDomain = true;
 
@@ -2482,7 +2482,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 		}
 		else if(fnString == "sublist" && params.size() == 3)
 		{
-			calcObj origList = parseArithmetic(params[0], parsingContext, expression);
+			CalcObj origList = parseArithmetic(params[0], parsingContext, expression);
 
 			string indexTypeErrorStr = "Sublist index type error";
 
@@ -2499,7 +2499,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 
 				result.validDomain = true;
 			}
-			catch (NumericConversionError ex)
+			catch (const NumericConversionError&)
 			{
 				result.validDomain = false;
 			}
@@ -2517,7 +2517,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 		}
 		else if(fnString == "filter" && params.size() == 2)
 		{
-			calcObj listObj = parseArithmetic(params[0], parsingContext, expression),
+			CalcObj listObj = parseArithmetic(params[0], parsingContext, expression),
 					newObj;
 
 			vector<calcFloat> listValues, newValues;
@@ -2535,9 +2535,9 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 
 				for(unsigned i = 0; i < listValues.size(); i++)
 				{
-					functionContext.setVariable("index", calcObj(i));
+					functionContext.setVariable("index", CalcObj(i));
 					functionContext.setVariable("value", listValues[i]);
-					functionContext.setVariable("length", calcObj(listValues.size()));
+					functionContext.setVariable("length", CalcObj(listValues.size()));
 
 					calcFloat keepVal = parseArithmetic(params[1], functionContext, expression).getVerifiedFloat(valueTypeErrorStr);
 
@@ -2562,7 +2562,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 
 			result.validFn = true;
 
-			calcObj firstParam = parseArithmetic(params[0], parsingContext, expression);
+			CalcObj firstParam = parseArithmetic(params[0], parsingContext, expression);
 
 			if(firstParam.get_type() == TYPE_LIST)
 			{
@@ -2597,7 +2597,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 		}
 		//else if(fnString == "avgseq" && (params.size() == 4 || params.size() == 5))
 		//{
-		//	vector<calcObj> values;
+		//	vector<CalcObj> values;
 		//	vector<calcFloat> floatValues;
 
 		//	string typeErrorMsg = "Sequence average type error";
@@ -2624,8 +2624,8 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 		//}
 		//else if(fnString == "sumseq" && (params.size() == 4 || params.size() == 5))
 		//{
-		//	vector<calcObj> values;
-		//	calcObj total = 0.0;
+		//	vector<CalcObj> values;
+		//	CalcObj total = 0.0;
 
 		//	string typeErrorMsg = "Sequence sum type error";
 
@@ -2662,7 +2662,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 
 			result.validFn = true;
 
-			calcObj firstParam = parseArithmetic(params[0], parsingContext, expression);
+			CalcObj firstParam = parseArithmetic(params[0], parsingContext, expression);
 
 			if(firstParam.get_type() == TYPE_LIST)
 			{
@@ -2703,7 +2703,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 
 			result.validFn = true;
 
-			calcObj firstParam = parseArithmetic(params[0], parsingContext, expression);
+			CalcObj firstParam = parseArithmetic(params[0], parsingContext, expression);
 
 			if(firstParam.get_type() == TYPE_LIST)
 			{
@@ -2744,7 +2744,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 
 			result.validFn = true;
 
-			calcObj firstParam = parseArithmetic(params[0], parsingContext, expression);
+			CalcObj firstParam = parseArithmetic(params[0], parsingContext, expression);
 
 			if(firstParam.get_type() == TYPE_LIST)
 			{
@@ -2785,7 +2785,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 
 			result.validFn = true;
 
-			calcObj firstParam = parseArithmetic(params[0], parsingContext, expression);
+			CalcObj firstParam = parseArithmetic(params[0], parsingContext, expression);
 
 			if(firstParam.get_type() == TYPE_LIST)
 			{
@@ -2826,7 +2826,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 
 			result.validFn = true;
 
-			calcObj firstParam = parseArithmetic(params[0], parsingContext, expression);
+			CalcObj firstParam = parseArithmetic(params[0], parsingContext, expression);
 
 			if(firstParam.get_type() == TYPE_LIST)
 			{
@@ -2867,7 +2867,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 
 			result.validFn = true;
 
-			calcObj firstParam = parseArithmetic(params[0], parsingContext, expression);
+			CalcObj firstParam = parseArithmetic(params[0], parsingContext, expression);
 
 			if(firstParam.get_type() == TYPE_LIST)
 			{
@@ -2902,7 +2902,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 		}
 		/*else if(fnString == "stddevseq" && (params.size() == 4 || params.size() == 5))
 		{
-			vector<calcObj> values;
+			vector<CalcObj> values;
 			vector<calcFloat> floatValues;
 
 			string typeErrorMsg = "Sequence standard deviation type error";
@@ -2964,7 +2964,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 		/*
 		else if(fnString == "lte" && params.size() == 2)
 		{
-			calcObj arg1 = parseArithmetic(params[0], parsingContext, expression),
+			CalcObj arg1 = parseArithmetic(params[0], parsingContext, expression),
 					  arg2 = parseArithmetic(params[1], parsingContext, expression);
 
 			result.validFn = result.validDomain = true;
@@ -2973,7 +2973,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 		}
 		else if(fnString == "lt" && params.size() == 2)
 		{
-			calcObj arg1 = parseArithmetic(params[0], parsingContext, expression),
+			CalcObj arg1 = parseArithmetic(params[0], parsingContext, expression),
 					  arg2 = parseArithmetic(params[1], parsingContext, expression);
 
 			result.validFn = result.validDomain = true;
@@ -2982,7 +2982,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 		}
 		else if(fnString == "gte" && params.size() == 2)
 		{
-			calcObj arg1 = parseArithmetic(params[0], parsingContext, expression),
+			CalcObj arg1 = parseArithmetic(params[0], parsingContext, expression),
 					  arg2 = parseArithmetic(params[1], parsingContext, expression);
 
 			result.validFn = result.validDomain = true;
@@ -2991,7 +2991,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 		}
 		else if(fnString == "gt" && params.size() == 2)
 		{
-			calcObj arg1 = parseArithmetic(params[0], parsingContext, expression),
+			CalcObj arg1 = parseArithmetic(params[0], parsingContext, expression),
 					  arg2 = parseArithmetic(params[1], parsingContext, expression);
 
 			result.validFn = result.validDomain = true;
@@ -3000,7 +3000,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 		}
 		else if(fnString == "eq" && params.size() == 2)
 		{
-			calcObj arg1 = parseArithmetic(params[0], parsingContext, expression),
+			CalcObj arg1 = parseArithmetic(params[0], parsingContext, expression),
 					  arg2 = parseArithmetic(params[1], parsingContext, expression);
 
 			result.validFn = result.validDomain = true;
@@ -3009,7 +3009,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 		}
 		else if(fnString == "ne" && params.size() == 2)
 		{
-			calcObj arg1 = parseArithmetic(params[0], parsingContext, expression),
+			CalcObj arg1 = parseArithmetic(params[0], parsingContext, expression),
 					  arg2 = parseArithmetic(params[1], parsingContext, expression);
 
 			result.validFn = result.validDomain = true;
@@ -3180,49 +3180,51 @@ calcFloat ExpressionParser::deriv(std::string expression,
 			 std::string parentExpression,
 			 unsigned derivNum) const
 {
+	/*
 	if(derivNum >= 0)
 	{
-		ParsingContext newContext = ParsingContext(&parsingContext);
+	*/
+	ParsingContext newContext = ParsingContext(&parsingContext);
 
-		string typeErrorMsg = "Derivative type error";
+	string typeErrorMsg = "Derivative type error";
 
-		vector<calcFloat> diffValues;
-		calcFloat startVal = value - (derivNum * delta / 2), currentVal = startVal, currentFnVal;
+	vector<calcFloat> diffValues;
+	calcFloat startVal = value - (derivNum * delta / 2), currentVal = startVal, currentFnVal;
 
-		for(unsigned i = 0; i < (derivNum + 1); i++)
-		{
-			newContext.setVariable(variable, currentVal);
+	for(unsigned i = 0; i < (derivNum + 1); i++)
+	{
+		newContext.setVariable(variable, currentVal);
 
-			currentFnVal = parseArithmetic(expression, newContext, parentExpression).getVerifiedFloat(typeErrorMsg);
+		currentFnVal = parseArithmetic(expression, newContext, parentExpression).getVerifiedFloat(typeErrorMsg);
 
-			diffValues.push_back(currentFnVal);
+		diffValues.push_back(currentFnVal);
 
-			currentVal += delta;
-		}
-		
-		while(diffValues.size() > 1)
-		{
-			ParserMathematicalFunctions::deltaVector(diffValues);
-
-			// cout << setprecision(50) << '{';
-
-			for(unsigned i = 0; i < diffValues.size(); i++)
-			{
-				diffValues[i] /= delta;
-
-				// cout << diffValues[i] << ' ';
-			}
-
-			// cout << '}' << endl;
-		}
-
-		return diffValues[0];
+		currentVal += delta;
 	}
+	
+	while(diffValues.size() > 1)
+	{
+		ParserMathematicalFunctions::deltaVector(diffValues);
+
+		// cout << setprecision(50) << '{';
+
+		for(unsigned i = 0; i < diffValues.size(); i++)
+		{
+			diffValues[i] /= delta;
+
+			// cout << diffValues[i] << ' ';
+		}
+
+		// cout << '}' << endl;
+	}
+
+	return diffValues[0];
+	/* }
 	else
 	{
 		throw exception(("Invalid derivative number (" + to_string((long long)derivNum) + ")" + " specified in expression \"" + parentExpression + "\".").c_str());
 	}
-
+	*/
 
 	//calcFloat leftVal, rightVal, derivative;
 
@@ -3262,7 +3264,7 @@ calcFloat ExpressionParser::integral(std::string expression,
 				const ParsingContext& parsingContext,
 				std::string parentExpression)
 {
-	map<string, calcObj> newValueMap = valueMap;
+	map<string, CalcObj> newValueMap = valueMap;
 	calcFloat total = 0.0, ptVal;
 
 	string typeErrorMsg = "Integral type error";
@@ -3303,7 +3305,7 @@ calcFloat ExpressionParser::gaussIntegral(std::string expression,
 	static vector<calcFloat> gaussNodes, gaussWeights;
 #endif
 
-	static unsigned cachedPrecision = 0, cachedEstimationPoints = 0;
+	static unsigned /*cachedPrecision = 0, */cachedEstimationPoints = 0;
 
 	string typeErrorMsg = "Integral type error";
 
@@ -3341,7 +3343,7 @@ calcFloat ExpressionParser::gaussIntegral(std::string expression,
 		}
 		*/
 //#ifdef MULTIPRECSISION
-		cachedPrecision = mpfr::mpreal::get_default_prec();
+//		cachedPrecision = mpfr::mpreal::get_default_prec();
 //#endif
 		cachedEstimationPoints = estimationPoints;
 
@@ -3423,7 +3425,7 @@ calcFloat ExpressionParser::scaleNum(calcFloat oldMin, calcFloat oldMax, calcFlo
 	return (value * slope) + xIntercept;
 }
 
-void ExpressionParser::evalSeq(std::vector<calcObj>& result,
+void ExpressionParser::evalSeq(std::vector<CalcObj>& result,
 			 std::string expression,
 			 std::string variable,
 			 calcFloat lower,
@@ -3434,7 +3436,7 @@ void ExpressionParser::evalSeq(std::vector<calcObj>& result,
 			 calcFloat delta) const
 {
 	ParsingContext newContext = ParsingContext(&parsingContext);
-	calcObj thisPt;
+	CalcObj thisPt;
 
 	// cout << '{';
 
@@ -3462,7 +3464,7 @@ void ExpressionParser::evalSeq(std::vector<calcObj>& result,
 			{
 				resultSize = floatToUnsigned(floor(abs((upper - lower) / delta))) + 1;
 			}
-			catch (NumericConversionError ex)
+			catch (const NumericConversionError&)
 			{
 				throw DomainError("parsing of sequence", expression, "invalid range");
 			}
@@ -3582,7 +3584,7 @@ void ExpressionParser::bisectionSolve(std::string expression,
 					const ParsingContext& parsingContext,
 					std::string parentExpression) const
 {
-	// map<string, calcObj> newValueMap = valueMap;
+	// map<string, CalcObj> newValueMap = valueMap;
 	// calcFloat lBoundVal, average, averageVal, hBoundVal;
 
 	string typeErrorStr = "Equation solver type error";

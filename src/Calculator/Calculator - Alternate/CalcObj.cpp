@@ -1,6 +1,6 @@
 #include <string>
 
-#include "calcObj.h"
+#include "CalcObj.h"
 
 using namespace std;
 
@@ -153,7 +153,7 @@ bool floatToFraction(Fraction* result, calcFloat value, calcSignedInt maximumDen
 	return successfulConversion;
 }
 
-void toVerifiedFloatVector(vector<calcObj>& calcObjVec, vector<calcFloat>& calcFloatVec, string typeErrorMsg)
+void toVerifiedFloatVector(vector<CalcObj>& calcObjVec, vector<calcFloat>& calcFloatVec, string typeErrorMsg)
 {
 	calcFloatVec.resize(calcObjVec.size());
 
@@ -187,19 +187,19 @@ std::ostream& operator<<(std::ostream& outputStream, Fraction value)
 }
 
 /*
-int calcObj::getCSVFormatIndex()
+int CalcObj::getCSVFormatIndex()
 {
 	static int CSVFormatIndex = ios_base::xalloc();
 	return CSVFormatIndex;
 }
 
-int calcObj::getDecimalFractionFormatIndex()
+int CalcObj::getDecimalFractionFormatIndex()
 {
 	static int decimalFractionFormatIndex = ios_base::xalloc();
 	return decimalFractionFormatIndex;
 }
 
-int calcObj::getFullPrecisionFormatIndex()
+int CalcObj::getFullPrecisionFormatIndex()
 {
 	static int fullPrecisionFormatIndex = ios_base::xalloc();
 	return fullPrecisionFormatIndex;
@@ -207,13 +207,13 @@ int calcObj::getFullPrecisionFormatIndex()
 
 */
 
-int calcObj::getStreamSettingsFormatIndex()
+int CalcObj::getStreamSettingsFormatIndex()
 {
 	static int streamSettingsFormatIndex = ios_base::xalloc();
 	return streamSettingsFormatIndex;
 }
 
-void calcObj::streamSettingsDestructorCallback(std::ios_base::event eventInfo, std::ios_base& stream, int settingsIndex)
+void CalcObj::streamSettingsDestructorCallback(std::ios_base::event eventInfo, std::ios_base& stream, int settingsIndex)
 {
 	if (eventInfo == std::ios_base::erase_event)
 	{
@@ -222,7 +222,7 @@ void calcObj::streamSettingsDestructorCallback(std::ios_base::event eventInfo, s
 	}
 }
 
-calcObj::StreamSettings* calcObj::getStreamSettings(ostream& outputStream, bool createSettings)
+CalcObj::StreamSettings* CalcObj::getStreamSettings(ostream& outputStream, bool createSettings)
 {
 	StreamSettings*& streamData = reinterpret_cast<StreamSettings*&>(outputStream.pword(getStreamSettingsFormatIndex()));
 
@@ -239,7 +239,7 @@ calcObj::StreamSettings* calcObj::getStreamSettings(ostream& outputStream, bool 
 	return streamData;
 }
 
-calcObj::StreamSettings calcObj::getStreamSettings(std::ostream & outputStream)
+CalcObj::StreamSettings CalcObj::getStreamSettings(std::ostream & outputStream)
 {
 	StreamSettings* currentStreamSettings = getStreamSettings(outputStream, false);
 
@@ -253,7 +253,7 @@ calcObj::StreamSettings calcObj::getStreamSettings(std::ostream & outputStream)
 	}
 }
 
-ostream& calcObj::CSVFormat(ostream& outputStream)
+ostream& CalcObj::CSVFormat(ostream& outputStream)
 {
 	/*
 	outputStream.iword(getCSVFormatIndex()) = 1;
@@ -266,7 +266,7 @@ ostream& calcObj::CSVFormat(ostream& outputStream)
 	return outputStream;
 }
 
-ostream& calcObj::nonCSVFormat(ostream& outputStream)
+ostream& CalcObj::nonCSVFormat(ostream& outputStream)
 {
 	StreamSettings* outputStreamSettings = getStreamSettings(outputStream, true);
 	outputStreamSettings->CSVOutputMode = false;
@@ -274,7 +274,7 @@ ostream& calcObj::nonCSVFormat(ostream& outputStream)
 	return outputStream;
 }
 
-ostream& calcObj::fractionFormat(ostream& outputStream)
+ostream& CalcObj::fractionFormat(ostream& outputStream)
 {
 	StreamSettings* outputStreamSettings = getStreamSettings(outputStream, true);
 	outputStreamSettings->decFracMode = FRACTION_VALUE;
@@ -282,7 +282,7 @@ ostream& calcObj::fractionFormat(ostream& outputStream)
 	return outputStream;
 }
 
-ostream& calcObj::decimalFormat(ostream& outputStream)
+ostream& CalcObj::decimalFormat(ostream& outputStream)
 {
 	StreamSettings* outputStreamSettings = getStreamSettings(outputStream, true);
 	outputStreamSettings->decFracMode = DECIMAL_VALUE;
@@ -290,7 +290,7 @@ ostream& calcObj::decimalFormat(ostream& outputStream)
 	return outputStream;
 }
 
-std::ostream& calcObj::setFullPrecision(std::ostream& outputStream)
+std::ostream& CalcObj::setFullPrecision(std::ostream& outputStream)
 {
 	StreamSettings* outputStreamSettings = getStreamSettings(outputStream, true);
 	outputStreamSettings->fullPrecision = true;
@@ -298,7 +298,7 @@ std::ostream& calcObj::setFullPrecision(std::ostream& outputStream)
 	return outputStream;
 }
 
-std::ostream & calcObj::unsetFullPrecision(std::ostream & outputStream)
+std::ostream & CalcObj::unsetFullPrecision(std::ostream & outputStream)
 {
 	StreamSettings* outputStreamSettings = getStreamSettings(outputStream, true);
 	outputStreamSettings->fullPrecision = false;
@@ -307,14 +307,14 @@ std::ostream & calcObj::unsetFullPrecision(std::ostream & outputStream)
 }
 
 /*
-bool calcObj::getCSVOutputMode(std::ostream& outputStream)
+bool CalcObj::getCSVOutputMode(std::ostream& outputStream)
 {
 	StreamSettings* outputStreamSettings = getStreamSettings(outputStream, false);
 
 
 }
 
-decimalFractionMode calcObj::getDecimalFractionOutputMode(std::ostream & outputStream)
+decimalFractionMode CalcObj::getDecimalFractionOutputMode(std::ostream & outputStream)
 {
 	decimalFractionMode resultEnum = DECIMAL_VALUE;
 
@@ -331,14 +331,14 @@ decimalFractionMode calcObj::getDecimalFractionOutputMode(std::ostream & outputS
 	return resultEnum;
 }
 
-bool calcObj::getFullPrecision(std::ostream & outputStream)
+bool CalcObj::getFullPrecision(std::ostream & outputStream)
 {
 	return (outputStream.iword(getFullPrecisionFormatIndex()) == 1);
 }
 */
 
 /*
-void calcObj::split(const string& s, char delim, vector<string>& elems) {
+void CalcObj::split(const string& s, char delim, vector<string>& elems) {
     stringstream ss(s);
     string item;
     while (getline(ss, item, delim)) {
@@ -347,19 +347,19 @@ void calcObj::split(const string& s, char delim, vector<string>& elems) {
 }
 */
 
-void calcObj::resetObjects()
+void CalcObj::resetObjects()
 {
 	this->floatObj = 0;
 	this->listObj.clear();
 }
 
-calcObj::calcObj()
+CalcObj::CalcObj()
 {
 	this->type = TYPE_FLOAT;
 	this->floatObj = 0;
 }
 
-calcObj::calcObj(const string& objString, bool preservePrecision)
+CalcObj::CalcObj(const string& objString, bool preservePrecision)
 {
 	if(objString.length() >= 2 && objString[0] == '{' && objString[objString.length() - 1] == '}')
 	{
@@ -411,23 +411,23 @@ calcObj::calcObj(const string& objString, bool preservePrecision)
 	}
 }
 
-calcObj::calcObj(const calcFloat& objFloat)
+CalcObj::CalcObj(const calcFloat& objFloat)
 {
 	this->type = TYPE_FLOAT;
 	this->floatObj = objFloat;
 }
 
 #ifdef MULTIPRECISION
-calcObj::calcObj(const int& objInt)
+CalcObj::CalcObj(const int& objInt)
 {
 	this->type = TYPE_FLOAT;
 	this->floatObj = objInt;
 }
 #endif
 
-calcObj calcObj::operator+(const calcObj& addObj)
+CalcObj CalcObj::operator+(const CalcObj& addObj)
 {
-	calcObj newObj(*this);
+	CalcObj newObj(*this);
 
 	switch(this->type)
 	{
@@ -457,9 +457,9 @@ calcObj calcObj::operator+(const calcObj& addObj)
 	return newObj;
 }
 
-calcObj calcObj::operator-(const calcObj& subObj)
+CalcObj CalcObj::operator-(const CalcObj& subObj)
 {
-	calcObj newObj(*this);
+	CalcObj newObj(*this);
 
 	switch(this->type)
 	{
@@ -489,9 +489,9 @@ calcObj calcObj::operator-(const calcObj& subObj)
 	return newObj;
 }
 
-calcObj calcObj::operator*(const calcObj& multObj)
+CalcObj CalcObj::operator*(const CalcObj& multObj)
 {
-	calcObj newObj(*this);
+	CalcObj newObj(*this);
 
 	switch(this->type)
 	{
@@ -525,9 +525,9 @@ calcObj calcObj::operator*(const calcObj& multObj)
 	return newObj;
 }
 
-calcObj calcObj::operator/(const calcObj& divObj)
+CalcObj CalcObj::operator/(const CalcObj& divObj)
 {
-	calcObj newObj(*this);
+	CalcObj newObj(*this);
 
 	switch(this->type)
 	{
@@ -565,7 +565,7 @@ calcObj calcObj::operator/(const calcObj& divObj)
 	return newObj;
 }
 
-calcObj calcObj::operator+=(const calcObj& addObj)
+CalcObj CalcObj::operator+=(const CalcObj& addObj)
 {
 	switch(this->type)
 	{
@@ -607,7 +607,7 @@ calcObj calcObj::operator+=(const calcObj& addObj)
 	return *this;
 }
 
-calcObj calcObj::operator-=(const calcObj& subObj)
+CalcObj CalcObj::operator-=(const CalcObj& subObj)
 {
 	switch(this->type)
 	{
@@ -646,7 +646,7 @@ calcObj calcObj::operator-=(const calcObj& subObj)
 	return *this;
 }
 
-calcObj calcObj::operator*=(const calcObj& multObj)
+CalcObj CalcObj::operator*=(const CalcObj& multObj)
 {
 	switch(this->type)
 	{
@@ -692,7 +692,7 @@ calcObj calcObj::operator*=(const calcObj& multObj)
 	return *this;
 }
 
-calcObj calcObj::operator/=(const calcObj& divObj)
+CalcObj CalcObj::operator/=(const CalcObj& divObj)
 {
 	switch(this->type)
 	{
@@ -740,7 +740,7 @@ calcObj calcObj::operator/=(const calcObj& divObj)
 	return *this;
 }
 
-calcObj calcObj::operator=(const calcObj& assignObj)
+CalcObj CalcObj::operator=(const CalcObj& assignObj)
 {
 	this->type = assignObj.type;
 	this->resetObjects();
@@ -757,7 +757,7 @@ calcObj calcObj::operator=(const calcObj& assignObj)
 	return *this;
 }
 
-calcObj calcObj::operator=(const calcFloat& assignObj)
+CalcObj CalcObj::operator=(const calcFloat& assignObj)
 {
 	this->type = TYPE_FLOAT;
 	this->resetObjects();
@@ -767,9 +767,9 @@ calcObj calcObj::operator=(const calcFloat& assignObj)
 	return *this;
 }
 
-calcObj calcObj::operator-()
+CalcObj CalcObj::operator-()
 {
-	calcObj newObj;
+	CalcObj newObj;
 	newObj.type = this->type;
 
 	switch(this->type)
@@ -792,7 +792,7 @@ calcObj calcObj::operator-()
 	return newObj;
 }
 
-calcFloat calcObj::getVerifiedFloat(string typeErrorMsg)
+calcFloat CalcObj::getVerifiedFloat(string typeErrorMsg)
 {
 	if(this->type == TYPE_FLOAT)
 	{
@@ -804,7 +804,7 @@ calcFloat calcObj::getVerifiedFloat(string typeErrorMsg)
 	}
 }
 
-void calcObj::set_list(const std::vector<calcFloat>& assignObj)
+void CalcObj::set_list(const std::vector<calcFloat>& assignObj)
 {
 	this->type = TYPE_LIST;
 	this->resetObjects();
@@ -812,7 +812,7 @@ void calcObj::set_list(const std::vector<calcFloat>& assignObj)
 	this->listObj = assignObj;
 }
 
-bool calcObj::get_list(std::vector<calcFloat>& buffer)
+bool CalcObj::get_list(std::vector<calcFloat>& buffer)
 {
 	bool returnVal = true;
 
@@ -828,12 +828,12 @@ bool calcObj::get_list(std::vector<calcFloat>& buffer)
 	return returnVal;
 }
 
-calcObjType calcObj::get_type()
+calcObjType CalcObj::get_type()
 {
 	return this->type;
 }
 
-calcFloat calcObj::get_list_index(unsigned index)
+calcFloat CalcObj::get_list_index(unsigned index)
 {
 	if(index < this->listObj.size())
 	{
@@ -845,7 +845,7 @@ calcFloat calcObj::get_list_index(unsigned index)
 	}
 }
 
-void calcObj::set_list_index(unsigned index, calcFloat value)
+void CalcObj::set_list_index(unsigned index, calcFloat value)
 {
 	if(index < this->listObj.size())
 	{
@@ -857,7 +857,7 @@ void calcObj::set_list_index(unsigned index, calcFloat value)
 	}
 }
 
-unsigned calcObj::get_list_length()
+unsigned CalcObj::get_list_length()
 {
 	if(this->type == TYPE_LIST)
 	{
@@ -869,7 +869,7 @@ unsigned calcObj::get_list_length()
 	}
 }
 
-void calcObj::concat_list(const calcObj& concatObj)
+void CalcObj::concat_list(const CalcObj& concatObj)
 {
 	if(this->type == TYPE_FLOAT)
 	{
@@ -889,7 +889,7 @@ void calcObj::concat_list(const calcObj& concatObj)
 	}
 }
 
-void calcObj::sublist(std::vector<calcFloat>& buffer, unsigned startIndex, unsigned endIndex)
+void CalcObj::sublist(std::vector<calcFloat>& buffer, unsigned startIndex, unsigned endIndex)
 {
 	if(this->type == TYPE_LIST)
 	{
@@ -914,7 +914,7 @@ void calcObj::sublist(std::vector<calcFloat>& buffer, unsigned startIndex, unsig
 }
 
 #ifdef MULTIPRECISION
-calcObj& calcObj::set_precision(long newPrecision)
+CalcObj& CalcObj::set_precision(long newPrecision)
 {
 	switch (this->type)
 	{
@@ -941,7 +941,7 @@ calcObj& calcObj::set_precision(long newPrecision)
 }
 #endif
 
-bool calcObj::operator==(const calcObj& compareObj)
+bool CalcObj::operator==(const CalcObj& compareObj)
 {
 	bool returnVal = true;
 
@@ -980,12 +980,12 @@ bool calcObj::operator==(const calcObj& compareObj)
 	return returnVal;
 }
 
-bool calcObj::operator!=(const calcObj& compareObj)
+bool CalcObj::operator!=(const CalcObj& compareObj)
 {
 	return !(this->operator==(compareObj));
 }
 
-bool calcObj::operator<(const calcObj& compareObj)
+bool CalcObj::operator<(const CalcObj& compareObj)
 {
 	bool returnVal = false;
 
@@ -1038,23 +1038,23 @@ bool calcObj::operator<(const calcObj& compareObj)
 	return returnVal;
 }
 
-bool calcObj::operator>(const calcObj& compareObj)
+bool CalcObj::operator>(const CalcObj& compareObj)
 {
 	return !((*this < compareObj) || (*this == compareObj));
 }
 
-bool calcObj::operator<=(const calcObj& compareObj)
+bool CalcObj::operator<=(const CalcObj& compareObj)
 {
 	return !(*this > compareObj);
 }
 
-bool calcObj::operator>=(const calcObj& compareObj)
+bool CalcObj::operator>=(const CalcObj& compareObj)
 {
 	return !(*this < compareObj);
 }
 
 /*
-void calcObj::getString(string& destination, decimalFractionMode decimalFractionFormat, bool csvMode)
+void CalcObj::getString(string& destination, decimalFractionMode decimalFractionFormat, bool csvMode)
 {
 	switch (this->type)
 	{
@@ -1066,7 +1066,7 @@ void calcObj::getString(string& destination, decimalFractionMode decimalFraction
 #endif
 			out << outObj.floatObj;
 		}
-		else if (calcObj::getDecimalFractionOutputMode(out) == decimalFractionMode::FRACTION_VALUE)
+		else if (CalcObj::getDecimalFractionOutputMode(out) == decimalFractionMode::FRACTION_VALUE)
 		{
 			Fraction conversionResult;
 
@@ -1095,14 +1095,14 @@ void calcObj::getString(string& destination, decimalFractionMode decimalFraction
 
 		for (unsigned i = 0; i < outObj.listObj.size(); i++)
 		{
-			if (calcObj::getDecimalFractionOutputMode(out) == decimalFractionMode::DECIMAL_VALUE)
+			if (CalcObj::getDecimalFractionOutputMode(out) == decimalFractionMode::DECIMAL_VALUE)
 			{
 #ifdef MULTIPRECISION
 				out << setprecision(mpfr::bits2digits(outObj.listObj[i].getPrecision()));
 #endif
 				out << outObj.listObj[i];
 			}
-			else if (calcObj::getDecimalFractionOutputMode(out) == decimalFractionMode::FRACTION_VALUE)
+			else if (CalcObj::getDecimalFractionOutputMode(out) == decimalFractionMode::FRACTION_VALUE)
 			{
 				Fraction conversionResult;
 
@@ -1119,13 +1119,13 @@ void calcObj::getString(string& destination, decimalFractionMode decimalFraction
 				}
 			}
 
-			if (calcObj::getCSVOutputMode(out) || i < (outObj.listObj.size() - 1))
+			if (CalcObj::getCSVOutputMode(out) || i < (outObj.listObj.size() - 1))
 			{
 				out << ',';
 			}
 		}
 
-		if (!calcObj::getCSVOutputMode(out))
+		if (!CalcObj::getCSVOutputMode(out))
 		{
 			out << '}';
 		}
@@ -1139,9 +1139,9 @@ void calcObj::getString(string& destination, decimalFractionMode decimalFraction
 }
 */
 
-std::ostream& operator<<(std::ostream& out, const calcObj& outObj)
+std::ostream& operator<<(std::ostream& out, const CalcObj& outObj)
 {
-	const calcObj::StreamSettings* outputSettings = calcObj::getStreamSettings(out, false);
+	const CalcObj::StreamSettings* outputSettings = CalcObj::getStreamSettings(out, false);
 
 	streamsize origPrecision = out.precision();
 #ifdef MULTIPRECISION
@@ -1251,7 +1251,7 @@ std::ostream& operator<<(std::ostream& out, const calcObj& outObj)
 		return out;
 }
 
-string calcObj::getString(StreamSettings settings, unsigned precision) const
+string CalcObj::getString(StreamSettings settings, unsigned precision) const
 {
 	stringstream conversionStream;
 	conversionStream.pword(getStreamSettingsFormatIndex()) = reinterpret_cast<void*>(&settings);
@@ -1265,9 +1265,9 @@ string calcObj::getString(StreamSettings settings, unsigned precision) const
 	return (conversionStream.str());
 }
 
-calcObj pow(const calcObj& base, const calcObj& power)
+CalcObj pow(const CalcObj& base, const CalcObj& power)
 {
-	calcObj newObj(base);
+	CalcObj newObj(base);
 
 	switch(base.type)
 	{
@@ -1288,9 +1288,9 @@ calcObj pow(const calcObj& base, const calcObj& power)
 	return newObj;
 }
 
-calcObj fmod(const calcObj& num, const calcObj& denom)
+CalcObj fmod(const CalcObj& num, const CalcObj& denom)
 {
-	calcObj newObj(num);
+	CalcObj newObj(num);
 
 	switch(num.type)
 	{

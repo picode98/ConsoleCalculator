@@ -5,7 +5,7 @@ string ParserOperators::AdditionOperator::getOperatorStr()
 	return "+";
 }
 
-void ParserOperators::AdditionOperator::applyOperator(calcObj& base, const calcObj& value)
+void ParserOperators::AdditionOperator::applyOperator(CalcObj& base, const CalcObj& value)
 {
 	base += value;
 }
@@ -15,7 +15,7 @@ string ParserOperators::SubtractionOperator::getOperatorStr()
 	return "-";
 }
 
-void ParserOperators::SubtractionOperator::applyOperator(calcObj& base, const calcObj& value)
+void ParserOperators::SubtractionOperator::applyOperator(CalcObj& base, const CalcObj& value)
 {
 	base -= value;
 }
@@ -25,7 +25,7 @@ string ParserOperators::MultiplicationOperator::getOperatorStr()
 	return "*";
 }
 
-void ParserOperators::MultiplicationOperator::applyOperator(calcObj& base, const calcObj& value)
+void ParserOperators::MultiplicationOperator::applyOperator(CalcObj& base, const CalcObj& value)
 {
 	base *= value;
 }
@@ -35,7 +35,7 @@ string ParserOperators::DivisionOperator::getOperatorStr()
 	return "/";
 }
 
-void ParserOperators::DivisionOperator::applyOperator(calcObj& base, const calcObj& value)
+void ParserOperators::DivisionOperator::applyOperator(CalcObj& base, const CalcObj& value)
 {
 	base /= value;
 }
@@ -45,7 +45,7 @@ string ParserOperators::ModuloOperator::getOperatorStr()
 	return "%";
 }
 
-void ParserOperators::ModuloOperator::applyOperator(calcObj& base, const calcObj& value)
+void ParserOperators::ModuloOperator::applyOperator(CalcObj& base, const CalcObj& value)
 {
 	base = fmod(base, value);
 }
@@ -55,7 +55,7 @@ string ParserOperators::PowerOperator::getOperatorStr()
 	return "^";
 }
 
-void ParserOperators::PowerOperator::applyOperator(calcObj& base, const calcObj& value)
+void ParserOperators::PowerOperator::applyOperator(CalcObj& base, const CalcObj& value)
 {
 	base = pow(value, base);
 }
@@ -65,9 +65,9 @@ string ParserOperators::LessThanOperator::getOperatorStr()
 	return "<";
 }
 
-void ParserOperators::LessThanOperator::applyOperator(calcObj& base, const calcObj& value)
+void ParserOperators::LessThanOperator::applyOperator(CalcObj& base, const CalcObj& value)
 {
-	base = calcObj(boolToFloat(base < value));
+	base = CalcObj(boolToFloat(base < value));
 }
 
 string ParserOperators::LessThanOrEqualOperator::getOperatorStr()
@@ -75,9 +75,9 @@ string ParserOperators::LessThanOrEqualOperator::getOperatorStr()
 	return "<=";
 }
 
-void ParserOperators::LessThanOrEqualOperator::applyOperator(calcObj& base, const calcObj& value)
+void ParserOperators::LessThanOrEqualOperator::applyOperator(CalcObj& base, const CalcObj& value)
 {
-	base = calcObj(boolToFloat(base <= value));
+	base = CalcObj(boolToFloat(base <= value));
 }
 
 string ParserOperators::GreaterThanOperator::getOperatorStr()
@@ -85,9 +85,9 @@ string ParserOperators::GreaterThanOperator::getOperatorStr()
 	return ">";
 }
 
-void ParserOperators::GreaterThanOperator::applyOperator(calcObj& base, const calcObj& value)
+void ParserOperators::GreaterThanOperator::applyOperator(CalcObj& base, const CalcObj& value)
 {
-	base = calcObj(boolToFloat(base > value));
+	base = CalcObj(boolToFloat(base > value));
 }
 
 string ParserOperators::GreaterThanOrEqualOperator::getOperatorStr()
@@ -95,9 +95,9 @@ string ParserOperators::GreaterThanOrEqualOperator::getOperatorStr()
 	return ">=";
 }
 
-void ParserOperators::GreaterThanOrEqualOperator::applyOperator(calcObj& base, const calcObj& value)
+void ParserOperators::GreaterThanOrEqualOperator::applyOperator(CalcObj& base, const CalcObj& value)
 {
-	base = calcObj(boolToFloat(base >= value));
+	base = CalcObj(boolToFloat(base >= value));
 }
 
 string ParserOperators::EqualityOperator::getOperatorStr()
@@ -105,9 +105,9 @@ string ParserOperators::EqualityOperator::getOperatorStr()
 	return "=";
 }
 
-void ParserOperators::EqualityOperator::applyOperator(calcObj& base, const calcObj& value)
+void ParserOperators::EqualityOperator::applyOperator(CalcObj& base, const CalcObj& value)
 {
-	base = calcObj(boolToFloat(base == value));
+	base = CalcObj(boolToFloat(base == value));
 }
 
 string ParserOperators::InequalityOperator::getOperatorStr()
@@ -115,9 +115,9 @@ string ParserOperators::InequalityOperator::getOperatorStr()
 	return "!=";
 }
 
-void ParserOperators::InequalityOperator::applyOperator(calcObj& base, const calcObj& value)
+void ParserOperators::InequalityOperator::applyOperator(CalcObj& base, const CalcObj& value)
 {
-	base = calcObj(boolToFloat(base != value));
+	base = CalcObj(boolToFloat(base != value));
 }
 
 ParserOperators::UnaryOperator::OperatorStrMode ParserOperators::NegationOperator::getOperatorStrMode()
@@ -130,7 +130,7 @@ string ParserOperators::NegationOperator::getOperatorStr()
 	return "-";
 }
 
-void ParserOperators::NegationOperator::applyOperator(calcObj& base)
+void ParserOperators::NegationOperator::applyOperator(CalcObj& base)
 {
 	base = -base;
 }
@@ -145,9 +145,9 @@ string ParserOperators::FactorialOperator::getOperatorStr()
 	return "!";
 }
 
-void ParserOperators::FactorialOperator::applyOperator(calcObj& base)
+void ParserOperators::FactorialOperator::applyOperator(CalcObj& base)
 {
-	calcObj result = ParserMathematicalFunctions::factorial(base.getVerifiedFloat("Factorial type error"));
+	CalcObj result = ParserMathematicalFunctions::factorial(base.getVerifiedFloat("Factorial type error"));
 
 	if (result == -1)
 	{
