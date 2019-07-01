@@ -51,12 +51,12 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <AdditionalIncludeDirectories>$(SolutionDir)Calculator - Alternate\;$(SolutionDir)Libraries;$(SolutionDir)Libraries\boost;$(SolutionDir)Libraries\mpfr_mpir_x86_x64_msvc2010\mpir\dll\$(Platform)\$(Configuration);$(SolutionDir)Libraries\mpfr_mpir_x86_x64_msvc2010\mpfr;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Calculator - Alternate\;$(SolutionDir)Libraries;$(SolutionDir)Libraries\boost;$(SolutionDir)Libraries\mpir\$(Platform)\$(Configuration);$(SolutionDir)Libraries\mpfr\$(Platform)\$(Configuration);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAsManaged>true</CompileAsManaged>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(SolutionDir)Calculator - Alternate\$(Configuration)\CalculatorNumericTypes.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\parseArithmetic.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\calcObj.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\ParserMathematicalFunctions.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\ParserOperators.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\StringUtils.obj;$(SolutionDir)Libraries\mpfr_mpir_x86_x64_msvc2010\mpir\dll\$(Platform)\$(Configuration)\mpir.lib;$(SolutionDir)Libraries\mpfr_mpir_x86_x64_msvc2010\mpfr\dll\$(Platform)\$(Configuration)\mpfr.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)Calculator - Alternate\$(Configuration)\CalculatorNumericTypes.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\parseArithmetic.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\calcObj.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\ParserMathematicalFunctions.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\ParserOperators.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\StringUtils.obj;$(SolutionDir)Libraries\mpir\$(Platform)\$(Configuration)\mpir.lib;$(SolutionDir)Libraries\mpfr\$(Platform)\$(Configuration)\mpfr.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers />
       <AdditionalOptions>/NODEFAULTLIB:MSVCRT /NODEFAULTLIB:ucrt.lib %(AdditionalOptions)</AdditionalOptions>
     </Link>
@@ -66,12 +66,12 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <AdditionalIncludeDirectories>$(SolutionDir)Calculator - Alternate\;$(SolutionDir)Libraries;$(SolutionDir)Libraries\boost;$(SolutionDir)Libraries\mpfr_mpir_x86_x64_msvc2010\mpir\dll\$(Platform)\$(Configuration);$(SolutionDir)Libraries\mpfr_mpir_x86_x64_msvc2010\mpfr;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Calculator - Alternate\;$(SolutionDir)Libraries;$(SolutionDir)Libraries\boost;$(SolutionDir)Libraries\mpir\$(Platform)\$(Configuration);$(SolutionDir)Libraries\mpfr\$(Platform)\$(Configuration);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAsManaged>true</CompileAsManaged>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(SolutionDir)Calculator - Alternate\$(Configuration)\CalculatorNumericTypes.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\parseArithmetic.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\calcObj.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\ParserMathematicalFunctions.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\ParserOperators.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\StringUtils.obj;$(SolutionDir)Libraries\mpfr_mpir_x86_x64_msvc2010\mpir\dll\$(Platform)\$(Configuration)\mpir.lib;$(SolutionDir)Libraries\mpfr_mpir_x86_x64_msvc2010\mpfr\dll\$(Platform)\$(Configuration)\mpfr.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)Calculator - Alternate\$(Configuration)\CalculatorNumericTypes.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\parseArithmetic.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\calcObj.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\ParserMathematicalFunctions.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\ParserOperators.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\StringUtils.obj;$(SolutionDir)Libraries\mpir\$(Platform)\$(Configuration)\mpir.lib;$(SolutionDir)Libraries\mpfr\$(Platform)\$(Configuration)\mpfr.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

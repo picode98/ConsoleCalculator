@@ -1,3 +1,5 @@
 **/.vs
 **/Debug
+!Calculator/Libraries/**/Debug
 **/Release
+!Calculator/Libraries/**/Release

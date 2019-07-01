@@ -54,15 +54,15 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)Libraries;$(SolutionDir)Libraries\boost;$(SolutionDir)Libraries\mpfr_mpir_x86_x64_msvc2010\mpir\dll\$(Platform)\$(Configuration);$(SolutionDir)Libraries\mpfr_mpir_x86_x64_msvc2010\mpfr;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Libraries;$(SolutionDir)Libraries\boost;$(SolutionDir)Libraries\mpir\$(Platform)\$(Configuration);$(SolutionDir)Libraries\mpfr\$(Platform)\$(Configuration);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(SolutionDir)Libraries\mpfr_mpir_x86_x64_msvc2010\mpir\dll\$(Platform)\$(Configuration)\mpir.lib;$(SolutionDir)Libraries\mpfr_mpir_x86_x64_msvc2010\mpfr\dll\$(Platform)\$(Configuration)\mpfr.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)Libraries\mpir\$(Platform)\$(Configuration)\mpir.lib;$(SolutionDir)Libraries\mpfr\$(Platform)\$(Configuration)\mpfr.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>cmd.exe /c "xcopy.exe "$(SolutionDir)Libraries\mpfr_mpir_x86_x64_msvc2010\mpir\dll\$(Platform)\$(Configuration)\mpir.dll" "$(SolutionDir)$(Configuration)" /Y &amp;&amp; xcopy.exe "$(SolutionDir)Libraries\mpfr_mpir_x86_x64_msvc2010\mpfr\dll\$(Platform)\$(Configuration)\mpfr.dll" "$(SolutionDir)$(Configuration)" /Y"</Command>
+      <Command>cmd.exe /c "xcopy.exe "$(SolutionDir)Libraries\mpir\$(Platform)\$(Configuration)\mpir.dll" "$(SolutionDir)$(Configuration)" /Y &amp;&amp; xcopy.exe "$(SolutionDir)Libraries\mpfr\$(Platform)\$(Configuration)\mpfr.dll" "$(SolutionDir)$(Configuration)" /Y"</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Copy required application DLLs to the build folder</Message>
@@ -77,17 +77,17 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)Libraries;$(SolutionDir)Libraries\boost;$(SolutionDir)Libraries\mpfr_mpir_x86_x64_msvc2010\mpir\dll\$(Platform)\$(Configuration);$(SolutionDir)Libraries\mpfr_mpir_x86_x64_msvc2010\mpfr;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Libraries;$(SolutionDir)Libraries\boost;$(SolutionDir)Libraries\mpir\$(Platform)\$(Configuration);$(SolutionDir)Libraries\mpfr\$(Platform)\$(Configuration);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>$(SolutionDir)Libraries\mpfr_mpir_x86_x64_msvc2010\mpir\dll\$(Platform)\$(Configuration)\mpir.lib;$(SolutionDir)Libraries\mpfr_mpir_x86_x64_msvc2010\mpfr\dll\$(Platform)\$(Configuration)\mpfr.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)Libraries\mpir\$(Platform)\$(Configuration)\mpir.lib;$(SolutionDir)Libraries\mpfr\$(Platform)\$(Configuration)\mpfr.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>cmd.exe /c "xcopy.exe "$(SolutionDir)Libraries\mpfr_mpir_x86_x64_msvc2010\mpir\dll\$(Platform)\$(Configuration)\mpir.dll" "$(SolutionDir)$(Configuration)" /Y &amp;&amp; xcopy.exe "$(SolutionDir)Libraries\mpfr_mpir_x86_x64_msvc2010\mpfr\dll\$(Platform)\$(Configuration)\mpfr.dll" "$(SolutionDir)$(Configuration)" /Y"</Command>
+      <Command>cmd.exe /c "xcopy.exe "$(SolutionDir)Libraries\mpir\$(Platform)\$(Configuration)\mpir.dll" "$(SolutionDir)$(Configuration)" /Y &amp;&amp; xcopy.exe "$(SolutionDir)Libraries\mpfr\$(Platform)\$(Configuration)\mpfr.dll" "$(SolutionDir)$(Configuration)" /Y"</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Copy required application DLLs to the build folder</Message>
