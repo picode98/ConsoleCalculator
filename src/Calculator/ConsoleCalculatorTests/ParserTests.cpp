@@ -27,10 +27,6 @@ namespace ConsoleCalculatorTests
 			mpfr::mpreal::set_default_prec(mpfr::digits2bits(testDigits));
 #endif
 			testParser = new ExpressionParser();
-			testParser->parsingSettings.enableAnsFn = true;
-			testParser->parsingSettings.enableDerivFn = true;
-			testParser->parsingSettings.enableIntegralFn = true;
-
 			testContext = new ExpressionParser::ParsingContext();
 		}
 
@@ -342,6 +338,28 @@ namespace ConsoleCalculatorTests
 
 			result = testParser->parseArithmetic("firstContextOne*firstContextTwo", secondInheritedContext);
 			Assert::IsTrue(result == compareObj);
+		}
+
+		[TestMethod]
+		void FunctionBlacklistTest()
+		{
+			Assert::IsTrue(checkFloatResult("log(100)", "2", false, true));
+			this->testParser->parsingSettings.functionBlacklist.insert("log");
+
+			try
+			{
+				this->testParser->parseArithmetic("log(100)", *(this->testContext));
+
+				Assert::Fail("Test parser failed to throw SyntaxError for blacklisted function");
+			}
+			catch(const SyntaxError&)
+			{
+				
+			}
+			finally
+			{
+				this->testParser->parsingSettings.functionBlacklist.clear();
+			}
 		}
 
 		~ParserTests()

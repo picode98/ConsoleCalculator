@@ -1491,910 +1491,307 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 		vector<string> params;
 		string currentStr;
 
+		if (this->parsingSettings.functionBlacklist.find(fnString) == this->parsingSettings.functionBlacklist.end())
 		{
-			unsigned i = 0;
-			for (int parenNestLevel = 0, braceNestLevel = 0; i < fnExpression.length(); i++)
+
 			{
-				if (fnExpression[i] == '(')
+				unsigned i = 0;
+				for (int parenNestLevel = 0, braceNestLevel = 0; i < fnExpression.length(); i++)
 				{
-					parenNestLevel++;
-				}
-				else if (fnExpression[i] == ')')
-				{
-					parenNestLevel--;
-				}
+					if (fnExpression[i] == '(')
+					{
+						parenNestLevel++;
+					}
+					else if (fnExpression[i] == ')')
+					{
+						parenNestLevel--;
+					}
 
-				if (fnExpression[i] == '{')
-				{
-					braceNestLevel++;
-				}
-				else if (fnExpression[i] == '}')
-				{
-					braceNestLevel--;
-				}
+					if (fnExpression[i] == '{')
+					{
+						braceNestLevel++;
+					}
+					else if (fnExpression[i] == '}')
+					{
+						braceNestLevel--;
+					}
 
-				if (parenNestLevel == 0 && braceNestLevel == 0 && fnExpression[i] == ',')
-				{
-					params.push_back(currentStr);
-					currentStr = "";
-				}
-				else
-				{
-					currentStr += fnExpression[i];
+					if (parenNestLevel == 0 && braceNestLevel == 0 && fnExpression[i] == ',')
+					{
+						params.push_back(currentStr);
+						currentStr = "";
+					}
+					else
+					{
+						currentStr += fnExpression[i];
+					}
 				}
 			}
-		}
 
-		params.push_back(currentStr);
+			params.push_back(currentStr);
 
-		if(fnString == "sin" && params.size() == 1)
-		{
-			string typeErrorMsg = "Sine type error";
-
-			switch(parsingSettings.parseAngleMode)
+			if(fnString == "sin" && params.size() == 1)
 			{
-			case degrees:
-				result.result = sin(parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg) * get_pi_value() / 180.0);
-				break;
-			case radians:
-				result.result = sin(parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg));
-				break;
-			case gradians:
-				result.result = sin(parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg) * get_pi_value() / 200.0);
-				break;
-			}
+				string typeErrorMsg = "Sine type error";
 
-			result.validFn = true;
-			result.validDomain = true;
-		}
-		else if(fnString == "cos" && params.size() == 1)
-		{
-			string typeErrorMsg = "Cosine type error";
-
-			switch(parsingSettings.parseAngleMode)
-			{
-			case degrees:
-				result.result = cos(parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg) * get_pi_value() / 180.0);
-				break;
-			case radians:
-				result.result = cos(parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg));
-				break;
-			case gradians:
-				result.result = cos(parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg) * get_pi_value() / 200.0);
-				break;
-			}
-
-			result.validFn = true;
-			result.validDomain = true;
-		}
-		else if(fnString == "tan" && params.size() == 1)
-		{
-			string typeErrorMsg = "Tangent type error";
-
-			switch(parsingSettings.parseAngleMode)
-			{
-			case degrees:
-				result.result = tan(parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg) * get_pi_value() / 180.0);
-				break;
-			case radians:
-				result.result = tan(parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg));
-				break;
-			case gradians:
-				result.result = tan(parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg) * get_pi_value() / 200.0);
-				break;
-			}
-
-			result.validFn = true;
-			result.validDomain = true;
-		}
-		else if(fnString == "arcsin" && params.size() == 1)
-		{
-			string typeErrorMsg = "Arcsine type error";
-
-			calcFloat expressionVal = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
-			result.validFn = true;
-
-			if(expressionVal >= -1 && expressionVal <= 1)
-			{
 				switch(parsingSettings.parseAngleMode)
 				{
 				case degrees:
-					result.result = asin(expressionVal) * 180.0 / get_pi_value();
+					result.result = sin(parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg) * get_pi_value() / 180.0);
 					break;
 				case radians:
-					result.result = asin(expressionVal);
+					result.result = sin(parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg));
 					break;
 				case gradians:
-					result.result = asin(expressionVal) * 200.0 / get_pi_value();
+					result.result = sin(parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg) * get_pi_value() / 200.0);
 					break;
 				}
 
+				result.validFn = true;
 				result.validDomain = true;
 			}
-		}
-		else if(fnString == "arccos" && params.size() == 1)
-		{
-			string typeErrorMsg = "Arccosine type error";
-
-			calcFloat expressionVal = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
-			result.validFn = true;
-
-			if(expressionVal >= -1 && expressionVal <= 1)
+			else if(fnString == "cos" && params.size() == 1)
 			{
+				string typeErrorMsg = "Cosine type error";
+
 				switch(parsingSettings.parseAngleMode)
 				{
 				case degrees:
-					result.result = acos(expressionVal) * 180.0 / get_pi_value();
+					result.result = cos(parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg) * get_pi_value() / 180.0);
 					break;
 				case radians:
-					result.result = acos(expressionVal);
+					result.result = cos(parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg));
 					break;
 				case gradians:
-					result.result = acos(expressionVal) * 200.0 / get_pi_value();
+					result.result = cos(parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg) * get_pi_value() / 200.0);
 					break;
 				}
 
+				result.validFn = true;
 				result.validDomain = true;
 			}
-		}
-		else if(fnString == "arctan" && params.size() == 1)
-		{
-			string typeErrorMsg = "Arctangent type error";
-
-			switch(parsingSettings.parseAngleMode)
+			else if(fnString == "tan" && params.size() == 1)
 			{
-			case degrees:
-				result.result = atan(parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg)) * 180.0 / get_pi_value();
-				break;
-			case radians:
-				result.result = atan(parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg));
-				break;
-			case gradians:
-				result.result = atan(parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg)) * 200.0 / get_pi_value();
-				break;
-			}
+				string typeErrorMsg = "Tangent type error";
 
-			result.validFn = true;
-			result.validDomain = true;
-		}
-		else if(fnString == "sinh" && params.size() == 1)
-		{
-			string typeErrorMsg = "Hyperbolic sine type error";
+				switch(parsingSettings.parseAngleMode)
+				{
+				case degrees:
+					result.result = tan(parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg) * get_pi_value() / 180.0);
+					break;
+				case radians:
+					result.result = tan(parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg));
+					break;
+				case gradians:
+					result.result = tan(parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg) * get_pi_value() / 200.0);
+					break;
+				}
 
-			calcFloat argument = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
-
-			result.validDomain = result.validFn = true;
-
-			result.result = sinh(argument);
-		}
-		else if(fnString == "cosh" && params.size() == 1)
-		{
-			string typeErrorMsg = "Hyperbolic cosine type error";
-
-			calcFloat argument = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
-
-			result.validDomain = result.validFn = true;
-
-			result.result = cosh(argument);
-		}
-		else if(fnString == "tanh" && params.size() == 1)
-		{
-			string typeErrorMsg = "Hyperbolic tangent type error";
-
-			calcFloat argument = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
-
-			result.validDomain = result.validFn = true;
-
-			result.result = tanh(argument);
-		}
-		else if(fnString == "arcsinh" && params.size() == 1)
-		{
-			string typeErrorMsg = "Hyperbolic arcsine type error";
-
-			calcFloat argument = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
-
-			result.validDomain = result.validFn = true;
-
-			result.result = log(argument + sqrt(1 + (argument * argument)));
-		}
-		else if(fnString == "arccosh" && params.size() == 1)
-		{
-			string typeErrorMsg = "Hyperbolic arccosine type error";
-
-			calcFloat argument = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
-
-			result.validFn = true;
-
-			if(argument >= 1)
-			{
-				result.validDomain = true;
-				result.result = log(argument + (sqrt(argument + 1) * sqrt(argument - 1)));
-			}
-		}
-		else if(fnString == "arctanh" && params.size() == 1)
-		{
-			string typeErrorMsg = "Hyperbolic arctangent type error";
-
-			calcFloat argument = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
-
-			result.validFn = true;
-
-			if(argument > -1 && argument < 1)
-			{
-				result.validDomain = true;
-				result.result = (log(1 + argument) - log(1 - argument)) / 2;
-			}
-		}
-		else if(fnString == "sqrt" && params.size() == 1)
-		{
-			string typeErrorMsg = "Square root type error";
-
-			calcFloat expressionVal = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
-			result.validFn = true;
-
-			if(expressionVal >= 0)
-			{
-				result.validDomain = true;
-				result.result = sqrt(expressionVal);
-			}
-		}
-		else if(fnString == "ln" && params.size() == 1)
-		{
-			string typeErrorMsg = "Natural log type error";
-
-			calcFloat expressionVal = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
-			result.validFn = true;
-			
-			if(expressionVal > 0)
-			{
-				result.validDomain = true;
-				result.result = log(expressionVal);
-			}
-		}
-		else if(fnString == "log" && params.size() == 1)
-		{
-			string typeErrorMsg = "Common log type error";
-
-			calcFloat expressionVal = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
-			result.validFn = true;
-			
-			if(expressionVal > 0)
-			{
-				result.validDomain = true;
-				result.result = log10(expressionVal);
-			}
-		}
-		else if(fnString == "logbase" && params.size() == 2)
-		{
-			string typeErrorMsg = "Logbase type error";
-
-			calcFloat arg1Val = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg),
-				   arg2Val = parseArithmetic(params[1], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
-			result.validFn = true;
-
-			if(arg1Val > 0 && (arg2Val > 0 && arg2Val != 1.0))
-			{
-				result.validDomain = true;
-				result.result = (log10(arg1Val) / log10(arg2Val));
-			}
-		}
-		else if(fnString == "ans" && parsingSettings.enableAnsFn && params.size() == 1)
-		{
-			string typeErrorMsg = "Ans type error";
-			result.validFn = true;
-
-			calcFloat expressionVal = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
-			unsigned expressionValInt;
-
-			try
-			{
-				expressionValInt = floatToUnsigned(expressionVal);
+				result.validFn = true;
 				result.validDomain = true;
 			}
-			catch (const NumericConversionError&)
+			else if(fnString == "arcsin" && params.size() == 1)
 			{
-				result.validDomain = false;
-			}
+				string typeErrorMsg = "Arcsine type error";
 
-			if (result.validDomain)
-			{
-				if (expressionValInt >= 1 && resultHistory.size() >= expressionValInt)
+				calcFloat expressionVal = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
+				result.validFn = true;
+
+				if(expressionVal >= -1 && expressionVal <= 1)
 				{
-					result.validDomain = true;
-
-					result.result = resultHistory[resultHistory.size() - expressionValInt];
-
-#ifdef MULTIPRECISION
-					result.result.set_precision(mpfr::mpreal::get_default_prec());
-#endif
-				}
-				else
-				{
-					result.validDomain = false;
-				}
-			}
-		}
-		else if(fnString == "deriv" && parsingSettings.enableDerivFn && params.size() == 3)
-		{
-			string typeErrorMsg = "Derivative type error";
-
-			calcFloat varValue = parseArithmetic(params[2], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
-			result.validFn = result.validDomain = true;
-			
-			result.result = deriv(params[0], params[1], varValue, 1.0e-4, parsingContext, expression);
-		}
-		else if(fnString == "deriv" && parsingSettings.enableDerivFn && params.size() == 4)
-		{
-			string typeErrorMsg = "Derivative type error";
-			unsigned derivNum;
-
-			result.validFn = true;
-
-			calcFloat varValue = parseArithmetic(params[2], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
-
-			try
-			{
-				derivNum = floatToUnsigned(parseArithmetic(params[3], parsingContext, expression).getVerifiedFloat(typeErrorMsg));
-				result.validDomain = true;
-			}
-			catch (const NumericConversionError&)
-			{
-				result.validDomain = false;
-			}
-
-			if (result.validDomain)
-			{
-				result.result = deriv(params[0], params[1], varValue, 1.0e-4 /*1.0e-6 * pow(10.0, (int)derivNum) */, parsingContext, expression, derivNum);
-			}
-		}
-		else if(fnString == "deriv" && parsingSettings.enableDerivFn && params.size() == 5)
-		{
-			string typeErrorMsg = "Derivative type error";
-			unsigned derivNum;
-
-			result.validFn = true;
-
-			calcFloat varValue = parseArithmetic(params[2], parsingContext, expression).getVerifiedFloat(typeErrorMsg),
-				   delta = parseArithmetic(params[4], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
-
-			try
-			{
-				derivNum = floatToUnsigned(parseArithmetic(params[3], parsingContext, expression).getVerifiedFloat(typeErrorMsg));
-				result.validDomain = true;
-			}
-			catch (const NumericConversionError&)
-			{
-				result.validDomain = false;
-			}
-
-			if (result.validDomain)
-			{
-				result.result = deriv(params[0], params[1], varValue, delta, parsingContext, expression, derivNum);
-			}
-		}
-		else if(fnString == "integral" && parsingSettings.enableIntegralFn && params.size() == 4)
-		{
-			string typeErrorMsg = "Integral type error";
-
-			calcFloat lower = parseArithmetic(params[2], parsingContext, expression).getVerifiedFloat(typeErrorMsg),
-				   upper = parseArithmetic(params[3], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
-
-			result.validFn = result.validDomain = true;
-
-#ifdef MULTIPRECISION
-			result.result = gaussIntegral(params[0], params[1], lower, upper,/* 1.0e-4 * (upper - lower),*/ 50, parsingContext, expression);
-#else
-			result.result = gaussIntegral(params[0], params[1], lower, upper,/* 1.0e-4 * (upper - lower),*/ 10, parsingContext, expression);
-#endif
-			// cout << "Trapezoidal result: " << sintegral(params[0], params[1], lower, upper, 1.0e-4 * (upper - lower), valueMap, settings, resultHistory, expression) << endl;
-		}
-		else if (fnString == "solve" && (params.size() == 4 || params.size() == 5))
-		{
-			string solveExpression = params[0],
-				   variable = params[1];
-			vector<calcFloat> results;
-			
-			result.validFn = result.validDomain = true;
-
-			calcFloat lBound = this->parseArithmetic(params[2], parsingContext).getVerifiedFloat("Solver lower-bound type error"),
-					  hBound = this->parseArithmetic(params[3], parsingContext).getVerifiedFloat("Solver upper-bound type error");
-
-			unsigned intervals;
-
-			if (params.size() == 5)
-			{
-				calcFloat intervalsFloat = this->parseArithmetic(params[4], parsingContext).getVerifiedFloat("Solver interval number type error");
-
-				try
-				{
-					intervals = floatToUnsigned(intervalsFloat);
-				}
-				catch (const NumericConversionError&)
-				{
-					result.validDomain = false;
-					result.specificErrorStr = "invalid number of intervals specified";
-				}
-			}
-			else
-			{
-				intervals = 16;
-			}
-			
-			if (result.validDomain)
-			{
-				this->bisectionSolve(solveExpression, variable, lBound, hBound, results, intervals, parsingContext, solveExpression);
-				result.result.set_list(results);
-			}
-		}
-		else if(fnString == "abs" && params.size() == 1)
-		{
-			string typeErrorMsg = "Absolute value type error";
-
-			calcFloat paramVal = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
-
-			result.validFn = result.validDomain = true;
-
-			result.result = fabs(paramVal);
-		}
-		else if(fnString == "ceil" && params.size() == 1)
-		{
-			string typeErrorMsg = "Ceil type error";
-
-			calcFloat paramVal = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
-
-			result.validFn = result.validDomain = true;
-
-			result.result = ceil(paramVal);
-		}
-		else if(fnString == "ceil" && params.size() == 2)
-		{
-			string typeErrorMsg = "Ceil value type error";
-
-			calcFloat paramVal = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg),
-					  multipleVal  = parseArithmetic(params[1], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
-
-			result.validFn = true;
-
-			if(multipleVal == 0.0)
-			{
-				result.validDomain = false;
-			}
-			else
-			{
-				result.validDomain = true;
-
-				result.result = ceil(paramVal / multipleVal) * multipleVal;
-			}
-		}
-		else if(fnString == "floor" && params.size() == 1)
-		{
-			string typeErrorMsg = "Floor value type error";
-
-			calcFloat paramVal = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
-
-			result.validFn = result.validDomain = true;
-
-			result.result = floor(paramVal);
-		}
-		else if(fnString == "floor" && params.size() == 2)
-		{
-			string typeErrorMsg = "Floor value type error";
-
-			calcFloat paramVal = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg),
-					  multipleVal  = parseArithmetic(params[1], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
-
-			result.validFn = true;
-
-			if(multipleVal == 0.0)
-			{
-				result.validDomain = false;
-			}
-			else
-			{
-				result.validDomain = true;
-
-				result.result = floor(paramVal / multipleVal) * multipleVal;
-			}
-		}
-		else if(fnString == "round" && params.size() == 1)
-		{
-			string typeErrorMsg = "Round value type error";
-
-			calcFloat paramVal = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
-
-			result.validFn = result.validDomain = true;
-
-			result.result = round(paramVal);
-		}
-		else if(fnString == "round" && params.size() == 2)
-		{
-			string typeErrorMsg = "Round value type error";
-
-			calcFloat paramVal = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg),
-					  multipleVal  = parseArithmetic(params[1], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
-
-			result.validFn = true;
-
-			if(multipleVal == 0.0)
-			{
-				result.validDomain = false;
-			}
-			else
-			{
-				result.validDomain = true;
-
-				result.result = round(paramVal / multipleVal) * multipleVal;
-			}
-		}
-		else if(fnString == "primeFct" && params.size() == 1)
-		{
-			calcFloat factorNum;
-			calcSignedInt factorNumInt;
-			bool nonInteger = false;
-			string typeErrorMsg = "Prime factorization type error";
-			vector<calcFloat> resultFactors;
-
-			result.validFn = true;
-
-			factorNum = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
-
-			try
-			{
-				floatToInt(factorNum, factorNumInt);
-			}
-			catch(exception ex)
-			{
-				nonInteger = true;
-			}
-
-			if(nonInteger || factorNumInt <= 1)
-			{
-				result.validDomain = false;
-			}
-			else
-			{
-				result.validDomain = true;
-
-				ParserMathematicalFunctions::primeFactorization(resultFactors, factorNumInt);
-
-				result.result.set_list(resultFactors);
-			}
-		}
-		else if(fnString == "isPrime" && params.size() == 1)
-		{
-			calcFloat checkNum;
-			calcSignedInt checkNumInt;
-			bool nonInteger = false;
-			string typeErrorMsg = "Prime checking type error";
-
-			result.validFn = true;
-
-			checkNum = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
-
-			try
-			{
-				floatToInt(checkNum, checkNumInt);
-			}
-			catch(NumericConversionError ex)
-			{
-				nonInteger = true;
-			}
-
-			if(nonInteger || checkNumInt <= 1)
-			{
-				result.validDomain = false;
-			}
-			else
-			{
-				result.validDomain = true;
-
-				result.result = boolToFloat(ParserMathematicalFunctions::isPrime(checkNumInt));
-			}
-		}
-		else if(fnString == "gcd" && params.size() == 2)
-		{
-			result.validFn = true;
-
-			string typeErrorMsg = "Greatest common denominator type error";
-			bool nonInteger = false;
-
-			calcFloat firstVal = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg),
-					  secondVal = parseArithmetic(params[1], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
-
-			calcSignedInt firstValInt, secondValInt, resultInt;
-
-			if(firstVal <= 0 || secondVal <= 0)
-			{
-				result.validDomain = false;
-			}
-			else
-			{
-				try
-				{
-					floatToInt(firstVal, firstValInt);
-					floatToInt(secondVal, secondValInt);
-
-					// cout << firstValInt << ' ' << secondValInt << endl;
-				}
-				catch(const NumericConversionError&)
-				{
-					nonInteger = true;
-				}
-
-				if(nonInteger)
-				{
-					result.validDomain = false;
-				}
-				else
-				{
-					result.validDomain = true;
-
-#ifdef MULTIPRECISION
-					resultInt = gcd(firstValInt, secondValInt);
-#else
-					resultInt = ParserMathematicalFunctions::greatestCommonDenominator(firstValInt, secondValInt);
-#endif
-
-					calcFloat buffer;
-					intToFloat(resultInt, buffer);
-
-					result.result = buffer;
-				}
-			}
-		}
-		else if(fnString == "lcm" && params.size() == 2)
-		{
-			result.validFn = true;
-
-			string typeErrorMsg = "Least common multiple type error";
-			bool nonInteger = false;
-
-			calcFloat firstVal = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg),
-					  secondVal = parseArithmetic(params[1], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
-
-			calcSignedInt firstValInt, secondValInt, resultInt;
-
-			if(firstVal <= 0 || secondVal <= 0)
-			{
-				result.validDomain = false;
-			}
-			else
-			{
-				try
-				{
-					floatToInt(firstVal, firstValInt);
-					floatToInt(secondVal, secondValInt);
-
-					// cout << firstValInt << ' ' << secondValInt << endl;
-				}
-				catch(const NumericConversionError&)
-				{
-					nonInteger = true;
-				}
-
-				if(nonInteger)
-				{
-					result.validDomain = false;
-				}
-				else
-				{
-					result.validDomain = true;
-
-#ifdef MULTIPRECISION
-					resultInt = lcm(firstValInt, secondValInt);
-#else
-					resultInt = ParserMathematicalFunctions::leastCommonMultiple(firstValInt, secondValInt);
-#endif
-
-					calcFloat buffer;
-					intToFloat(resultInt, buffer);
-
-					result.result = buffer;
-				}
-			}
-		}
-		else if(fnString == "rand" && params.size() == 1 && params[0] == "")
-		{
-			result.validFn = result.validDomain = true;
-#ifdef MULTIPRECISION
-			calcFloat floatResult;
-
-			if(!seededEngine)
-			{
-				seededEngine = true;
-
-				gmp_randinit_mt(randState);
-			}
-
-			mpfr_urandomb(floatResult.mpfr_ptr(), randState);
-
-			result.result = floatResult;
-#else
-			if (!seededEngine)
-			{
-				long long tickCount = chrono::high_resolution_clock::now().time_since_epoch().count();
-				unsigned seedValue = static_cast<unsigned>(tickCount % (static_cast<long long>(numeric_limits<unsigned>::max()) + 1));
-
-				seededEngine = true;
-				randEngine.seed(seedValue);
-			}
-
-			uniform_real_distribution<calcFloat> distributionGenerator(0.0, 1.0);
-			result.result = distributionGenerator(randEngine);
-#endif
-		}
-		else if(fnString == "randInt" && params.size() == 2)
-		{
-			result.validFn = true;
-
-			bool nonInteger = false;
-			calcSignedInt minValInt, maxValInt;
-			calcFloat minVal, maxVal;
-			string typeErrorMsg = "Random integer type error";
-
-			minVal = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
-			maxVal = parseArithmetic(params[1], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
-
-			if(minVal > maxVal)
-			{
-				result.validDomain = false;
-			}
-			else
-			{
-				try
-				{
-					floatToInt(minVal, minValInt);
-					floatToInt(maxVal, maxValInt);
-				}
-				catch(const NumericConversionError&)
-				{
-					nonInteger = true;
-				}
-
-				if(nonInteger)
-				{
-					result.validDomain = false;
-				}
-				else
-				{
-					result.validDomain = true;
-
-#ifdef MULTIPRECISION
-					calcSignedInt randNum, randRange;
-
-					if(!seededEngine)
+					switch(parsingSettings.parseAngleMode)
 					{
-						seededEngine = true;
-
-						gmp_randinit_mt(randState);
+					case degrees:
+						result.result = asin(expressionVal) * 180.0 / get_pi_value();
+						break;
+					case radians:
+						result.result = asin(expressionVal);
+						break;
+					case gradians:
+						result.result = asin(expressionVal) * 200.0 / get_pi_value();
+						break;
 					}
 
-					randRange = (maxValInt - minValInt + 1);
-					mpz_urandomm(randNum.backend().data(), randState, randRange.backend().data());
+					result.validDomain = true;
+				}
+			}
+			else if(fnString == "arccos" && params.size() == 1)
+			{
+				string typeErrorMsg = "Arccosine type error";
 
-					randNum += minValInt;
+				calcFloat expressionVal = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
+				result.validFn = true;
 
-					calcFloat floatResult;
-					intToFloat(randNum, floatResult);
-
-					result.result = floatResult;
-#else
-					if (!seededEngine)
+				if(expressionVal >= -1 && expressionVal <= 1)
+				{
+					switch(parsingSettings.parseAngleMode)
 					{
-						long long tickCount = chrono::high_resolution_clock::now().time_since_epoch().count();
-						unsigned seedValue = static_cast<unsigned>(tickCount % (static_cast<long long>(numeric_limits<unsigned>::max()) + 1));
-
-						seededEngine = true;
-						randEngine.seed(seedValue);
+					case degrees:
+						result.result = acos(expressionVal) * 180.0 / get_pi_value();
+						break;
+					case radians:
+						result.result = acos(expressionVal);
+						break;
+					case gradians:
+						result.result = acos(expressionVal) * 200.0 / get_pi_value();
+						break;
 					}
 
-					calcFloat floatResult;
-
-					uniform_int_distribution<calcSignedInt> distributionGenerator(minValInt, maxValInt);
-					intToFloat(distributionGenerator(randEngine), floatResult);
-					result.result = floatResult;
-#endif
-				}
-			}
-		}
-		else if(fnString == "seq" && (params.size() == 4 || params.size() == 5))
-		{
-			vector<CalcObj> values;
-			vector<calcFloat> floatValues;
-
-			string typeErrorMsg = "Sequence type error";
-
-			result.validFn = true;
-
-			calcFloat lower = parseArithmetic(params[2], parsingContext, expression).getVerifiedFloat(typeErrorMsg),
-					  upper = parseArithmetic(params[3], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
-
-			if(params.size() == 5)
-			{
-				calcFloat delta = parseArithmetic(params[4], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
-
-				try
-				{
-					evalSeq(values, params[0], params[1], lower, upper, parsingContext, expression, false, delta);
 					result.validDomain = true;
 				}
-				catch (const DomainError& ex)
-				{
-					result.validDomain = false;
-					result.specificErrorStr = ex.getSpecificInformation();
-				}
 			}
-			else
+			else if(fnString == "arctan" && params.size() == 1)
 			{
-				try
+				string typeErrorMsg = "Arctangent type error";
+
+				switch(parsingSettings.parseAngleMode)
 				{
-					evalSeq(values, params[0], params[1], lower, upper, parsingContext, expression);
+				case degrees:
+					result.result = atan(parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg)) * 180.0 / get_pi_value();
+					break;
+				case radians:
+					result.result = atan(parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg));
+					break;
+				case gradians:
+					result.result = atan(parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg)) * 200.0 / get_pi_value();
+					break;
+				}
+
+				result.validFn = true;
+				result.validDomain = true;
+			}
+			else if(fnString == "sinh" && params.size() == 1)
+			{
+				string typeErrorMsg = "Hyperbolic sine type error";
+
+				calcFloat argument = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
+
+				result.validDomain = result.validFn = true;
+
+				result.result = sinh(argument);
+			}
+			else if(fnString == "cosh" && params.size() == 1)
+			{
+				string typeErrorMsg = "Hyperbolic cosine type error";
+
+				calcFloat argument = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
+
+				result.validDomain = result.validFn = true;
+
+				result.result = cosh(argument);
+			}
+			else if(fnString == "tanh" && params.size() == 1)
+			{
+				string typeErrorMsg = "Hyperbolic tangent type error";
+
+				calcFloat argument = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
+
+				result.validDomain = result.validFn = true;
+
+				result.result = tanh(argument);
+			}
+			else if(fnString == "arcsinh" && params.size() == 1)
+			{
+				string typeErrorMsg = "Hyperbolic arcsine type error";
+
+				calcFloat argument = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
+
+				result.validDomain = result.validFn = true;
+
+				result.result = log(argument + sqrt(1 + (argument * argument)));
+			}
+			else if(fnString == "arccosh" && params.size() == 1)
+			{
+				string typeErrorMsg = "Hyperbolic arccosine type error";
+
+				calcFloat argument = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
+
+				result.validFn = true;
+
+				if(argument >= 1)
+				{
 					result.validDomain = true;
+					result.result = log(argument + (sqrt(argument + 1) * sqrt(argument - 1)));
 				}
-				catch (const DomainError& ex)
+			}
+			else if(fnString == "arctanh" && params.size() == 1)
+			{
+				string typeErrorMsg = "Hyperbolic arctangent type error";
+
+				calcFloat argument = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
+
+				result.validFn = true;
+
+				if(argument > -1 && argument < 1)
 				{
-					result.validDomain = false;
-					result.specificErrorStr = ex.getSpecificInformation();
+					result.validDomain = true;
+					result.result = (log(1 + argument) - log(1 - argument)) / 2;
 				}
 			}
-
-			toVerifiedFloatVector(values, floatValues, typeErrorMsg);
-
-			result.result.set_list(floatValues);
-		}
-		else if(fnString == "foreach" && params.size() == 2)
-		{
-			CalcObj listObj = parseArithmetic(params[0], parsingContext, expression),
-					newObj;
-
-			vector<calcFloat> listValues, newValues;
-
-			ParsingContext functionContext = ParsingContext(&parsingContext);
-
-			result.validFn = result.validDomain = true;
-
-			string valueTypeErrorStr = "Foreach value type error",
-				   argumentTypeErrorStr = "Foreach argument type error";
-
-			if(listObj.get_type() == TYPE_LIST)
+			else if(fnString == "sqrt" && params.size() == 1)
 			{
-				listObj.get_list(listValues);
+				string typeErrorMsg = "Square root type error";
 
-				newValues.resize(listValues.size());
+				calcFloat expressionVal = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
+				result.validFn = true;
 
-				for(unsigned i = 0; i < listValues.size(); i++)
+				if(expressionVal >= 0)
 				{
-					functionContext.setVariable("index", CalcObj(i));
-					functionContext.setVariable("value", listValues[i]);
-					functionContext.setVariable("length", CalcObj(listValues.size()));
-
-					newValues[i] = parseArithmetic(params[1], functionContext, expression).getVerifiedFloat(valueTypeErrorStr);
+					result.validDomain = true;
+					result.result = sqrt(expressionVal);
 				}
-
-				result.result.set_list(newValues);
 			}
-			else
+			else if(fnString == "ln" && params.size() == 1)
 			{
-				throw ExpressionTypeError(expression, argumentTypeErrorStr);
-			}
-		}
-		else if(fnString == "getIndex" && params.size() == 2)
-		{
-			CalcObj listObj = parseArithmetic(params[0], parsingContext, expression);
+				string typeErrorMsg = "Natural log type error";
 
-			result.validFn = true;
-
-			string valueTypeErrorStr = "Getindex value type error",
-				   argumentTypeErrorStr = "Getindex argument type error";
-
-			if(listObj.get_type() == TYPE_LIST)
-			{
-				calcFloat index = parseArithmetic(params[1], parsingContext, expression).getVerifiedFloat(argumentTypeErrorStr);
-				unsigned intIndex;
+				calcFloat expressionVal = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
+				result.validFn = true;
 				
+				if(expressionVal > 0)
+				{
+					result.validDomain = true;
+					result.result = log(expressionVal);
+				}
+			}
+			else if(fnString == "log" && params.size() == 1)
+			{
+				string typeErrorMsg = "Common log type error";
+
+				calcFloat expressionVal = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
+				result.validFn = true;
+				
+				if(expressionVal > 0)
+				{
+					result.validDomain = true;
+					result.result = log10(expressionVal);
+				}
+			}
+			else if(fnString == "logbase" && params.size() == 2)
+			{
+				string typeErrorMsg = "Logbase type error";
+
+				calcFloat arg1Val = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg),
+					   arg2Val = parseArithmetic(params[1], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
+				result.validFn = true;
+
+				if(arg1Val > 0 && (arg2Val > 0 && arg2Val != 1.0))
+				{
+					result.validDomain = true;
+					result.result = (log10(arg1Val) / log10(arg2Val));
+				}
+			}
+			else if(fnString == "ans" && params.size() == 1)
+			{
+				string typeErrorMsg = "Ans type error";
+				result.validFn = true;
+
+				calcFloat expressionVal = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
+				unsigned expressionValInt;
+
 				try
 				{
-					intIndex = floatToUnsigned(index);
+					expressionValInt = floatToUnsigned(expressionVal);
 					result.validDomain = true;
 				}
 				catch (const NumericConversionError&)
@@ -2404,31 +1801,43 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 
 				if (result.validDomain)
 				{
-					result.result = listObj.get_list_index(intIndex);
+					if (expressionValInt >= 1 && resultHistory.size() >= expressionValInt)
+					{
+						result.validDomain = true;
+
+						result.result = resultHistory[resultHistory.size() - expressionValInt];
+
+	#ifdef MULTIPRECISION
+						result.result.set_precision(mpfr::mpreal::get_default_prec());
+	#endif
+					}
+					else
+					{
+						result.validDomain = false;
+					}
 				}
 			}
-			else
+			else if(fnString == "deriv" && params.size() == 3)
 			{
-				throw ExpressionTypeError(expression, argumentTypeErrorStr);
+				string typeErrorMsg = "Derivative type error";
+
+				calcFloat varValue = parseArithmetic(params[2], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
+				result.validFn = result.validDomain = true;
+				
+				result.result = deriv(params[0], params[1], varValue, 1.0e-4, parsingContext, expression);
 			}
-		}
-		else if(fnString == "setIndex" && params.size() == 3)
-		{
-			CalcObj listObj = parseArithmetic(params[0], parsingContext, expression);
-
-			result.validFn = true;
-
-			string valueTypeErrorStr = "Setindex value type error",
-				   argumentTypeErrorStr = "Setindex argument type error";
-
-			if(listObj.get_type() == TYPE_LIST)
+			else if(fnString == "deriv" && params.size() == 4)
 			{
-				calcFloat index = parseArithmetic(params[1], parsingContext, expression).getVerifiedFloat(argumentTypeErrorStr), newVal;
-				unsigned intIndex;
+				string typeErrorMsg = "Derivative type error";
+				unsigned derivNum;
+
+				result.validFn = true;
+
+				calcFloat varValue = parseArithmetic(params[2], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
 
 				try
 				{
-					intIndex = floatToUnsigned(index);
+					derivNum = floatToUnsigned(parseArithmetic(params[3], parsingContext, expression).getVerifiedFloat(typeErrorMsg));
 					result.validDomain = true;
 				}
 				catch (const NumericConversionError&)
@@ -2436,623 +1845,1218 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 					result.validDomain = false;
 				}
 
-				newVal = parseArithmetic(params[2], parsingContext, expression).getVerifiedFloat(argumentTypeErrorStr);
+				if (result.validDomain)
+				{
+					result.result = deriv(params[0], params[1], varValue, 1.0e-4 /*1.0e-6 * pow(10.0, (int)derivNum) */, parsingContext, expression, derivNum);
+				}
+			}
+			else if(fnString == "deriv" && params.size() == 5)
+			{
+				string typeErrorMsg = "Derivative type error";
+				unsigned derivNum;
+
+				result.validFn = true;
+
+				calcFloat varValue = parseArithmetic(params[2], parsingContext, expression).getVerifiedFloat(typeErrorMsg),
+					   delta = parseArithmetic(params[4], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
+
+				try
+				{
+					derivNum = floatToUnsigned(parseArithmetic(params[3], parsingContext, expression).getVerifiedFloat(typeErrorMsg));
+					result.validDomain = true;
+				}
+				catch (const NumericConversionError&)
+				{
+					result.validDomain = false;
+				}
 
 				if (result.validDomain)
 				{
-					listObj.set_list_index(intIndex, newVal);
-
-					result.result = listObj;
+					result.result = deriv(params[0], params[1], varValue, delta, parsingContext, expression, derivNum);
 				}
 			}
-			else
+			else if(fnString == "integral" && params.size() == 4)
 			{
-				throw ExpressionTypeError(expression, argumentTypeErrorStr);
-			}
-		}
-		else if(fnString == "length" && params.size() == 1)
-		{
-			CalcObj listObj = parseArithmetic(params[0], parsingContext, expression);
+				string typeErrorMsg = "Integral type error";
 
-			result.validFn = result.validDomain = true;
-
-			string typeErrorStr = "Length type error";
-
-			if(listObj.get_type() == TYPE_LIST)
-			{
-				result.result = CalcObj(listObj.get_list_length());
-			}
-			else
-			{
-				throw ExpressionTypeError(expression, typeErrorStr);
-			}
-		}
-		else if(fnString == "concat" && params.size() >= 2)
-		{
-			CalcObj concatResult = parseArithmetic(params[0], parsingContext, expression);
-
-			result.validFn = result.validDomain = true;
-
-			for(unsigned i = 1; i < params.size(); i++)
-			{
-				concatResult.concat_list(parseArithmetic(params[i], parsingContext, expression));
-			}
-
-			result.result = concatResult;
-		}
-		else if(fnString == "sublist" && params.size() == 3)
-		{
-			CalcObj origList = parseArithmetic(params[0], parsingContext, expression);
-
-			string indexTypeErrorStr = "Sublist index type error";
-
-			calcFloat startIndex = parseArithmetic(params[1], parsingContext, expression).getVerifiedFloat(indexTypeErrorStr),
-					  endIndex = parseArithmetic(params[2], parsingContext, expression).getVerifiedFloat(indexTypeErrorStr);
-
-			unsigned startIndexInt,
-					 endIndexInt;
-
-			try
-			{
-				startIndexInt = floatToUnsigned(startIndex);
-				endIndexInt = floatToUnsigned(endIndex);
-
-				result.validDomain = true;
-			}
-			catch (const NumericConversionError&)
-			{
-				result.validDomain = false;
-			}
-
-			if (result.validDomain)
-			{
-				vector<calcFloat> sublistBuffer;
+				calcFloat lower = parseArithmetic(params[2], parsingContext, expression).getVerifiedFloat(typeErrorMsg),
+					   upper = parseArithmetic(params[3], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
 
 				result.validFn = result.validDomain = true;
 
-				origList.sublist(sublistBuffer, startIndexInt, endIndexInt);
-
-				result.result.set_list(sublistBuffer);
+	#ifdef MULTIPRECISION
+				result.result = gaussIntegral(params[0], params[1], lower, upper,/* 1.0e-4 * (upper - lower),*/ 50, parsingContext, expression);
+	#else
+				result.result = gaussIntegral(params[0], params[1], lower, upper,/* 1.0e-4 * (upper - lower),*/ 10, parsingContext, expression);
+	#endif
+				// cout << "Trapezoidal result: " << sintegral(params[0], params[1], lower, upper, 1.0e-4 * (upper - lower), valueMap, settings, resultHistory, expression) << endl;
 			}
-		}
-		else if(fnString == "filter" && params.size() == 2)
-		{
-			CalcObj listObj = parseArithmetic(params[0], parsingContext, expression),
-					newObj;
-
-			vector<calcFloat> listValues, newValues;
-
-			ParsingContext functionContext = ParsingContext(&parsingContext);
-
-			result.validFn = result.validDomain = true;
-
-			string valueTypeErrorStr = "Filter value type error",
-				   argumentTypeErrorStr = "Filter argument type error";
-
-			if(listObj.get_type() == TYPE_LIST)
+			else if (fnString == "solve" && (params.size() == 4 || params.size() == 5))
 			{
-				listObj.get_list(listValues);
+				string solveExpression = params[0],
+					   variable = params[1];
+				vector<calcFloat> results;
+				
+				result.validFn = result.validDomain = true;
 
-				for(unsigned i = 0; i < listValues.size(); i++)
+				calcFloat lBound = this->parseArithmetic(params[2], parsingContext).getVerifiedFloat("Solver lower-bound type error"),
+						  hBound = this->parseArithmetic(params[3], parsingContext).getVerifiedFloat("Solver upper-bound type error");
+
+				unsigned intervals;
+
+				if (params.size() == 5)
 				{
-					functionContext.setVariable("index", CalcObj(i));
-					functionContext.setVariable("value", listValues[i]);
-					functionContext.setVariable("length", CalcObj(listValues.size()));
+					calcFloat intervalsFloat = this->parseArithmetic(params[4], parsingContext).getVerifiedFloat("Solver interval number type error");
 
-					calcFloat keepVal = parseArithmetic(params[1], functionContext, expression).getVerifiedFloat(valueTypeErrorStr);
-
-					if(keepVal != 0.0)
+					try
 					{
-						newValues.push_back(listValues[i]);
+						intervals = floatToUnsigned(intervalsFloat);
+					}
+					catch (const NumericConversionError&)
+					{
+						result.validDomain = false;
+						result.specificErrorStr = "invalid number of intervals specified";
+					}
+				}
+				else
+				{
+					intervals = 16;
+				}
+				
+				if (result.validDomain)
+				{
+					this->bisectionSolve(solveExpression, variable, lBound, hBound, results, intervals, parsingContext, solveExpression);
+					result.result.set_list(results);
+				}
+			}
+			else if(fnString == "abs" && params.size() == 1)
+			{
+				string typeErrorMsg = "Absolute value type error";
+
+				calcFloat paramVal = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
+
+				result.validFn = result.validDomain = true;
+
+				result.result = fabs(paramVal);
+			}
+			else if(fnString == "ceil" && params.size() == 1)
+			{
+				string typeErrorMsg = "Ceil type error";
+
+				calcFloat paramVal = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
+
+				result.validFn = result.validDomain = true;
+
+				result.result = ceil(paramVal);
+			}
+			else if(fnString == "ceil" && params.size() == 2)
+			{
+				string typeErrorMsg = "Ceil value type error";
+
+				calcFloat paramVal = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg),
+						  multipleVal  = parseArithmetic(params[1], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
+
+				result.validFn = true;
+
+				if(multipleVal == 0.0)
+				{
+					result.validDomain = false;
+				}
+				else
+				{
+					result.validDomain = true;
+
+					result.result = ceil(paramVal / multipleVal) * multipleVal;
+				}
+			}
+			else if(fnString == "floor" && params.size() == 1)
+			{
+				string typeErrorMsg = "Floor value type error";
+
+				calcFloat paramVal = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
+
+				result.validFn = result.validDomain = true;
+
+				result.result = floor(paramVal);
+			}
+			else if(fnString == "floor" && params.size() == 2)
+			{
+				string typeErrorMsg = "Floor value type error";
+
+				calcFloat paramVal = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg),
+						  multipleVal  = parseArithmetic(params[1], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
+
+				result.validFn = true;
+
+				if(multipleVal == 0.0)
+				{
+					result.validDomain = false;
+				}
+				else
+				{
+					result.validDomain = true;
+
+					result.result = floor(paramVal / multipleVal) * multipleVal;
+				}
+			}
+			else if(fnString == "round" && params.size() == 1)
+			{
+				string typeErrorMsg = "Round value type error";
+
+				calcFloat paramVal = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
+
+				result.validFn = result.validDomain = true;
+
+				result.result = round(paramVal);
+			}
+			else if(fnString == "round" && params.size() == 2)
+			{
+				string typeErrorMsg = "Round value type error";
+
+				calcFloat paramVal = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg),
+						  multipleVal  = parseArithmetic(params[1], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
+
+				result.validFn = true;
+
+				if(multipleVal == 0.0)
+				{
+					result.validDomain = false;
+				}
+				else
+				{
+					result.validDomain = true;
+
+					result.result = round(paramVal / multipleVal) * multipleVal;
+				}
+			}
+			else if(fnString == "primeFct" && params.size() == 1)
+			{
+				calcFloat factorNum;
+				calcSignedInt factorNumInt;
+				bool nonInteger = false;
+				string typeErrorMsg = "Prime factorization type error";
+				vector<calcFloat> resultFactors;
+
+				result.validFn = true;
+
+				factorNum = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
+
+				try
+				{
+					floatToInt(factorNum, factorNumInt);
+				}
+				catch(exception ex)
+				{
+					nonInteger = true;
+				}
+
+				if(nonInteger || factorNumInt <= 1)
+				{
+					result.validDomain = false;
+				}
+				else
+				{
+					result.validDomain = true;
+
+					ParserMathematicalFunctions::primeFactorization(resultFactors, factorNumInt);
+
+					result.result.set_list(resultFactors);
+				}
+			}
+			else if(fnString == "isPrime" && params.size() == 1)
+			{
+				calcFloat checkNum;
+				calcSignedInt checkNumInt;
+				bool nonInteger = false;
+				string typeErrorMsg = "Prime checking type error";
+
+				result.validFn = true;
+
+				checkNum = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
+
+				try
+				{
+					floatToInt(checkNum, checkNumInt);
+				}
+				catch(NumericConversionError ex)
+				{
+					nonInteger = true;
+				}
+
+				if(nonInteger || checkNumInt <= 1)
+				{
+					result.validDomain = false;
+				}
+				else
+				{
+					result.validDomain = true;
+
+					result.result = boolToFloat(ParserMathematicalFunctions::isPrime(checkNumInt));
+				}
+			}
+			else if(fnString == "gcd" && params.size() == 2)
+			{
+				result.validFn = true;
+
+				string typeErrorMsg = "Greatest common denominator type error";
+				bool nonInteger = false;
+
+				calcFloat firstVal = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg),
+						  secondVal = parseArithmetic(params[1], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
+
+				calcSignedInt firstValInt, secondValInt, resultInt;
+
+				if(firstVal <= 0 || secondVal <= 0)
+				{
+					result.validDomain = false;
+				}
+				else
+				{
+					try
+					{
+						floatToInt(firstVal, firstValInt);
+						floatToInt(secondVal, secondValInt);
+
+						// cout << firstValInt << ' ' << secondValInt << endl;
+					}
+					catch(const NumericConversionError&)
+					{
+						nonInteger = true;
+					}
+
+					if(nonInteger)
+					{
+						result.validDomain = false;
+					}
+					else
+					{
+						result.validDomain = true;
+
+	#ifdef MULTIPRECISION
+						resultInt = gcd(firstValInt, secondValInt);
+	#else
+						resultInt = ParserMathematicalFunctions::greatestCommonDenominator(firstValInt, secondValInt);
+	#endif
+
+						calcFloat buffer;
+						intToFloat(resultInt, buffer);
+
+						result.result = buffer;
+					}
+				}
+			}
+			else if(fnString == "lcm" && params.size() == 2)
+			{
+				result.validFn = true;
+
+				string typeErrorMsg = "Least common multiple type error";
+				bool nonInteger = false;
+
+				calcFloat firstVal = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg),
+						  secondVal = parseArithmetic(params[1], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
+
+				calcSignedInt firstValInt, secondValInt, resultInt;
+
+				if(firstVal <= 0 || secondVal <= 0)
+				{
+					result.validDomain = false;
+				}
+				else
+				{
+					try
+					{
+						floatToInt(firstVal, firstValInt);
+						floatToInt(secondVal, secondValInt);
+
+						// cout << firstValInt << ' ' << secondValInt << endl;
+					}
+					catch(const NumericConversionError&)
+					{
+						nonInteger = true;
+					}
+
+					if(nonInteger)
+					{
+						result.validDomain = false;
+					}
+					else
+					{
+						result.validDomain = true;
+
+	#ifdef MULTIPRECISION
+						resultInt = lcm(firstValInt, secondValInt);
+	#else
+						resultInt = ParserMathematicalFunctions::leastCommonMultiple(firstValInt, secondValInt);
+	#endif
+
+						calcFloat buffer;
+						intToFloat(resultInt, buffer);
+
+						result.result = buffer;
+					}
+				}
+			}
+			else if(fnString == "rand" && params.size() == 1 && params[0] == "")
+			{
+				result.validFn = result.validDomain = true;
+	#ifdef MULTIPRECISION
+				calcFloat floatResult;
+
+				if(!seededEngine)
+				{
+					seededEngine = true;
+
+					gmp_randinit_mt(randState);
+				}
+
+				mpfr_urandomb(floatResult.mpfr_ptr(), randState);
+
+				result.result = floatResult;
+	#else
+				if (!seededEngine)
+				{
+					long long tickCount = chrono::high_resolution_clock::now().time_since_epoch().count();
+					unsigned seedValue = static_cast<unsigned>(tickCount % (static_cast<long long>(numeric_limits<unsigned>::max()) + 1));
+
+					seededEngine = true;
+					randEngine.seed(seedValue);
+				}
+
+				uniform_real_distribution<calcFloat> distributionGenerator(0.0, 1.0);
+				result.result = distributionGenerator(randEngine);
+	#endif
+			}
+			else if(fnString == "randInt" && params.size() == 2)
+			{
+				result.validFn = true;
+
+				bool nonInteger = false;
+				calcSignedInt minValInt, maxValInt;
+				calcFloat minVal, maxVal;
+				string typeErrorMsg = "Random integer type error";
+
+				minVal = parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
+				maxVal = parseArithmetic(params[1], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
+
+				if(minVal > maxVal)
+				{
+					result.validDomain = false;
+				}
+				else
+				{
+					try
+					{
+						floatToInt(minVal, minValInt);
+						floatToInt(maxVal, maxValInt);
+					}
+					catch(const NumericConversionError&)
+					{
+						nonInteger = true;
+					}
+
+					if(nonInteger)
+					{
+						result.validDomain = false;
+					}
+					else
+					{
+						result.validDomain = true;
+
+	#ifdef MULTIPRECISION
+						calcSignedInt randNum, randRange;
+
+						if(!seededEngine)
+						{
+							seededEngine = true;
+
+							gmp_randinit_mt(randState);
+						}
+
+						randRange = (maxValInt - minValInt + 1);
+						mpz_urandomm(randNum.backend().data(), randState, randRange.backend().data());
+
+						randNum += minValInt;
+
+						calcFloat floatResult;
+						intToFloat(randNum, floatResult);
+
+						result.result = floatResult;
+	#else
+						if (!seededEngine)
+						{
+							long long tickCount = chrono::high_resolution_clock::now().time_since_epoch().count();
+							unsigned seedValue = static_cast<unsigned>(tickCount % (static_cast<long long>(numeric_limits<unsigned>::max()) + 1));
+
+							seededEngine = true;
+							randEngine.seed(seedValue);
+						}
+
+						calcFloat floatResult;
+
+						uniform_int_distribution<calcSignedInt> distributionGenerator(minValInt, maxValInt);
+						intToFloat(distributionGenerator(randEngine), floatResult);
+						result.result = floatResult;
+	#endif
+					}
+				}
+			}
+			else if(fnString == "seq" && (params.size() == 4 || params.size() == 5))
+			{
+				vector<CalcObj> values;
+				vector<calcFloat> floatValues;
+
+				string typeErrorMsg = "Sequence type error";
+
+				result.validFn = true;
+
+				calcFloat lower = parseArithmetic(params[2], parsingContext, expression).getVerifiedFloat(typeErrorMsg),
+						  upper = parseArithmetic(params[3], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
+
+				if(params.size() == 5)
+				{
+					calcFloat delta = parseArithmetic(params[4], parsingContext, expression).getVerifiedFloat(typeErrorMsg);
+
+					try
+					{
+						evalSeq(values, params[0], params[1], lower, upper, parsingContext, expression, false, delta);
+						result.validDomain = true;
+					}
+					catch (const DomainError& ex)
+					{
+						result.validDomain = false;
+						result.specificErrorStr = ex.getSpecificInformation();
+					}
+				}
+				else
+				{
+					try
+					{
+						evalSeq(values, params[0], params[1], lower, upper, parsingContext, expression);
+						result.validDomain = true;
+					}
+					catch (const DomainError& ex)
+					{
+						result.validDomain = false;
+						result.specificErrorStr = ex.getSpecificInformation();
 					}
 				}
 
-				result.result.set_list(newValues);
+				toVerifiedFloatVector(values, floatValues, typeErrorMsg);
+
+				result.result.set_list(floatValues);
 			}
-			else
+			else if(fnString == "foreach" && params.size() == 2)
 			{
-				throw ExpressionTypeError(expression, argumentTypeErrorStr);
-			}
-		}
-		else if(fnString == "avg" && params.size() >= 1)
-		{
-			vector<calcFloat> parsedParams;
+				CalcObj listObj = parseArithmetic(params[0], parsingContext, expression),
+						newObj;
 
-			string typeErrorMsg = "Average type error";
+				vector<calcFloat> listValues, newValues;
 
-			result.validFn = true;
+				ParsingContext functionContext = ParsingContext(&parsingContext);
 
-			CalcObj firstParam = parseArithmetic(params[0], parsingContext, expression);
-
-			if(firstParam.get_type() == TYPE_LIST)
-			{
-				vector<calcFloat> avgList;
-				
-				firstParam.get_list(avgList);
-
-				if(avgList.size() > 0)
-				{
-					result.validDomain = true;
-
-					result.result = ParserMathematicalFunctions::average(avgList);
-				}
-				else
-				{
-					result.validDomain = false;
-				}
-			}
-			else
-			{
-				result.validDomain = true;
-
-				parsedParams.push_back(firstParam.getVerifiedFloat(typeErrorMsg));
-
-				for(unsigned i = 1; i < params.size(); i++)
-				{
-					parsedParams.push_back(parseArithmetic(params[i], parsingContext, expression).getVerifiedFloat(typeErrorMsg));
-				}
-
-				result.result = ParserMathematicalFunctions::average(parsedParams);
-			}
-		}
-		//else if(fnString == "avgseq" && (params.size() == 4 || params.size() == 5))
-		//{
-		//	vector<CalcObj> values;
-		//	vector<calcFloat> floatValues;
-
-		//	string typeErrorMsg = "Sequence average type error";
-
-		//	result.validFn = result.validDomain = true;
-
-		//	calcFloat lower = parseArithmetic(params[2], valueMap, settings, resultHistory, expression).getVerifiedFloat(typeErrorMsg),
-		//			  upper = parseArithmetic(params[3], valueMap, settings, resultHistory, expression).getVerifiedFloat(typeErrorMsg);
-
-		//	if(params.size() == 5)
-		//	{
-		//		calcFloat delta = parseArithmetic(params[4], valueMap, settings, resultHistory, expression).getVerifiedFloat(typeErrorMsg);
-
-		//		evalSeq(values, params[0], params[1], lower, upper, valueMap, settings, resultHistory, expression, delta);
-		//	}
-		//	else
-		//	{
-		//		evalSeq(values, params[0], params[1], lower, upper, valueMap, settings, resultHistory, expression);
-		//	}
-
-		//	toVerifiedFloatVector(values, floatValues, typeErrorMsg);
-
-		//	result.result = average(floatValues);
-		//}
-		//else if(fnString == "sumseq" && (params.size() == 4 || params.size() == 5))
-		//{
-		//	vector<CalcObj> values;
-		//	CalcObj total = 0.0;
-
-		//	string typeErrorMsg = "Sequence sum type error";
-
-		//	result.validFn = result.validDomain = true;
-
-		//	calcFloat lower = parseArithmetic(params[2], valueMap, settings, resultHistory, expression).getVerifiedFloat(typeErrorMsg),
-		//			  upper = parseArithmetic(params[3], valueMap, settings, resultHistory, expression).getVerifiedFloat(typeErrorMsg);
-
-		//	if(params.size() == 5)
-		//	{
-		//		calcFloat delta = parseArithmetic(params[4], valueMap, settings, resultHistory, expression).getVerifiedFloat(typeErrorMsg);
-
-		//		evalSeq(values, params[0], params[1], lower, upper, valueMap, settings, resultHistory, expression, delta);
-		//	}
-		//	else
-		//	{
-		//		evalSeq(values, params[0], params[1], lower, upper, valueMap, settings, resultHistory, expression);
-		//	}
-
-		//	for(int i = 0; i < values.size(); i++)
-		//	{
-		//		total += values[i];
-
-		//		// cout << "Adding " << values[i] << ": " << total << endl;
-		//	}
-
-		//	result.result = total;
-		//}
-		else if(fnString == "sum" && params.size() >= 1)
-		{
-			vector<calcFloat> parsedParams;
-
-			string typeErrorMsg = "Sum type error";
-
-			result.validFn = true;
-
-			CalcObj firstParam = parseArithmetic(params[0], parsingContext, expression);
-
-			if(firstParam.get_type() == TYPE_LIST)
-			{
-				vector<calcFloat> sumList;
-				
-				firstParam.get_list(sumList);
-
-				if(sumList.size() > 0)
-				{
-					result.validDomain = true;
-
-					result.result = ParserMathematicalFunctions::sum(sumList);
-				}
-				else
-				{
-					result.validDomain = false;
-				}
-			}
-			else
-			{
-				result.validDomain = false;
-
-				parsedParams.push_back(firstParam.getVerifiedFloat(typeErrorMsg));
-
-				for(unsigned i = 1; i < params.size(); i++)
-				{
-					parsedParams.push_back(parseArithmetic(params[i], parsingContext, expression).getVerifiedFloat(typeErrorMsg));
-				}
-
-				result.result = ParserMathematicalFunctions::sum(parsedParams);
-			}
-		}
-		else if(fnString == "product" && params.size() >= 1)
-		{
-			vector<calcFloat> parsedParams;
-
-			string typeErrorMsg = "Product type error";
-
-			result.validFn = true;
-
-			CalcObj firstParam = parseArithmetic(params[0], parsingContext, expression);
-
-			if(firstParam.get_type() == TYPE_LIST)
-			{
-				vector<calcFloat> productList;
-				
-				firstParam.get_list(productList);
-
-				if(productList.size() > 0)
-				{
-					result.validDomain = true;
-
-					result.result = ParserMathematicalFunctions::product(productList);
-				}
-				else
-				{
-					result.validDomain = false;
-				}
-			}
-			else
-			{
-				result.validDomain = false;
-
-				parsedParams.push_back(firstParam.getVerifiedFloat(typeErrorMsg));
-
-				for(unsigned i = 1; i < params.size(); i++)
-				{
-					parsedParams.push_back(parseArithmetic(params[i], parsingContext, expression).getVerifiedFloat(typeErrorMsg));
-				}
-
-				result.result = ParserMathematicalFunctions::product(parsedParams);
-			}
-		}
-		else if(fnString == "stddev" && params.size() >= 1)
-		{
-			vector<calcFloat> parsedParams;
-
-			string typeErrorMsg = "Standard deviation type error";
-
-			result.validFn = true;
-
-			CalcObj firstParam = parseArithmetic(params[0], parsingContext, expression);
-
-			if(firstParam.get_type() == TYPE_LIST)
-			{
-				vector<calcFloat> stddevList;
-				
-				firstParam.get_list(stddevList);
-
-				if(stddevList.size() > 0)
-				{
-					result.validDomain = true;
-
-					result.result = ParserMathematicalFunctions::stddev(stddevList);
-				}
-				else
-				{
-					result.validDomain = false;
-				}
-			}
-			else
-			{
-				result.validDomain = true;
-
-				parsedParams.push_back(firstParam.getVerifiedFloat(typeErrorMsg));
-
-				for(unsigned i = 1; i < params.size(); i++)
-				{
-					parsedParams.push_back(parseArithmetic(params[i], parsingContext, expression).getVerifiedFloat(typeErrorMsg));
-				}
-
-				result.result = ParserMathematicalFunctions::stddev(parsedParams);
-			}
-		}
-		else if(fnString == "variance" && params.size() >= 1)
-		{
-			vector<calcFloat> parsedParams;
-
-			string typeErrorMsg = "Variance type error";
-
-			result.validFn = true;
-
-			CalcObj firstParam = parseArithmetic(params[0], parsingContext, expression);
-
-			if(firstParam.get_type() == TYPE_LIST)
-			{
-				vector<calcFloat> varianceList;
-				
-				firstParam.get_list(varianceList);
-
-				if(varianceList.size() > 0)
-				{
-					result.validDomain = true;
-
-					result.result = ParserMathematicalFunctions::variance(varianceList);
-				}
-				else
-				{
-					result.validDomain = false;
-				}
-			}
-			else
-			{
-				result.validDomain = true;
-
-				parsedParams.push_back(firstParam.getVerifiedFloat(typeErrorMsg));
-
-				for(unsigned i = 1; i < params.size(); i++)
-				{
-					parsedParams.push_back(parseArithmetic(params[i], parsingContext, expression).getVerifiedFloat(typeErrorMsg));
-				}
-
-				result.result = ParserMathematicalFunctions::variance(parsedParams);
-			}
-		}
-		else if(fnString == "max" && params.size() >= 1)
-		{
-			vector<calcFloat> parsedParams;
-
-			string typeErrorMsg = "Max type error";
-
-			result.validFn = true;
-
-			CalcObj firstParam = parseArithmetic(params[0], parsingContext, expression);
-
-			if(firstParam.get_type() == TYPE_LIST)
-			{
-				vector<calcFloat> maxList;
-				
-				firstParam.get_list(maxList);
-
-				if(maxList.size() > 0)
-				{
-					result.validDomain = true;
-
-					result.result = ParserMathematicalFunctions::max(maxList);
-				}
-				else
-				{
-					result.validDomain = false;
-				}
-			}
-			else
-			{
-				result.validDomain = true;
-
-				parsedParams.push_back(firstParam.getVerifiedFloat(typeErrorMsg));
-
-				for(unsigned i = 1; i < params.size(); i++)
-				{
-					parsedParams.push_back(parseArithmetic(params[i], parsingContext, expression).getVerifiedFloat(typeErrorMsg));
-				}
-
-				result.result = ParserMathematicalFunctions::max(parsedParams);
-			}
-		}
-		else if(fnString == "min" && params.size() >= 1)
-		{
-			vector<calcFloat> parsedParams;
-
-			string typeErrorMsg = "Min type error";
-
-			result.validFn = true;
-
-			CalcObj firstParam = parseArithmetic(params[0], parsingContext, expression);
-
-			if(firstParam.get_type() == TYPE_LIST)
-			{
-				vector<calcFloat> minList;
-				
-				firstParam.get_list(minList);
-
-				if(minList.size() > 0)
-				{
-					result.validDomain = true;
-
-					result.result = ParserMathematicalFunctions::min(minList);
-				}
-				else
-				{
-					result.validDomain = false;
-				}
-			}
-			else
-			{
-				result.validDomain = true;
-
-				parsedParams.push_back(firstParam.getVerifiedFloat(typeErrorMsg));
-
-				for(unsigned i = 1; i < params.size(); i++)
-				{
-					parsedParams.push_back(parseArithmetic(params[i], parsingContext, expression).getVerifiedFloat(typeErrorMsg));
-				}
-
-				result.result = ParserMathematicalFunctions::min(parsedParams);
-			}
-		}
-		/*else if(fnString == "stddevseq" && (params.size() == 4 || params.size() == 5))
-		{
-			vector<CalcObj> values;
-			vector<calcFloat> floatValues;
-
-			string typeErrorMsg = "Sequence standard deviation type error";
-
-			result.validFn = result.validDomain = true;
-
-			calcFloat lower = parseArithmetic(params[2], valueMap, settings, resultHistory, expression).getVerifiedFloat(typeErrorMsg),
-					  upper = parseArithmetic(params[3], valueMap, settings, resultHistory, expression).getVerifiedFloat(typeErrorMsg);
-
-			if(params.size() == 5)
-			{
-				calcFloat delta = parseArithmetic(params[4], valueMap, settings, resultHistory, expression).getVerifiedFloat(typeErrorMsg);
-
-				evalSeq(values, params[0], params[1], lower, upper, valueMap, settings, resultHistory, expression, delta);
-			}
-			else
-			{
-				evalSeq(values, params[0], params[1], lower, upper, valueMap, settings, resultHistory, expression);
-			}
-
-			toVerifiedFloatVector(values, floatValues, typeErrorMsg);
-
-			result.result = stddev(floatValues);
-		}*/
-		else if(fnString == "or" && params.size() >= 2)
-		{
-			bool orResult = false;
-
-			result.validFn = result.validDomain = true;
-
-			for(unsigned i = 0; (i < params.size()) && !orResult; i++)
-			{
-				orResult = (parseArithmetic(params[i], parsingContext, expression) != 0);
-			}
-
-			result.result = boolToFloat(orResult);
-		}
-		else if(fnString == "and" && params.size() >= 2)
-		{
-			bool andResult = true;
-
-			result.validFn = result.validDomain = true;
-
-			for(unsigned i = 0; (i < params.size()) && andResult; i++)
-			{
-				andResult = (parseArithmetic(params[i], parsingContext, expression) != 0);
-			}
-
-			result.result = boolToFloat(andResult);
-		}
-		else if(fnString == "not" && params.size() == 1)
-		{
-			bool notResult = (parseArithmetic(params[0], parsingContext, expression) == 0);
-
-			result.validFn = result.validDomain = true;
-
-			result.result = boolToFloat(notResult);
-		}
-		/*
-		else if(fnString == "lte" && params.size() == 2)
-		{
-			CalcObj arg1 = parseArithmetic(params[0], parsingContext, expression),
-					  arg2 = parseArithmetic(params[1], parsingContext, expression);
-
-			result.validFn = result.validDomain = true;
-
-			result.result = boolToFloat(arg1 <= arg2);
-		}
-		else if(fnString == "lt" && params.size() == 2)
-		{
-			CalcObj arg1 = parseArithmetic(params[0], parsingContext, expression),
-					  arg2 = parseArithmetic(params[1], parsingContext, expression);
-
-			result.validFn = result.validDomain = true;
-
-			result.result = boolToFloat(arg1 < arg2);
-		}
-		else if(fnString == "gte" && params.size() == 2)
-		{
-			CalcObj arg1 = parseArithmetic(params[0], parsingContext, expression),
-					  arg2 = parseArithmetic(params[1], parsingContext, expression);
-
-			result.validFn = result.validDomain = true;
-
-			result.result = boolToFloat(arg1 >= arg2);
-		}
-		else if(fnString == "gt" && params.size() == 2)
-		{
-			CalcObj arg1 = parseArithmetic(params[0], parsingContext, expression),
-					  arg2 = parseArithmetic(params[1], parsingContext, expression);
-
-			result.validFn = result.validDomain = true;
-
-			result.result = boolToFloat(arg1 > arg2);
-		}
-		else if(fnString == "eq" && params.size() == 2)
-		{
-			CalcObj arg1 = parseArithmetic(params[0], parsingContext, expression),
-					  arg2 = parseArithmetic(params[1], parsingContext, expression);
-
-			result.validFn = result.validDomain = true;
-
-			result.result = boolToFloat(arg1 == arg2);
-		}
-		else if(fnString == "ne" && params.size() == 2)
-		{
-			CalcObj arg1 = parseArithmetic(params[0], parsingContext, expression),
-					  arg2 = parseArithmetic(params[1], parsingContext, expression);
-
-			result.validFn = result.validDomain = true;
-
-			result.result = boolToFloat(arg1 != arg2);
-		}
-		*/
-		else if(fnString == "if" && params.size() == 3)
-		{
-			bool conditionVal = (parseArithmetic(params[0], parsingContext, expression) != 0);
-
-			result.validFn = result.validDomain = true;
-
-			if(conditionVal)
-			{
-				result.result = parseArithmetic(params[1], parsingContext, expression);
-			}
-			else
-			{
-				result.result = parseArithmetic(params[2], parsingContext, expression);
-			}
-		}
-		else
-		{
-			unsigned numParams = ((params.size() == 1 && params[0] == "") ? 0 : params.size());
-
-			FunctionSignature fnSignature = { fnString, numParams };
-
-			ParsingContext::FunctionIteratorConst foundFunction = parsingContext.findFunction(fnSignature);
-
-			if(foundFunction != parsingContext.endFunctionConst())
-			{
 				result.validFn = result.validDomain = true;
 
-				ParsingContext newContext = ParsingContext(&parsingContext);
+				string valueTypeErrorStr = "Foreach value type error",
+					   argumentTypeErrorStr = "Foreach argument type error";
 
-				for(unsigned i = 0; i < numParams; i++)
+				if(listObj.get_type() == TYPE_LIST)
 				{
-					newContext.setVariable((*foundFunction).params[i], parseArithmetic(params[i], parsingContext, expression));
-					// newMap[(foundFunction->second).params[i]] = parseArithmetic(params[i], parsingContext, expression);
+					listObj.get_list(listValues);
+
+					newValues.resize(listValues.size());
+
+					for(unsigned i = 0; i < listValues.size(); i++)
+					{
+						functionContext.setVariable("index", CalcObj(i));
+						functionContext.setVariable("value", listValues[i]);
+						functionContext.setVariable("length", CalcObj(listValues.size()));
+
+						newValues[i] = parseArithmetic(params[1], functionContext, expression).getVerifiedFloat(valueTypeErrorStr);
+					}
+
+					result.result.set_list(newValues);
+				}
+				else
+				{
+					throw ExpressionTypeError(expression, argumentTypeErrorStr);
+				}
+			}
+			else if(fnString == "getIndex" && params.size() == 2)
+			{
+				CalcObj listObj = parseArithmetic(params[0], parsingContext, expression);
+
+				result.validFn = true;
+
+				string valueTypeErrorStr = "Getindex value type error",
+					   argumentTypeErrorStr = "Getindex argument type error";
+
+				if(listObj.get_type() == TYPE_LIST)
+				{
+					calcFloat index = parseArithmetic(params[1], parsingContext, expression).getVerifiedFloat(argumentTypeErrorStr);
+					unsigned intIndex;
+					
+					try
+					{
+						intIndex = floatToUnsigned(index);
+						result.validDomain = true;
+					}
+					catch (const NumericConversionError&)
+					{
+						result.validDomain = false;
+					}
+
+					if (result.validDomain)
+					{
+						result.result = listObj.get_list_index(intIndex);
+					}
+				}
+				else
+				{
+					throw ExpressionTypeError(expression, argumentTypeErrorStr);
+				}
+			}
+			else if(fnString == "setIndex" && params.size() == 3)
+			{
+				CalcObj listObj = parseArithmetic(params[0], parsingContext, expression);
+
+				result.validFn = true;
+
+				string valueTypeErrorStr = "Setindex value type error",
+					   argumentTypeErrorStr = "Setindex argument type error";
+
+				if(listObj.get_type() == TYPE_LIST)
+				{
+					calcFloat index = parseArithmetic(params[1], parsingContext, expression).getVerifiedFloat(argumentTypeErrorStr), newVal;
+					unsigned intIndex;
+
+					try
+					{
+						intIndex = floatToUnsigned(index);
+						result.validDomain = true;
+					}
+					catch (const NumericConversionError&)
+					{
+						result.validDomain = false;
+					}
+
+					newVal = parseArithmetic(params[2], parsingContext, expression).getVerifiedFloat(argumentTypeErrorStr);
+
+					if (result.validDomain)
+					{
+						listObj.set_list_index(intIndex, newVal);
+
+						result.result = listObj;
+					}
+				}
+				else
+				{
+					throw ExpressionTypeError(expression, argumentTypeErrorStr);
+				}
+			}
+			else if(fnString == "length" && params.size() == 1)
+			{
+				CalcObj listObj = parseArithmetic(params[0], parsingContext, expression);
+
+				result.validFn = result.validDomain = true;
+
+				string typeErrorStr = "Length type error";
+
+				if(listObj.get_type() == TYPE_LIST)
+				{
+					result.result = CalcObj(listObj.get_list_length());
+				}
+				else
+				{
+					throw ExpressionTypeError(expression, typeErrorStr);
+				}
+			}
+			else if(fnString == "concat" && params.size() >= 2)
+			{
+				CalcObj concatResult = parseArithmetic(params[0], parsingContext, expression);
+
+				result.validFn = result.validDomain = true;
+
+				for(unsigned i = 1; i < params.size(); i++)
+				{
+					concatResult.concat_list(parseArithmetic(params[i], parsingContext, expression));
 				}
 
-				result.result = parseArithmetic((*foundFunction).fnExpression, newContext, expression);
+				result.result = concatResult;
+			}
+			else if(fnString == "sublist" && params.size() == 3)
+			{
+				CalcObj origList = parseArithmetic(params[0], parsingContext, expression);
+
+				string indexTypeErrorStr = "Sublist index type error";
+
+				calcFloat startIndex = parseArithmetic(params[1], parsingContext, expression).getVerifiedFloat(indexTypeErrorStr),
+						  endIndex = parseArithmetic(params[2], parsingContext, expression).getVerifiedFloat(indexTypeErrorStr);
+
+				unsigned startIndexInt,
+						 endIndexInt;
+
+				try
+				{
+					startIndexInt = floatToUnsigned(startIndex);
+					endIndexInt = floatToUnsigned(endIndex);
+
+					result.validDomain = true;
+				}
+				catch (const NumericConversionError&)
+				{
+					result.validDomain = false;
+				}
+
+				if (result.validDomain)
+				{
+					vector<calcFloat> sublistBuffer;
+
+					result.validFn = result.validDomain = true;
+
+					origList.sublist(sublistBuffer, startIndexInt, endIndexInt);
+
+					result.result.set_list(sublistBuffer);
+				}
+			}
+			else if(fnString == "filter" && params.size() == 2)
+			{
+				CalcObj listObj = parseArithmetic(params[0], parsingContext, expression),
+						newObj;
+
+				vector<calcFloat> listValues, newValues;
+
+				ParsingContext functionContext = ParsingContext(&parsingContext);
+
+				result.validFn = result.validDomain = true;
+
+				string valueTypeErrorStr = "Filter value type error",
+					   argumentTypeErrorStr = "Filter argument type error";
+
+				if(listObj.get_type() == TYPE_LIST)
+				{
+					listObj.get_list(listValues);
+
+					for(unsigned i = 0; i < listValues.size(); i++)
+					{
+						functionContext.setVariable("index", CalcObj(i));
+						functionContext.setVariable("value", listValues[i]);
+						functionContext.setVariable("length", CalcObj(listValues.size()));
+
+						calcFloat keepVal = parseArithmetic(params[1], functionContext, expression).getVerifiedFloat(valueTypeErrorStr);
+
+						if(keepVal != 0.0)
+						{
+							newValues.push_back(listValues[i]);
+						}
+					}
+
+					result.result.set_list(newValues);
+				}
+				else
+				{
+					throw ExpressionTypeError(expression, argumentTypeErrorStr);
+				}
+			}
+			else if(fnString == "avg" && params.size() >= 1)
+			{
+				vector<calcFloat> parsedParams;
+
+				string typeErrorMsg = "Average type error";
+
+				result.validFn = true;
+
+				CalcObj firstParam = parseArithmetic(params[0], parsingContext, expression);
+
+				if(firstParam.get_type() == TYPE_LIST)
+				{
+					vector<calcFloat> avgList;
+					
+					firstParam.get_list(avgList);
+
+					if(avgList.size() > 0)
+					{
+						result.validDomain = true;
+
+						result.result = ParserMathematicalFunctions::average(avgList);
+					}
+					else
+					{
+						result.validDomain = false;
+					}
+				}
+				else
+				{
+					result.validDomain = true;
+
+					parsedParams.push_back(firstParam.getVerifiedFloat(typeErrorMsg));
+
+					for(unsigned i = 1; i < params.size(); i++)
+					{
+						parsedParams.push_back(parseArithmetic(params[i], parsingContext, expression).getVerifiedFloat(typeErrorMsg));
+					}
+
+					result.result = ParserMathematicalFunctions::average(parsedParams);
+				}
+			}
+			//else if(fnString == "avgseq" && (params.size() == 4 || params.size() == 5))
+			//{
+			//	vector<CalcObj> values;
+			//	vector<calcFloat> floatValues;
+
+			//	string typeErrorMsg = "Sequence average type error";
+
+			//	result.validFn = result.validDomain = true;
+
+			//	calcFloat lower = parseArithmetic(params[2], valueMap, settings, resultHistory, expression).getVerifiedFloat(typeErrorMsg),
+			//			  upper = parseArithmetic(params[3], valueMap, settings, resultHistory, expression).getVerifiedFloat(typeErrorMsg);
+
+			//	if(params.size() == 5)
+			//	{
+			//		calcFloat delta = parseArithmetic(params[4], valueMap, settings, resultHistory, expression).getVerifiedFloat(typeErrorMsg);
+
+			//		evalSeq(values, params[0], params[1], lower, upper, valueMap, settings, resultHistory, expression, delta);
+			//	}
+			//	else
+			//	{
+			//		evalSeq(values, params[0], params[1], lower, upper, valueMap, settings, resultHistory, expression);
+			//	}
+
+			//	toVerifiedFloatVector(values, floatValues, typeErrorMsg);
+
+			//	result.result = average(floatValues);
+			//}
+			//else if(fnString == "sumseq" && (params.size() == 4 || params.size() == 5))
+			//{
+			//	vector<CalcObj> values;
+			//	CalcObj total = 0.0;
+
+			//	string typeErrorMsg = "Sequence sum type error";
+
+			//	result.validFn = result.validDomain = true;
+
+			//	calcFloat lower = parseArithmetic(params[2], valueMap, settings, resultHistory, expression).getVerifiedFloat(typeErrorMsg),
+			//			  upper = parseArithmetic(params[3], valueMap, settings, resultHistory, expression).getVerifiedFloat(typeErrorMsg);
+
+			//	if(params.size() == 5)
+			//	{
+			//		calcFloat delta = parseArithmetic(params[4], valueMap, settings, resultHistory, expression).getVerifiedFloat(typeErrorMsg);
+
+			//		evalSeq(values, params[0], params[1], lower, upper, valueMap, settings, resultHistory, expression, delta);
+			//	}
+			//	else
+			//	{
+			//		evalSeq(values, params[0], params[1], lower, upper, valueMap, settings, resultHistory, expression);
+			//	}
+
+			//	for(int i = 0; i < values.size(); i++)
+			//	{
+			//		total += values[i];
+
+			//		// cout << "Adding " << values[i] << ": " << total << endl;
+			//	}
+
+			//	result.result = total;
+			//}
+			else if(fnString == "sum" && params.size() >= 1)
+			{
+				vector<calcFloat> parsedParams;
+
+				string typeErrorMsg = "Sum type error";
+
+				result.validFn = true;
+
+				CalcObj firstParam = parseArithmetic(params[0], parsingContext, expression);
+
+				if(firstParam.get_type() == TYPE_LIST)
+				{
+					vector<calcFloat> sumList;
+					
+					firstParam.get_list(sumList);
+
+					if(sumList.size() > 0)
+					{
+						result.validDomain = true;
+
+						result.result = ParserMathematicalFunctions::sum(sumList);
+					}
+					else
+					{
+						result.validDomain = false;
+					}
+				}
+				else
+				{
+					result.validDomain = false;
+
+					parsedParams.push_back(firstParam.getVerifiedFloat(typeErrorMsg));
+
+					for(unsigned i = 1; i < params.size(); i++)
+					{
+						parsedParams.push_back(parseArithmetic(params[i], parsingContext, expression).getVerifiedFloat(typeErrorMsg));
+					}
+
+					result.result = ParserMathematicalFunctions::sum(parsedParams);
+				}
+			}
+			else if(fnString == "product" && params.size() >= 1)
+			{
+				vector<calcFloat> parsedParams;
+
+				string typeErrorMsg = "Product type error";
+
+				result.validFn = true;
+
+				CalcObj firstParam = parseArithmetic(params[0], parsingContext, expression);
+
+				if(firstParam.get_type() == TYPE_LIST)
+				{
+					vector<calcFloat> productList;
+					
+					firstParam.get_list(productList);
+
+					if(productList.size() > 0)
+					{
+						result.validDomain = true;
+
+						result.result = ParserMathematicalFunctions::product(productList);
+					}
+					else
+					{
+						result.validDomain = false;
+					}
+				}
+				else
+				{
+					result.validDomain = false;
+
+					parsedParams.push_back(firstParam.getVerifiedFloat(typeErrorMsg));
+
+					for(unsigned i = 1; i < params.size(); i++)
+					{
+						parsedParams.push_back(parseArithmetic(params[i], parsingContext, expression).getVerifiedFloat(typeErrorMsg));
+					}
+
+					result.result = ParserMathematicalFunctions::product(parsedParams);
+				}
+			}
+			else if(fnString == "stddev" && params.size() >= 1)
+			{
+				vector<calcFloat> parsedParams;
+
+				string typeErrorMsg = "Standard deviation type error";
+
+				result.validFn = true;
+
+				CalcObj firstParam = parseArithmetic(params[0], parsingContext, expression);
+
+				if(firstParam.get_type() == TYPE_LIST)
+				{
+					vector<calcFloat> stddevList;
+					
+					firstParam.get_list(stddevList);
+
+					if(stddevList.size() > 0)
+					{
+						result.validDomain = true;
+
+						result.result = ParserMathematicalFunctions::stddev(stddevList);
+					}
+					else
+					{
+						result.validDomain = false;
+					}
+				}
+				else
+				{
+					result.validDomain = true;
+
+					parsedParams.push_back(firstParam.getVerifiedFloat(typeErrorMsg));
+
+					for(unsigned i = 1; i < params.size(); i++)
+					{
+						parsedParams.push_back(parseArithmetic(params[i], parsingContext, expression).getVerifiedFloat(typeErrorMsg));
+					}
+
+					result.result = ParserMathematicalFunctions::stddev(parsedParams);
+				}
+			}
+			else if(fnString == "variance" && params.size() >= 1)
+			{
+				vector<calcFloat> parsedParams;
+
+				string typeErrorMsg = "Variance type error";
+
+				result.validFn = true;
+
+				CalcObj firstParam = parseArithmetic(params[0], parsingContext, expression);
+
+				if(firstParam.get_type() == TYPE_LIST)
+				{
+					vector<calcFloat> varianceList;
+					
+					firstParam.get_list(varianceList);
+
+					if(varianceList.size() > 0)
+					{
+						result.validDomain = true;
+
+						result.result = ParserMathematicalFunctions::variance(varianceList);
+					}
+					else
+					{
+						result.validDomain = false;
+					}
+				}
+				else
+				{
+					result.validDomain = true;
+
+					parsedParams.push_back(firstParam.getVerifiedFloat(typeErrorMsg));
+
+					for(unsigned i = 1; i < params.size(); i++)
+					{
+						parsedParams.push_back(parseArithmetic(params[i], parsingContext, expression).getVerifiedFloat(typeErrorMsg));
+					}
+
+					result.result = ParserMathematicalFunctions::variance(parsedParams);
+				}
+			}
+			else if(fnString == "max" && params.size() >= 1)
+			{
+				vector<calcFloat> parsedParams;
+
+				string typeErrorMsg = "Max type error";
+
+				result.validFn = true;
+
+				CalcObj firstParam = parseArithmetic(params[0], parsingContext, expression);
+
+				if(firstParam.get_type() == TYPE_LIST)
+				{
+					vector<calcFloat> maxList;
+					
+					firstParam.get_list(maxList);
+
+					if(maxList.size() > 0)
+					{
+						result.validDomain = true;
+
+						result.result = ParserMathematicalFunctions::max(maxList);
+					}
+					else
+					{
+						result.validDomain = false;
+					}
+				}
+				else
+				{
+					result.validDomain = true;
+
+					parsedParams.push_back(firstParam.getVerifiedFloat(typeErrorMsg));
+
+					for(unsigned i = 1; i < params.size(); i++)
+					{
+						parsedParams.push_back(parseArithmetic(params[i], parsingContext, expression).getVerifiedFloat(typeErrorMsg));
+					}
+
+					result.result = ParserMathematicalFunctions::max(parsedParams);
+				}
+			}
+			else if(fnString == "min" && params.size() >= 1)
+			{
+				vector<calcFloat> parsedParams;
+
+				string typeErrorMsg = "Min type error";
+
+				result.validFn = true;
+
+				CalcObj firstParam = parseArithmetic(params[0], parsingContext, expression);
+
+				if(firstParam.get_type() == TYPE_LIST)
+				{
+					vector<calcFloat> minList;
+					
+					firstParam.get_list(minList);
+
+					if(minList.size() > 0)
+					{
+						result.validDomain = true;
+
+						result.result = ParserMathematicalFunctions::min(minList);
+					}
+					else
+					{
+						result.validDomain = false;
+					}
+				}
+				else
+				{
+					result.validDomain = true;
+
+					parsedParams.push_back(firstParam.getVerifiedFloat(typeErrorMsg));
+
+					for(unsigned i = 1; i < params.size(); i++)
+					{
+						parsedParams.push_back(parseArithmetic(params[i], parsingContext, expression).getVerifiedFloat(typeErrorMsg));
+					}
+
+					result.result = ParserMathematicalFunctions::min(parsedParams);
+				}
+			}
+			/*else if(fnString == "stddevseq" && (params.size() == 4 || params.size() == 5))
+			{
+				vector<CalcObj> values;
+				vector<calcFloat> floatValues;
+
+				string typeErrorMsg = "Sequence standard deviation type error";
+
+				result.validFn = result.validDomain = true;
+
+				calcFloat lower = parseArithmetic(params[2], valueMap, settings, resultHistory, expression).getVerifiedFloat(typeErrorMsg),
+						  upper = parseArithmetic(params[3], valueMap, settings, resultHistory, expression).getVerifiedFloat(typeErrorMsg);
+
+				if(params.size() == 5)
+				{
+					calcFloat delta = parseArithmetic(params[4], valueMap, settings, resultHistory, expression).getVerifiedFloat(typeErrorMsg);
+
+					evalSeq(values, params[0], params[1], lower, upper, valueMap, settings, resultHistory, expression, delta);
+				}
+				else
+				{
+					evalSeq(values, params[0], params[1], lower, upper, valueMap, settings, resultHistory, expression);
+				}
+
+				toVerifiedFloatVector(values, floatValues, typeErrorMsg);
+
+				result.result = stddev(floatValues);
+			}*/
+			else if(fnString == "or" && params.size() >= 2)
+			{
+				bool orResult = false;
+
+				result.validFn = result.validDomain = true;
+
+				for(unsigned i = 0; (i < params.size()) && !orResult; i++)
+				{
+					orResult = (parseArithmetic(params[i], parsingContext, expression) != 0);
+				}
+
+				result.result = boolToFloat(orResult);
+			}
+			else if(fnString == "and" && params.size() >= 2)
+			{
+				bool andResult = true;
+
+				result.validFn = result.validDomain = true;
+
+				for(unsigned i = 0; (i < params.size()) && andResult; i++)
+				{
+					andResult = (parseArithmetic(params[i], parsingContext, expression) != 0);
+				}
+
+				result.result = boolToFloat(andResult);
+			}
+			else if(fnString == "not" && params.size() == 1)
+			{
+				bool notResult = (parseArithmetic(params[0], parsingContext, expression) == 0);
+
+				result.validFn = result.validDomain = true;
+
+				result.result = boolToFloat(notResult);
+			}
+			/*
+			else if(fnString == "lte" && params.size() == 2)
+			{
+				CalcObj arg1 = parseArithmetic(params[0], parsingContext, expression),
+						  arg2 = parseArithmetic(params[1], parsingContext, expression);
+
+				result.validFn = result.validDomain = true;
+
+				result.result = boolToFloat(arg1 <= arg2);
+			}
+			else if(fnString == "lt" && params.size() == 2)
+			{
+				CalcObj arg1 = parseArithmetic(params[0], parsingContext, expression),
+						  arg2 = parseArithmetic(params[1], parsingContext, expression);
+
+				result.validFn = result.validDomain = true;
+
+				result.result = boolToFloat(arg1 < arg2);
+			}
+			else if(fnString == "gte" && params.size() == 2)
+			{
+				CalcObj arg1 = parseArithmetic(params[0], parsingContext, expression),
+						  arg2 = parseArithmetic(params[1], parsingContext, expression);
+
+				result.validFn = result.validDomain = true;
+
+				result.result = boolToFloat(arg1 >= arg2);
+			}
+			else if(fnString == "gt" && params.size() == 2)
+			{
+				CalcObj arg1 = parseArithmetic(params[0], parsingContext, expression),
+						  arg2 = parseArithmetic(params[1], parsingContext, expression);
+
+				result.validFn = result.validDomain = true;
+
+				result.result = boolToFloat(arg1 > arg2);
+			}
+			else if(fnString == "eq" && params.size() == 2)
+			{
+				CalcObj arg1 = parseArithmetic(params[0], parsingContext, expression),
+						  arg2 = parseArithmetic(params[1], parsingContext, expression);
+
+				result.validFn = result.validDomain = true;
+
+				result.result = boolToFloat(arg1 == arg2);
+			}
+			else if(fnString == "ne" && params.size() == 2)
+			{
+				CalcObj arg1 = parseArithmetic(params[0], parsingContext, expression),
+						  arg2 = parseArithmetic(params[1], parsingContext, expression);
+
+				result.validFn = result.validDomain = true;
+
+				result.result = boolToFloat(arg1 != arg2);
+			}
+			*/
+			else if(fnString == "if" && params.size() == 3)
+			{
+				bool conditionVal = (parseArithmetic(params[0], parsingContext, expression) != 0);
+
+				result.validFn = result.validDomain = true;
+
+				if(conditionVal)
+				{
+					result.result = parseArithmetic(params[1], parsingContext, expression);
+				}
+				else
+				{
+					result.result = parseArithmetic(params[2], parsingContext, expression);
+				}
+			}
+			else
+			{
+				unsigned numParams = ((params.size() == 1 && params[0] == "") ? 0 : params.size());
+
+				FunctionSignature fnSignature = { fnString, numParams };
+
+				ParsingContext::FunctionIteratorConst foundFunction = parsingContext.findFunction(fnSignature);
+
+				if(foundFunction != parsingContext.endFunctionConst())
+				{
+					result.validFn = result.validDomain = true;
+
+					ParsingContext newContext = ParsingContext(&parsingContext);
+
+					for(unsigned i = 0; i < numParams; i++)
+					{
+						newContext.setVariable((*foundFunction).params[i], parseArithmetic(params[i], parsingContext, expression));
+						// newMap[(foundFunction->second).params[i]] = parseArithmetic(params[i], parsingContext, expression);
+					}
+
+					result.result = parseArithmetic((*foundFunction).fnExpression, newContext, expression);
+				}
 			}
 		}
 	}

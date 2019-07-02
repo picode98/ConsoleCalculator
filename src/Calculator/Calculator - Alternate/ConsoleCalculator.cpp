@@ -1224,6 +1224,8 @@ bool ConsoleCalculator::parseUserStringAux(string userString, bool csvFormat)
 					}
 					else
 					{
+						// cout << "Parser setting test: " << static_cast<int>(this->calculatorParser.parsingSettings.enableIntegralFn) << endl;
+
 						CalcObj calcResult = this->calculatorParser.parseArithmetic(userString, this->baseParsingContext);
 
 						setUserFlags(cout, calcOutputMode);

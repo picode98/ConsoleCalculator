@@ -19,6 +19,7 @@
 #include "ParserOperators.h"
 #include "ParserMathematicalFunctions.h"
 #include "ParserErrors.h"
+#include <set>
 
 /*
 #ifndef MULTIPRECISION
@@ -56,10 +57,8 @@ public:
 
 	struct ParsingSettings
 	{
-		angleMode parseAngleMode;
-		bool enableAnsFn,
-			enableDerivFn,
-			enableIntegralFn;
+		angleMode parseAngleMode = angleMode::radians;
+		set<string> functionBlacklist;
 	};
 
 	struct FunctionSignature
