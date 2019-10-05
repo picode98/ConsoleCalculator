@@ -5,7 +5,7 @@
 
 // #include <iostream>
 
-#include "parseArithmetic.h"
+#include "ParserCore.h"
 
 #define _USE_MATH_DEFINES
 
@@ -162,38 +162,6 @@ vector<calcFloat> doublePrecisisonGaussNodes = { -0.9997137267734412336782, -0.9
 
 const vector<string> functionNames = vector<string>(functionNamesArr, functionNamesArr + FUNCTION_NAMES_LENGTH);
 
-bool ExpressionParser::FunctionSignature::operator<(const FunctionSignature & otherSignature) const
-{
-	return (this->functionName < otherSignature.functionName)
-		|| (this->functionName == otherSignature.functionName && this->numParams < otherSignature.numParams);
-}
-
-bool ExpressionParser::FunctionSignature::operator<=(const FunctionSignature & otherSignature) const
-{
-	return (*this < otherSignature || *this == otherSignature);
-}
-
-bool ExpressionParser::FunctionSignature::operator>(const FunctionSignature & otherSignature) const
-{
-	return !(*this <= otherSignature);
-}
-
-bool ExpressionParser::FunctionSignature::operator>=(const FunctionSignature & otherSignature) const
-{
-	return !(*this < otherSignature);
-}
-
-bool ExpressionParser::FunctionSignature::operator==(const FunctionSignature & otherSignature) const
-{
-	return (this->functionName == otherSignature.functionName)
-		&& (this->numParams == otherSignature.numParams);
-}
-
-bool ExpressionParser::FunctionSignature::operator!=(const FunctionSignature & otherSignature) const
-{
-	return !(*this == otherSignature);
-}
-
 ExpressionParser::ParsingContext::VariableIteratorConst::VariableIteratorConst(bool isEndIterator, const ParsingContext* parsingContext, const ParsingContext* baseContext, std::map<std::string, CalcObj>::const_iterator variableMapIterator):
 	isEndIterator(isEndIterator),
 	parsingContext(parsingContext),
@@ -273,7 +241,7 @@ ExpressionParser::ParsingContext::FunctionIteratorConst::FunctionIteratorConst(b
 {
 }
 
-ExpressionParser::FunctionSignature ExpressionParser::ParsingContext::FunctionIteratorConst::getFunctionSignature()
+FunctionSignature ExpressionParser::ParsingContext::FunctionIteratorConst::getFunctionSignature()
 {
 	return (this->constMapIterator->first);
 }
@@ -1491,6 +1459,118 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 		vector<string> params;
 		string currentStr;
 
+		{
+			unsigned i = 0;
+			for (int parenNestLevel = 0, braceNestLevel = 0; i < fnExpression.length(); i++)
+			{
+				if (fnExpression[i] == '(')
+				{
+					parenNestLevel++;
+				}
+				else if (fnExpression[i] == ')')
+				{
+					parenNestLevel--;
+				}
+
+				if (fnExpression[i] == '{')
+				{
+					braceNestLevel++;
+				}
+				else if (fnExpression[i] == '}')
+				{
+					braceNestLevel--;
+				}
+
+				if (parenNestLevel == 0 && braceNestLevel == 0 && fnExpression[i] == ',')
+				{
+					params.push_back(currentStr);
+					currentStr = "";
+				}
+				else
+				{
+					currentStr += fnExpression[i];
+				}
+			}
+		}
+
+		if (!currentStr.empty())
+		{
+			params.push_back(currentStr);
+		}
+
+		BuiltInFunctionDefinition* foundFunction = nullptr;
+		BuiltInFunctionDefinition::ParameterSpecs specs;
+
+		try
+		{
+			BuiltInFunctionDefinition* functionDefinition = this->builtInFunctions.at(fnString);
+
+			specs = functionDefinition->getParameterSpecs();
+
+			if(specs.acceptedArgs.find(params.size()) != specs.acceptedArgs.end()
+				|| (specs.acceptsExtraArgs && params.size() > *(--specs.acceptedArgs.end())))
+			{
+				foundFunction = functionDefinition;
+			}
+		}
+		catch(const std::out_of_range&)
+		{
+			
+		}
+		
+		if(foundFunction != nullptr)
+		{
+			result.validFn = true;
+
+			std::vector<std::variant<std::string, CalcObj>> variantParams(params.size());
+
+			for (unsigned i = 0; i < variantParams.size(); i++)
+			{
+				if ((i < specs.parsedArguments.size() && specs.parsedArguments[i])
+					|| (i >= specs.parsedArguments.size() && specs.parseExtraArgs))
+				{
+					variantParams[i] = this->parseArithmetic(params[i], parsingContext, expression);
+				}
+				else
+				{
+					variantParams[i] = params[i];
+				}
+			}
+
+			try
+			{
+				result.result = foundFunction->evaluate(this, static_cast<const ParsingContext_Export&>(parsingContext), variantParams, fnString, expression);
+				result.validDomain = true;
+			}
+			catch(const BuiltInFunctionDomainError& ex)
+			{
+				result.validDomain = false;
+				result.specificErrorStr = ex.getSpecificInformation();
+			}
+		}
+		else
+		{
+			FunctionSignature fnSignature = { fnString, params.size() };
+
+			ParsingContext::FunctionIteratorConst foundFunction = parsingContext.findFunction(fnSignature);
+
+			if (foundFunction != parsingContext.endFunctionConst())
+			{
+				result.validFn = result.validDomain = true;
+
+				ParsingContext newContext = ParsingContext(&parsingContext);
+
+				for (unsigned i = 0; i < params.size(); i++)
+				{
+					newContext.setVariable((*foundFunction).params[i], parseArithmetic(params[i], parsingContext, expression));
+					// newMap[(foundFunction->second).params[i]] = parseArithmetic(params[i], parsingContext, expression);
+				}
+
+				result.result = parseArithmetic((*foundFunction).fnExpression, newContext, expression);
+			}
+		}
+
+		/*
 		if (this->parsingSettings.functionBlacklist.find(fnString) == this->parsingSettings.functionBlacklist.end())
 		{
 
@@ -1536,13 +1616,13 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 
 				switch(parsingSettings.parseAngleMode)
 				{
-				case degrees:
+				case ParsingSettings::degrees:
 					result.result = sin(parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg) * get_pi_value() / 180.0);
 					break;
-				case radians:
+				case ParsingSettings::radians:
 					result.result = sin(parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg));
 					break;
-				case gradians:
+				case ParsingSettings::gradians:
 					result.result = sin(parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg) * get_pi_value() / 200.0);
 					break;
 				}
@@ -1556,13 +1636,13 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 
 				switch(parsingSettings.parseAngleMode)
 				{
-				case degrees:
+				case ParsingSettings::degrees:
 					result.result = cos(parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg) * get_pi_value() / 180.0);
 					break;
-				case radians:
+				case ParsingSettings::radians:
 					result.result = cos(parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg));
 					break;
-				case gradians:
+				case ParsingSettings::gradians:
 					result.result = cos(parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg) * get_pi_value() / 200.0);
 					break;
 				}
@@ -1576,13 +1656,13 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 
 				switch(parsingSettings.parseAngleMode)
 				{
-				case degrees:
+				case ParsingSettings::degrees:
 					result.result = tan(parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg) * get_pi_value() / 180.0);
 					break;
-				case radians:
+				case ParsingSettings::radians:
 					result.result = tan(parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg));
 					break;
-				case gradians:
+				case ParsingSettings::gradians:
 					result.result = tan(parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg) * get_pi_value() / 200.0);
 					break;
 				}
@@ -1601,13 +1681,13 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 				{
 					switch(parsingSettings.parseAngleMode)
 					{
-					case degrees:
+					case ParsingSettings::degrees:
 						result.result = asin(expressionVal) * 180.0 / get_pi_value();
 						break;
-					case radians:
+					case ParsingSettings::radians:
 						result.result = asin(expressionVal);
 						break;
-					case gradians:
+					case ParsingSettings::gradians:
 						result.result = asin(expressionVal) * 200.0 / get_pi_value();
 						break;
 					}
@@ -1626,13 +1706,13 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 				{
 					switch(parsingSettings.parseAngleMode)
 					{
-					case degrees:
+					case ParsingSettings::degrees:
 						result.result = acos(expressionVal) * 180.0 / get_pi_value();
 						break;
-					case radians:
+					case ParsingSettings::radians:
 						result.result = acos(expressionVal);
 						break;
-					case gradians:
+					case ParsingSettings::gradians:
 						result.result = acos(expressionVal) * 200.0 / get_pi_value();
 						break;
 					}
@@ -1646,13 +1726,13 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 
 				switch(parsingSettings.parseAngleMode)
 				{
-				case degrees:
+				case ParsingSettings::degrees:
 					result.result = atan(parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg)) * 180.0 / get_pi_value();
 					break;
-				case radians:
+				case ParsingSettings::radians:
 					result.result = atan(parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg));
 					break;
-				case gradians:
+				case ParsingSettings::gradians:
 					result.result = atan(parseArithmetic(params[0], parsingContext, expression).getVerifiedFloat(typeErrorMsg)) * 200.0 / get_pi_value();
 					break;
 				}
@@ -1847,7 +1927,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 
 				if (result.validDomain)
 				{
-					result.result = deriv(params[0], params[1], varValue, 1.0e-4 /*1.0e-6 * pow(10.0, (int)derivNum) */, parsingContext, expression, derivNum);
+					result.result = deriv(params[0], params[1], varValue, 1.0e-4 /*1.0e-6 * pow(10.0, (int)derivNum) #1#, parsingContext, expression, derivNum);
 				}
 			}
 			else if(fnString == "deriv" && params.size() == 5)
@@ -1885,9 +1965,9 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 				result.validFn = result.validDomain = true;
 
 	#ifdef MULTIPRECISION
-				result.result = gaussIntegral(params[0], params[1], lower, upper,/* 1.0e-4 * (upper - lower),*/ 50, parsingContext, expression);
+				result.result = gaussIntegral(params[0], params[1], lower, upper,/* 1.0e-4 * (upper - lower),#1# 50, parsingContext, expression);
 	#else
-				result.result = gaussIntegral(params[0], params[1], lower, upper,/* 1.0e-4 * (upper - lower),*/ 10, parsingContext, expression);
+				result.result = gaussIntegral(params[0], params[1], lower, upper,/* 1.0e-4 * (upper - lower),#1# 10, parsingContext, expression);
 	#endif
 				// cout << "Trapezoidal result: " << sintegral(params[0], params[1], lower, upper, 1.0e-4 * (upper - lower), valueMap, settings, resultHistory, expression) << endl;
 			}
@@ -2929,7 +3009,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 				toVerifiedFloatVector(values, floatValues, typeErrorMsg);
 
 				result.result = stddev(floatValues);
-			}*/
+			}#1#
 			else if(fnString == "or" && params.size() >= 2)
 			{
 				bool orResult = false;
@@ -3019,7 +3099,7 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 
 				result.result = boolToFloat(arg1 != arg2);
 			}
-			*/
+			#1#
 			else if(fnString == "if" && params.size() == 3)
 			{
 				bool conditionVal = (parseArithmetic(params[0], parsingContext, expression) != 0);
@@ -3059,6 +3139,8 @@ ExpressionParser::FnResult ExpressionParser::evalFn(std::string expression, cons
 				}
 			}
 		}
+		*/
+
 	}
 
 	return result;
@@ -3153,28 +3235,6 @@ bool ExpressionParser::isVarChar(char ch)
 {
 	return isalpha(ch) || (ch == '_');
 }
-
-#ifdef MULTIPRECISION
-calcFloat ExpressionParser::get_pi_value()
-{
-	return mpfr::const_pi();
-}
-
-calcFloat ExpressionParser::get_e_value()
-{
-	return mpfr::exp(calcFloat(1.0));
-}
-#else
-calcFloat ExpressionParser::get_pi_value()
-{
-	return M_PI;
-}
-
-calcFloat ExpressionParser::get_e_value()
-{
-	return M_E;
-}
-#endif
 
 calcFloat ExpressionParser::deriv(std::string expression,
 			 std::string variable,

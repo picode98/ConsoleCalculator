@@ -7,6 +7,8 @@
 #include <vector>
 #include <string>
 #include <iomanip>
+#include <set>
+#include <variant>
 
 #ifndef MULTIPRECISION
 #include <random>
@@ -19,7 +21,11 @@
 #include "ParserOperators.h"
 #include "ParserMathematicalFunctions.h"
 #include "ParserErrors.h"
-#include <set>
+#include "ParsingSettings.h"
+#include "FunctionSignature.h"
+#include "BuiltInFunctionTypes.h"
+#include "BuiltInConstants.h"
+
 
 /*
 #ifndef MULTIPRECISION
@@ -52,27 +58,6 @@ class ExpressionParser
 public:
 	static const string RESERVED_NAMES[];
 	static const unsigned RESERVED_NAMES_SIZE;
-
-	enum angleMode { degrees, radians, gradians };
-
-	struct ParsingSettings
-	{
-		angleMode parseAngleMode = angleMode::radians;
-		set<string> functionBlacklist;
-	};
-
-	struct FunctionSignature
-	{
-		string functionName;
-		unsigned numParams;
-
-		bool operator<(const FunctionSignature& otherSignature) const;
-		bool operator<=(const FunctionSignature& otherSignature) const;
-		bool operator>(const FunctionSignature& otherSignature) const;
-		bool operator>=(const FunctionSignature& otherSignature) const;
-		bool operator==(const FunctionSignature& otherSignature) const;
-		bool operator!=(const FunctionSignature& otherSignature) const;
-	};
 
 	struct FunctionDefinition
 	{
@@ -175,11 +160,10 @@ public:
 	};
 
 	static bool isVarChar(char ch);
-	static calcFloat get_pi_value();
-	static calcFloat get_e_value();
 
 	ParsingSettings parsingSettings;
 	vector<CalcObj> resultHistory;
+	std::map<std::string, BuiltInFunctionDefinition*> builtInFunctions;
 private:
 	struct FnResult
 	{
@@ -283,5 +267,13 @@ public:
 	CalcObj parseArithmetic(std::string expression,
 		const ParsingContext& parsingContext,
 		std::string parentExpression = "") const;
+};
+
+// Ugly hack: Identical derived class created for the ExpressionParser::ParsingContext
+// class because C++ doesn't support forward declarations for nested classes (see
+// BuiltInFunctionTypes.h).
+class ParsingContext_Export : public ExpressionParser::ParsingContext
+{
+	using ParsingContext::ParsingContext;
 };
 #endif

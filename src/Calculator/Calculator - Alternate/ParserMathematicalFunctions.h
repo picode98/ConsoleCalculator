@@ -3,9 +3,13 @@
 #include <vector>
 
 #include "CalcObj.h"
+#include "ParsingSettings.h"
+#include "BuiltInConstants.h"
 
 namespace ParserMathematicalFunctions
 {
+	calcFloat convertAngle(ParsingSettings::angleMode srcUnits, ParsingSettings::angleMode destUnits, calcFloat value);
+
 	void deltaVector(std::vector<calcFloat>& vec);
 
 	calcFloat average(const std::vector<calcFloat>& vec);
@@ -22,6 +26,7 @@ namespace ParserMathematicalFunctions
 	{
 	public:
 		virtual calcFloat evaluate(calcFloat value) const = 0;
+		virtual ~SingleVariableFunction() = default;
 	};
 
 	bool findBisectionSolution(const SingleVariableFunction* evaluationFunction,
@@ -41,4 +46,5 @@ namespace ParserMathematicalFunctions
 	calcSignedInt greatestCommonDenominator(calcSignedInt firstNum, calcSignedInt secondNum);
 	calcFloat factorial(calcFloat value);
 	calcSignedInt factorial(unsigned value);
+	calcFloat scaleNum(calcFloat oldMin, calcFloat oldMax, calcFloat newMin, calcFloat newMax, calcFloat value);
 }

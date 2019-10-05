@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "CalculatorNumericTypes.h"
-#include "parseArithmetic.h"
-#include <boost/math/special_functions/next.hpp>
+#include "CalcParser.h"
 
 
 using namespace System;
@@ -17,8 +16,8 @@ namespace ConsoleCalculatorTests
 	public ref class ParserTests
 	{
 	public:
-		ExpressionParser* testParser;
-		ExpressionParser::ParsingContext* testContext;
+		CalcParser* testParser;
+		CalcParser::ParsingContext* testContext;
 		const unsigned testDigits = 50;
 
 		ParserTests()
@@ -26,7 +25,7 @@ namespace ConsoleCalculatorTests
 #ifdef MULTIPRECISION
 			mpfr::mpreal::set_default_prec(mpfr::digits2bits(testDigits));
 #endif
-			testParser = new ExpressionParser();
+			testParser = new CalcParser();
 			testContext = new ExpressionParser::ParsingContext();
 		}
 
@@ -153,7 +152,7 @@ namespace ConsoleCalculatorTests
 		[TestMethod]
 		void TrigFunctionTest()
 		{
-			testParser->parsingSettings.parseAngleMode = ExpressionParser::radians;
+			testParser->parsingSettings.parseAngleMode = ParsingSettings::radians;
 			
 			Assert::IsTrue(checkFloatResult("sin(pi/6)", "0.5", false, false));
 
@@ -291,7 +290,7 @@ namespace ConsoleCalculatorTests
 			{
 				this->testParser->parseArithmetic("deriv(x^2,x,4.5,-1)", *(this->testContext));
 
-				Assert::Fail("The deriv function failed to throw a domain error for negative deltas.");
+				Assert::Fail("The deriv function failed to throw a domain error for negative derivative numbers.");
 			}
 			catch (DomainError)
 			{
@@ -302,7 +301,7 @@ namespace ConsoleCalculatorTests
 		[TestMethod]
 		void IntegralFunctionTest()
 		{
-			this->testParser->parsingSettings.parseAngleMode = ExpressionParser::radians;
+			this->testParser->parsingSettings.parseAngleMode = ParsingSettings::radians;
 			Assert::IsTrue(checkFloatResult("integral(sin(x),x,0,pi)", "2", false, false));
 		}
 
@@ -340,6 +339,7 @@ namespace ConsoleCalculatorTests
 			Assert::IsTrue(result == compareObj);
 		}
 
+		/*
 		[TestMethod]
 		void FunctionBlacklistTest()
 		{
@@ -361,6 +361,7 @@ namespace ConsoleCalculatorTests
 				this->testParser->parsingSettings.functionBlacklist.clear();
 			}
 		}
+		*/
 
 		~ParserTests()
 		{

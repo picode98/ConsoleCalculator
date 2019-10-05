@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="parseArithmetic.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Calculator - Alternate.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -39,11 +36,14 @@
     <ClCompile Include="StringUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ParserCore.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RandomNumberGeneration.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="parseArithmetic.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="calcObj.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -72,6 +72,30 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="StringUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BuiltInFunctions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FunctionSignature.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ParsingSettings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BuiltInConstants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BuiltInFunctionTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ParserCore.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CalcParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RandomNumberGeneration.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

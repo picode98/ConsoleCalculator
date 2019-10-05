@@ -53,10 +53,11 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <AdditionalIncludeDirectories>$(SolutionDir)Calculator - Alternate\;$(SolutionDir)Libraries;$(SolutionDir)Libraries\boost;$(SolutionDir)Libraries\mpir\$(Platform)\$(Configuration);$(SolutionDir)Libraries\mpfr\$(Platform)\$(Configuration);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAsManaged>true</CompileAsManaged>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(SolutionDir)Calculator - Alternate\$(Configuration)\CalculatorNumericTypes.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\parseArithmetic.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\calcObj.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\ParserMathematicalFunctions.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\ParserOperators.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\StringUtils.obj;$(SolutionDir)Libraries\mpir\$(Platform)\$(Configuration)\mpir.lib;$(SolutionDir)Libraries\mpfr\$(Platform)\$(Configuration)\mpfr.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)Calculator - Alternate\$(Configuration)\CalculatorNumericTypes.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\ParserCore.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\calcObj.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\ParserMathematicalFunctions.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\ParserOperators.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\StringUtils.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\RandomNumberGeneration.obj;$(SolutionDir)Libraries\mpir\$(Platform)\$(Configuration)\mpir.lib;$(SolutionDir)Libraries\mpfr\$(Platform)\$(Configuration)\mpfr.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers />
       <AdditionalOptions>/NODEFAULTLIB:MSVCRT /NODEFAULTLIB:ucrt.lib %(AdditionalOptions)</AdditionalOptions>
     </Link>
@@ -68,10 +69,11 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <AdditionalIncludeDirectories>$(SolutionDir)Calculator - Alternate\;$(SolutionDir)Libraries;$(SolutionDir)Libraries\boost;$(SolutionDir)Libraries\mpir\$(Platform)\$(Configuration);$(SolutionDir)Libraries\mpfr\$(Platform)\$(Configuration);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAsManaged>true</CompileAsManaged>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(SolutionDir)Calculator - Alternate\$(Configuration)\CalculatorNumericTypes.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\parseArithmetic.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\calcObj.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\ParserMathematicalFunctions.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\ParserOperators.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\StringUtils.obj;$(SolutionDir)Libraries\mpir\$(Platform)\$(Configuration)\mpir.lib;$(SolutionDir)Libraries\mpfr\$(Platform)\$(Configuration)\mpfr.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)Calculator - Alternate\$(Configuration)\CalculatorNumericTypes.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\ParserCore.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\calcObj.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\ParserMathematicalFunctions.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\ParserOperators.obj;$(SolutionDir)Calculator - Alternate\$(Configuration)\StringUtils.obj;$(SolutionDir)Libraries\mpir\$(Platform)\$(Configuration)\mpir.lib;$(SolutionDir)Libraries\mpfr\$(Platform)\$(Configuration)\mpfr.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

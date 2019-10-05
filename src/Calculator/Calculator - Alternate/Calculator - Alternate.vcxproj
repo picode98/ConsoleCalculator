@@ -55,6 +55,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)Libraries;$(SolutionDir)Libraries\boost;$(SolutionDir)Libraries\mpir\$(Platform)\$(Configuration);$(SolutionDir)Libraries\mpfr\$(Platform)\$(Configuration);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -78,6 +79,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)Libraries;$(SolutionDir)Libraries\boost;$(SolutionDir)Libraries\mpir\$(Platform)\$(Configuration);$(SolutionDir)Libraries\mpfr\$(Platform)\$(Configuration);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -98,21 +100,29 @@
     <ClCompile Include="Calculator - Alternate.cpp" />
     <ClCompile Include="CalculatorNumericTypes.cpp" />
     <ClCompile Include="ConsoleCalculator.cpp" />
-    <ClCompile Include="parseArithmetic.cpp" />
+    <ClCompile Include="ParserCore.cpp" />
     <ClCompile Include="ParserMathematicalFunctions.cpp" />
     <ClCompile Include="ParserOperators.cpp" />
+    <ClCompile Include="RandomNumberGeneration.cpp" />
     <ClCompile Include="StringUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BuiltInConstants.h" />
+    <ClInclude Include="BuiltInFunctions.h" />
+    <ClInclude Include="BuiltInFunctionTypes.h" />
     <ClInclude Include="calcObj.h" />
+    <ClInclude Include="CalcParser.h" />
     <ClInclude Include="CalculatorNumericTypes.h" />
     <ClInclude Include="ConsoleCalculator.h" />
+    <ClInclude Include="FunctionSignature.h" />
     <ClInclude Include="GlobalBuildVariables.h" />
     <ClInclude Include="mpreal.h" />
-    <ClInclude Include="parseArithmetic.h" />
+    <ClInclude Include="ParserCore.h" />
     <ClInclude Include="ParserErrors.h" />
     <ClInclude Include="ParserMathematicalFunctions.h" />
     <ClInclude Include="ParserOperators.h" />
+    <ClInclude Include="ParsingSettings.h" />
+    <ClInclude Include="RandomNumberGeneration.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="StringUtils.h" />
   </ItemGroup>

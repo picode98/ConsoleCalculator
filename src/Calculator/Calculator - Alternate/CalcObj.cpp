@@ -425,7 +425,7 @@ CalcObj::CalcObj(const int& objInt)
 }
 #endif
 
-CalcObj CalcObj::operator+(const CalcObj& addObj)
+CalcObj CalcObj::operator+(const CalcObj& addObj) const
 {
 	CalcObj newObj(*this);
 
@@ -457,7 +457,7 @@ CalcObj CalcObj::operator+(const CalcObj& addObj)
 	return newObj;
 }
 
-CalcObj CalcObj::operator-(const CalcObj& subObj)
+CalcObj CalcObj::operator-(const CalcObj& subObj) const
 {
 	CalcObj newObj(*this);
 
@@ -489,7 +489,7 @@ CalcObj CalcObj::operator-(const CalcObj& subObj)
 	return newObj;
 }
 
-CalcObj CalcObj::operator*(const CalcObj& multObj)
+CalcObj CalcObj::operator*(const CalcObj& multObj) const
 {
 	CalcObj newObj(*this);
 
@@ -525,7 +525,7 @@ CalcObj CalcObj::operator*(const CalcObj& multObj)
 	return newObj;
 }
 
-CalcObj CalcObj::operator/(const CalcObj& divObj)
+CalcObj CalcObj::operator/(const CalcObj& divObj) const
 {
 	CalcObj newObj(*this);
 
@@ -767,7 +767,7 @@ CalcObj CalcObj::operator=(const calcFloat& assignObj)
 	return *this;
 }
 
-CalcObj CalcObj::operator-()
+CalcObj CalcObj::operator-() const
 {
 	CalcObj newObj;
 	newObj.type = this->type;
@@ -792,7 +792,7 @@ CalcObj CalcObj::operator-()
 	return newObj;
 }
 
-calcFloat CalcObj::getVerifiedFloat(string typeErrorMsg)
+calcFloat CalcObj::getVerifiedFloat(string typeErrorMsg) const
 {
 	if(this->type == TYPE_FLOAT)
 	{
@@ -812,7 +812,7 @@ void CalcObj::set_list(const std::vector<calcFloat>& assignObj)
 	this->listObj = assignObj;
 }
 
-bool CalcObj::get_list(std::vector<calcFloat>& buffer)
+bool CalcObj::get_list(std::vector<calcFloat>& buffer) const
 {
 	bool returnVal = true;
 
@@ -828,12 +828,12 @@ bool CalcObj::get_list(std::vector<calcFloat>& buffer)
 	return returnVal;
 }
 
-calcObjType CalcObj::get_type()
+calcObjType CalcObj::get_type() const
 {
 	return this->type;
 }
 
-calcFloat CalcObj::get_list_index(unsigned index)
+calcFloat CalcObj::get_list_index(unsigned index) const
 {
 	if(index < this->listObj.size())
 	{
@@ -841,7 +841,7 @@ calcFloat CalcObj::get_list_index(unsigned index)
 	}
 	else
 	{
-		throw exception("Invalid list index");
+		throw domain_error("invalid list index");
 	}
 }
 
@@ -853,11 +853,11 @@ void CalcObj::set_list_index(unsigned index, calcFloat value)
 	}
 	else
 	{
-		throw exception("Invalid list index");
+		throw domain_error("invalid list index");
 	}
 }
 
-unsigned CalcObj::get_list_length()
+unsigned CalcObj::get_list_length() const
 {
 	if(this->type == TYPE_LIST)
 	{
@@ -889,22 +889,24 @@ void CalcObj::concat_list(const CalcObj& concatObj)
 	}
 }
 
-void CalcObj::sublist(std::vector<calcFloat>& buffer, unsigned startIndex, unsigned endIndex)
+void CalcObj::sublist(unsigned startIndex, unsigned endIndex)
 {
 	if(this->type == TYPE_LIST)
 	{
 		if(startIndex < this->listObj.size() && endIndex < this->listObj.size() && startIndex <= endIndex)
 		{
-			buffer.resize(endIndex - startIndex + 1);
+			unsigned newSize = endIndex - startIndex + 1;
 
-			for(unsigned i = startIndex; i <= endIndex; i++)
+			for(unsigned i = 0; i < newSize; i++)
 			{
-				buffer[i - startIndex] = this->listObj[i];
+				this->listObj[i] = this->listObj[i + startIndex];
 			}
+
+			this->listObj.resize(newSize);
 		}
 		else
 		{
-			throw exception("Invalid sublist indices");
+			throw domain_error("invalid sublist indices");
 		}
 	}
 	else
@@ -941,7 +943,7 @@ CalcObj& CalcObj::set_precision(long newPrecision)
 }
 #endif
 
-bool CalcObj::operator==(const CalcObj& compareObj)
+bool CalcObj::operator==(const CalcObj& compareObj) const
 {
 	bool returnVal = true;
 
@@ -980,12 +982,12 @@ bool CalcObj::operator==(const CalcObj& compareObj)
 	return returnVal;
 }
 
-bool CalcObj::operator!=(const CalcObj& compareObj)
+bool CalcObj::operator!=(const CalcObj& compareObj) const
 {
 	return !(this->operator==(compareObj));
 }
 
-bool CalcObj::operator<(const CalcObj& compareObj)
+bool CalcObj::operator<(const CalcObj& compareObj) const
 {
 	bool returnVal = false;
 
@@ -1038,17 +1040,17 @@ bool CalcObj::operator<(const CalcObj& compareObj)
 	return returnVal;
 }
 
-bool CalcObj::operator>(const CalcObj& compareObj)
+bool CalcObj::operator>(const CalcObj& compareObj) const
 {
 	return !((*this < compareObj) || (*this == compareObj));
 }
 
-bool CalcObj::operator<=(const CalcObj& compareObj)
+bool CalcObj::operator<=(const CalcObj& compareObj) const
 {
 	return !(*this > compareObj);
 }
 
-bool CalcObj::operator>=(const CalcObj& compareObj)
+bool CalcObj::operator>=(const CalcObj& compareObj) const
 {
 	return !(*this < compareObj);
 }

@@ -118,33 +118,33 @@ public:
 #ifdef MULTIPRECISION
 	CalcObj(const int& objInt);
 #endif
-	CalcObj operator+(const CalcObj& addObj);
-	CalcObj operator-(const CalcObj& subObj);
-	CalcObj operator*(const CalcObj& multObj);
-	CalcObj operator/(const CalcObj& divObj);
+	CalcObj operator+(const CalcObj& addObj) const;
+	CalcObj operator-(const CalcObj& subObj) const;
+	CalcObj operator*(const CalcObj& multObj) const;
+	CalcObj operator/(const CalcObj& divObj) const;
 	CalcObj operator+=(const CalcObj& addObj);
 	CalcObj operator-=(const CalcObj& subObj);
 	CalcObj operator*=(const CalcObj& multObj);
 	CalcObj operator/=(const CalcObj& divObj);
 	CalcObj operator=(const CalcObj& assignObj);
 	CalcObj operator=(const calcFloat& assignObj);
-	CalcObj operator-();
-	bool operator==(const CalcObj& compareObj);
-	bool operator!=(const CalcObj& compareObj);
-	bool operator<(const CalcObj& compareObj);
-	bool operator>(const CalcObj& compareObj);
-	bool operator<=(const CalcObj& compareObj);
-	bool operator>=(const CalcObj& compareObj);
+	CalcObj operator-() const;
+	bool operator==(const CalcObj& compareObj) const;
+	bool operator!=(const CalcObj& compareObj) const;
+	bool operator<(const CalcObj& compareObj) const;
+	bool operator>(const CalcObj& compareObj) const;
+	bool operator<=(const CalcObj& compareObj) const;
+	bool operator>=(const CalcObj& compareObj) const;
 
-	calcFloat getVerifiedFloat(std::string typeErrorMsg);
+	calcFloat getVerifiedFloat(std::string typeErrorMsg) const;
 	void set_list(const std::vector<calcFloat>& assignObj);
-	bool get_list(std::vector<calcFloat>& buffer);
-	calcObjType get_type();
-	calcFloat get_list_index(unsigned index);
+	bool get_list(std::vector<calcFloat>& buffer) const;
+	calcObjType get_type() const;
+	calcFloat get_list_index(unsigned index) const;
 	void set_list_index(unsigned index, calcFloat value);
-	unsigned get_list_length();
+	unsigned get_list_length() const;
 	void concat_list(const CalcObj& concatObj);
-	void sublist(std::vector<calcFloat>& buffer, unsigned startIndex, unsigned endIndex);
+	void sublist(unsigned startIndex, unsigned endIndex);
 
 #ifdef MULTIPRECISION
 	CalcObj& set_precision(long newPrecision);

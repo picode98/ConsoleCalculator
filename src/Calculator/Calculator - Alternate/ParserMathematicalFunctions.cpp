@@ -1,6 +1,51 @@
+#include "ParsingSettings.h"
 #include "ParserMathematicalFunctions.h"
 
 using namespace std;
+
+calcFloat ParserMathematicalFunctions::convertAngle(ParsingSettings::angleMode srcUnits, ParsingSettings::angleMode destUnits, calcFloat value)
+{
+	calcFloat result = value;
+
+	switch(srcUnits)
+	{
+	case ParsingSettings::radians:
+		switch (destUnits)
+		{
+		case ParsingSettings::degrees:
+			result *= (180.0 / get_pi_value());
+			break;
+		case ParsingSettings::gradians:
+			result *= (200.0 / get_pi_value());
+			break;
+		}
+		break;
+	case ParsingSettings::gradians:
+		switch (destUnits)
+		{
+		case ParsingSettings::degrees:
+			result *= (180.0 / 200.0);
+			break;
+		case ParsingSettings::radians:
+			result *= (get_pi_value() / 200.0);
+			break;
+		}
+		break;
+	default:
+		switch (destUnits)
+		{
+		case ParsingSettings::radians:
+			result *= (get_pi_value() / 180.0);
+			break;
+		case ParsingSettings::gradians:
+			result *= (200.0 / 180.0);
+			break;
+		}
+		break;
+	}
+
+	return result;
+}
 
 void ParserMathematicalFunctions::deltaVector(vector<calcFloat>& vec)
 {
@@ -393,4 +438,12 @@ calcSignedInt ParserMathematicalFunctions::greatestCommonDenominator(calcSignedI
 	}
 
 	return firstNum;
+}
+
+calcFloat ParserMathematicalFunctions::scaleNum(calcFloat oldMin, calcFloat oldMax, calcFloat newMin, calcFloat newMax, calcFloat value)
+{
+	calcFloat slope = (newMax - newMin) / (oldMax - oldMin);
+	calcFloat xIntercept = newMin - (oldMin * slope);
+
+	return (value * slope) + xIntercept;
 }

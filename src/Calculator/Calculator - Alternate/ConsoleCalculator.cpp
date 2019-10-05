@@ -14,10 +14,10 @@ const string ConsoleCalculator::CONFIG_VERSION = "1.0";
 
 const wstring CONFIG_FILE_OPEN_ERROR_FORMAT = L"Could not open configuration file \"%s\".";
 
-const map<ExpressionParser::angleMode, string> ConsoleCalculator::ANGLE_MODE_TO_SHORT_ANGLE_STRING = { { ExpressionParser::degrees, "DEG" },{ ExpressionParser::radians, "RAD" },{ ExpressionParser::gradians, "GRAD" } };
-const map<ExpressionParser::angleMode, string> ConsoleCalculator::ANGLE_MODE_TO_LONG_ANGLE_STRING = { { ExpressionParser::degrees, "degrees" },{ ExpressionParser::radians, "radians" },{ ExpressionParser::gradians, "gradians" } };
-const map<string, ExpressionParser::angleMode> ConsoleCalculator::SHORT_ANGLE_STRING_TO_ANGLE_MODE = invertOneToOneMap(ANGLE_MODE_TO_SHORT_ANGLE_STRING);
-const map<string, ExpressionParser::angleMode> ConsoleCalculator::LONG_ANGLE_STRING_TO_ANGLE_MODE = invertOneToOneMap(ANGLE_MODE_TO_LONG_ANGLE_STRING);
+const map<ParsingSettings::angleMode, string> ConsoleCalculator::ANGLE_MODE_TO_SHORT_ANGLE_STRING = { { ParsingSettings::degrees, "DEG" },{ ParsingSettings::radians, "RAD" },{ ParsingSettings::gradians, "GRAD" } };
+const map<ParsingSettings::angleMode, string> ConsoleCalculator::ANGLE_MODE_TO_LONG_ANGLE_STRING = { { ParsingSettings::degrees, "degrees" },{ ParsingSettings::radians, "radians" },{ ParsingSettings::gradians, "gradians" } };
+const map<string, ParsingSettings::angleMode> ConsoleCalculator::SHORT_ANGLE_STRING_TO_ANGLE_MODE = invertOneToOneMap(ANGLE_MODE_TO_SHORT_ANGLE_STRING);
+const map<string, ParsingSettings::angleMode> ConsoleCalculator::LONG_ANGLE_STRING_TO_ANGLE_MODE = invertOneToOneMap(ANGLE_MODE_TO_LONG_ANGLE_STRING);
 
 const map<ConsoleCalculator::outputMode, string> ConsoleCalculator::OUTPUT_MODE_TO_SHORT_STRING = { {outputMode::AUTO_MODE, "AUTO"}, {outputMode::FIXED_MODE, "FIXED"}, {outputMode::SCIENTIFIC_MODE, "SCI"} };
 const map<ConsoleCalculator::outputMode, string> ConsoleCalculator::OUTPUT_MODE_TO_LONG_STRING = { { outputMode::AUTO_MODE, "automatic" },{ outputMode::FIXED_MODE, "fixed point" },{ outputMode::SCIENTIFIC_MODE, "scientific" } };
@@ -114,11 +114,11 @@ ConsoleCalculator::ConsoleCalculator(wstring helpFilePath):
 #ifdef MULTIPRECISION
 	mpfr::mpreal::set_default_prec(mpfr::digits2bits(outputPrecision));
 #endif
-	this->calculatorParser.parsingSettings.parseAngleMode = ExpressionParser::radians;
+	this->calculatorParser.parsingSettings.parseAngleMode = ParsingSettings::radians;
 }
 
 #pragma region StaticFunctions
-	string ConsoleCalculator::functionToString(ExpressionParser::FunctionSignature functionSignature, ExpressionParser::FunctionDefinition fnDef)
+	string ConsoleCalculator::functionToString(FunctionSignature functionSignature, ExpressionParser::FunctionDefinition fnDef)
 	{
 		string result = (functionSignature.functionName + '(');
 
@@ -161,9 +161,9 @@ ConsoleCalculator::ConsoleCalculator(wstring helpFilePath):
 		}
 	}
 
-	pair<ExpressionParser::FunctionSignature, ExpressionParser::FunctionDefinition> ConsoleCalculator::stringToFunction(string functionStr)
+	pair<FunctionSignature, ExpressionParser::FunctionDefinition> ConsoleCalculator::stringToFunction(string functionStr)
 	{
-		pair<ExpressionParser::FunctionSignature, ExpressionParser::FunctionDefinition> resultFunction;
+		pair<FunctionSignature, ExpressionParser::FunctionDefinition> resultFunction;
 
 		vector<string> functionParts;
 		vector<string> functionNameParts;
@@ -376,7 +376,7 @@ bool ConsoleCalculator::validVarName(string name, bool variableName, bool constN
 	return validName;
 }
 
-bool ConsoleCalculator::validFunctionSignature(const ExpressionParser::FunctionSignature & functionSignature, bool savedFunction)
+bool ConsoleCalculator::validFunctionSignature(const FunctionSignature & functionSignature, bool savedFunction)
 {
 	bool validSignature = true;
 
@@ -471,7 +471,7 @@ void ConsoleCalculator::setConfiguration(wstring configFilePath)
 			try
 			{
 				angleModeStr = configTree.get<string>(ANGLE_MODE_KEY);
-				this->calculatorParser.parsingSettings.parseAngleMode = stringToEnum<ExpressionParser::angleMode>(angleModeStr, SHORT_ANGLE_STRING_TO_ANGLE_MODE);
+				this->calculatorParser.parsingSettings.parseAngleMode = stringToEnum<ParsingSettings::angleMode>(angleModeStr, SHORT_ANGLE_STRING_TO_ANGLE_MODE);
 			}
 			catch (const boost::property_tree::ptree_bad_path&)
 			{
@@ -618,7 +618,7 @@ void ConsoleCalculator::setConfiguration(wstring configFilePath)
 
 				for (boost::property_tree::ptree::const_iterator thisIterator = savedFunctionTree.begin(); thisIterator != savedFunctionTree.end(); thisIterator++)
 				{
-					pair<ExpressionParser::FunctionSignature, ExpressionParser::FunctionDefinition> functionDef = stringToFunction(thisIterator->second.data());
+					pair<FunctionSignature, ExpressionParser::FunctionDefinition> functionDef = stringToFunction(thisIterator->second.data());
 					this->baseParsingContext.setFunction(functionDef.first, functionDef.second);
 					this->savedFunctionSignatures.emplace(functionDef.first);
 				}
@@ -650,7 +650,7 @@ void ConsoleCalculator::saveConfiguration()
 
 		configTree.put(CONFIG_VERSION_KEY, CONFIG_VERSION);
 
-		angleModeStr = enumToString<ExpressionParser::angleMode>(this->calculatorParser.parsingSettings.parseAngleMode, ANGLE_MODE_TO_SHORT_ANGLE_STRING);
+		angleModeStr = enumToString<ParsingSettings::angleMode>(this->calculatorParser.parsingSettings.parseAngleMode, ANGLE_MODE_TO_SHORT_ANGLE_STRING);
 		configTree.put(ANGLE_MODE_KEY, angleModeStr);
 
 		configTree.put(OUTPUT_MODE_KEY, enumToString<outputMode>(this->calcOutputMode, OUTPUT_MODE_TO_SHORT_STRING));
@@ -928,19 +928,19 @@ bool ConsoleCalculator::parseUserStringAux(string userString, bool csvFormat)
 					}
 					else if (userString == "deg")
 					{
-						this->calculatorParser.parsingSettings.parseAngleMode = ExpressionParser::degrees;
+						this->calculatorParser.parsingSettings.parseAngleMode = ParsingSettings::degrees;
 						cout << "Calculator angle mode set to degrees." << endl;
 						this->saveConfiguration();
 					}
 					else if (userString == "rad")
 					{
-						this->calculatorParser.parsingSettings.parseAngleMode = ExpressionParser::radians;
+						this->calculatorParser.parsingSettings.parseAngleMode = ParsingSettings::radians;
 						cout << "Calculator angle mode set to radians." << endl;
 						this->saveConfiguration();
 					}
 					else if (userString == "grad")
 					{
-						this->calculatorParser.parsingSettings.parseAngleMode = ExpressionParser::gradians;
+						this->calculatorParser.parsingSettings.parseAngleMode = ParsingSettings::gradians;
 						cout << "Calculator angle mode set to gradians." << endl;
 						this->saveConfiguration();
 					}
@@ -1012,7 +1012,7 @@ bool ConsoleCalculator::parseUserStringAux(string userString, bool csvFormat)
 					}
 					else if((userStringParts[0] == "fn" || userStringParts[0] == "setfn") && (userStringParts.size() == 2 || userStringParts.size() == 3))
 					{
-						pair<ExpressionParser::FunctionSignature, ExpressionParser::FunctionDefinition> newFunction = stringToFunction(userStringParts[1]);
+						pair<FunctionSignature, ExpressionParser::FunctionDefinition> newFunction = stringToFunction(userStringParts[1]);
 						bool savedFunction = (userStringParts.size() == 3 && userStringParts[2] == "-save");
 
 						if(!validFunctionSignature(newFunction.first, savedFunction))
@@ -1122,17 +1122,17 @@ bool ConsoleCalculator::parseUserStringAux(string userString, bool csvFormat)
 					else if((userStringParts[0] == "df" || userStringParts[0] == "deletefunction") && userStringParts.size() == 3)
 					{
 						unsigned numParams = stoul(userStringParts[2]);
-						ExpressionParser::FunctionSignature fnSignature = { userStringParts[1], numParams };
+						FunctionSignature fnSignature = { userStringParts[1], numParams };
 
 						ExpressionParser::ParsingContext::FunctionIteratorConst currentFunction = this->baseParsingContext.findFunction(fnSignature);
 
 						if(currentFunction != this->baseParsingContext.endFunctionConst())
 						{
-							this->baseParsingContext.deleteFunctionFromCurrent(currentFunction.getFunctionSignature());
+							this->baseParsingContext.deleteFunctionFromCurrent(fnSignature);
 
-							if(this->savedFunctionSignatures.count(currentFunction.getFunctionSignature()) > 0)
+							if(this->savedFunctionSignatures.count(fnSignature) > 0)
 							{
-								this->savedFunctionSignatures.erase(currentFunction.getFunctionSignature());
+								this->savedFunctionSignatures.erase(fnSignature);
 								this->saveConfiguration();
 							}
 
@@ -1267,7 +1267,7 @@ void ConsoleCalculator::runPromptLoop()
 
 	do
 	{
-		angleString = enumToString<ExpressionParser::angleMode>(this->calculatorParser.parsingSettings.parseAngleMode, ANGLE_MODE_TO_SHORT_ANGLE_STRING);
+		angleString = enumToString<ParsingSettings::angleMode>(this->calculatorParser.parsingSettings.parseAngleMode, ANGLE_MODE_TO_SHORT_ANGLE_STRING);
 
 		decimalFractionMode currentDecimalFractionMode = CalcObj::getStreamSettings(cout).decFracMode;
 		fractionDecimalString = enumToString<decimalFractionMode>(currentDecimalFractionMode, DEC_FRAC_MODE_TO_STRING);

@@ -20,9 +20,12 @@
 
 #include "GlobalBuildVariables.h"
 #include "CalculatorNumericTypes.h"
-#include "parseArithmetic.h"
+#include "ParsingSettings.h"
+#include "FunctionSignature.h"
+#include "ParserCore.h"
 #include "CalcObj.h"
 #include "StringUtils.h"
+#include "CalcParser.h"
 
 using namespace std;
 
@@ -85,9 +88,9 @@ private:
 		return resultMap;
 	}
 
-	static const map<ExpressionParser::angleMode, string> ANGLE_MODE_TO_SHORT_ANGLE_STRING,
+	static const map<ParsingSettings::angleMode, string> ANGLE_MODE_TO_SHORT_ANGLE_STRING,
 														  ANGLE_MODE_TO_LONG_ANGLE_STRING;
-	static const map<string, ExpressionParser::angleMode> SHORT_ANGLE_STRING_TO_ANGLE_MODE,
+	static const map<string, ParsingSettings::angleMode> SHORT_ANGLE_STRING_TO_ANGLE_MODE,
 														  LONG_ANGLE_STRING_TO_ANGLE_MODE;
 
 	static const map<outputMode, string> OUTPUT_MODE_TO_SHORT_STRING,
@@ -152,12 +155,12 @@ private:
 
 	vector<string> inputHistory;
 
-	ExpressionParser calculatorParser;
+	CalcParser calculatorParser;
 
 	ExpressionParser::ParsingContext baseParsingContext;
 
 	set<string> constantNames;
-	set<ExpressionParser::FunctionSignature> savedFunctionSignatures;
+	set<FunctionSignature> savedFunctionSignatures;
 
 	outputMode calcOutputMode;
 	unsigned outputPrecision;
@@ -166,9 +169,9 @@ private:
 			configFilePath;
 
 
-	static string functionToString(ExpressionParser::FunctionSignature functionSignature, ExpressionParser::FunctionDefinition fnDef);
+	static string functionToString(FunctionSignature functionSignature, ExpressionParser::FunctionDefinition fnDef);
 	static void setUserFlags(ostream& outStream, outputMode mode);
-	static pair<ExpressionParser::FunctionSignature, ExpressionParser::FunctionDefinition> stringToFunction(string functionStr);
+	static pair<FunctionSignature, ExpressionParser::FunctionDefinition> stringToFunction(string functionStr);
 	// static vector<string> &split(const string &s, char delim, vector<string> &elems);
 	// static vector<std::string> split(const string &s, char delim);
 	static void toClipboard(const string &s);
@@ -177,7 +180,7 @@ private:
 	static int compareVersionStrings(string firstString, string secondString);
 
 	bool validVarName(string name, bool variableName, bool constName);
-	bool validFunctionSignature(const ExpressionParser::FunctionSignature& functionSignature, bool savedFunction);
+	bool validFunctionSignature(const FunctionSignature& functionSignature, bool savedFunction);
 	bool parseUserStringAux(string userString, bool csvFormat = false);
 	void saveConfiguration();
 public:
