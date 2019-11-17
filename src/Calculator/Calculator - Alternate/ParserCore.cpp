@@ -19,10 +19,12 @@ using namespace boost::multiprecision;
 const string ExpressionParser::RESERVED_NAMES[] = { "e", "pi" };
 const unsigned ExpressionParser::RESERVED_NAMES_SIZE = 2;
 
+/*
 const string functionNamesArr[] = {"sin", "cos", "tan", "arcsin", "arccos", "arctan", "sqrt", "ln", "log", "logbase", "ans", "deriv", "integral", "solve", "abs", "ceil", "floor", "round", "primeFct", "isPrime", "gcd", "lcm", "rand", "avg",
 								   "variance", "max", "min", "stddev", "sum", "product", "seq", "foreach", "filter", "getIndex", "setIndex", "length", "concat", "sublist", "or", "and",
 								   "not", "if"};
 const size_t FUNCTION_NAMES_LENGTH = 42;
+*/
 
 const string additionalImplicitMultLeftStrs[] = { ")", "}" };
 const size_t ADDITIONAL_IMPLICIT_MULT_LEFT_STRS_LENGTH = 2;
@@ -160,7 +162,7 @@ vector<calcFloat> doublePrecisisonGaussNodes = { -0.9997137267734412336782, -0.9
 
 // const size_t GAUSS_NODES_LENGTH = 30;
 
-const vector<string> functionNames = vector<string>(functionNamesArr, functionNamesArr + FUNCTION_NAMES_LENGTH);
+// const vector<string> functionNames = vector<string>(functionNamesArr, functionNamesArr + FUNCTION_NAMES_LENGTH);
 
 ExpressionParser::ParsingContext::VariableIteratorConst::VariableIteratorConst(bool isEndIterator, const ParsingContext* parsingContext, const ParsingContext* baseContext, std::map<std::string, CalcObj>::const_iterator variableMapIterator):
 	isEndIterator(isEndIterator),
@@ -679,6 +681,7 @@ bool ExpressionParser::isValidImplicitTerm(string expression, unsigned basePosit
 
 	if (validLeftStr)
 	{
+		/*
 		for (unsigned thisFunctionIndex = 0; thisFunctionIndex < FUNCTION_NAMES_LENGTH && !leftFunctionName; thisFunctionIndex++)
 		{
 			int nameSectionStartIndex = (int)basePosition - (functionNames[thisFunctionIndex].length() - 1);
@@ -691,18 +694,30 @@ bool ExpressionParser::isValidImplicitTerm(string expression, unsigned basePosit
 				}
 			}
 		}
+		*/
 
-		if (!leftFunctionName)
+		if (expression[basePosition + 1] == '(')
 		{
-			for (ExpressionParser::ParsingContext::FunctionIteratorConst thisUserFunction = parsingContext.beginFunctionConst(); thisUserFunction != parsingContext.endFunctionConst() && !leftFunctionName; ++thisUserFunction)
-			{
-				int nameSectionStartIndex = (int)basePosition - (thisUserFunction.getFunctionSignature().functionName.length() - 1);
+			int endNameIndex = basePosition;
+			
+			for(; endNameIndex >= 0 && isVarChar(expression[endNameIndex]); endNameIndex--)
+			{}
 
-				if (nameSectionStartIndex >= 0)
+			string potentialFunctionName = expression.substr(endNameIndex + 1, basePosition - endNameIndex);
+			leftFunctionName = (this->builtInFunctions.count(potentialFunctionName) >= 1);
+
+			if (!leftFunctionName)
+			{
+				for (ExpressionParser::ParsingContext::FunctionIteratorConst thisUserFunction = parsingContext.beginFunctionConst(); thisUserFunction != parsingContext.endFunctionConst() && !leftFunctionName; ++thisUserFunction)
 				{
-					if (expression[basePosition + 1] == '(' && expression.substr(nameSectionStartIndex, thisUserFunction.getFunctionSignature().functionName.length()) == thisUserFunction.getFunctionSignature().functionName)
+					int nameSectionStartIndex = (int)basePosition - (thisUserFunction.getFunctionSignature().functionName.length() - 1);
+
+					if (nameSectionStartIndex >= 0)
 					{
-						leftFunctionName = true;
+						if (expression.substr(nameSectionStartIndex, thisUserFunction.getFunctionSignature().functionName.length()) == thisUserFunction.getFunctionSignature().functionName)
+						{
+							leftFunctionName = true;
+						}
 					}
 				}
 			}

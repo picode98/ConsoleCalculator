@@ -52,14 +52,14 @@ namespace ConsoleCalculatorTests
 		}
 		*/
 
-		bool checkFloatResult(string expression, string expectedResult, bool parseExpected, bool exactEquality, double epsilonIncrement)
+		bool checkFloatResult(string expression, string expectedResult, bool parseExpected, bool exactEquality, CalcParser::ParsingContext* context, double epsilonIncrement)
 		{
-			calcFloat expressionResult = this->testParser->parseArithmetic(expression, *(this->testContext)).getVerifiedFloat("Unit test type error");
+			calcFloat expressionResult = this->testParser->parseArithmetic(expression, *context).getVerifiedFloat("Unit test type error");
 			calcFloat expectedResultFloat;
 
 			if (parseExpected)
 			{
-				expectedResultFloat = this->testParser->parseArithmetic(expectedResult, *(this->testContext)).getVerifiedFloat("Unit test type error");
+				expectedResultFloat = this->testParser->parseArithmetic(expectedResult, *context).getVerifiedFloat("Unit test type error");
 			}
 			else
 			{
@@ -76,9 +76,14 @@ namespace ConsoleCalculatorTests
 			}
 		}
 
+		inline bool checkFloatResult(string expression, string expectedResult, bool parseExpected, bool exactEquality, CalcParser::ParsingContext* context)
+		{
+			return checkFloatResult(expression, expectedResult, parseExpected, exactEquality, context, 64.0);
+		}
+
 		inline bool checkFloatResult(string expression, string expectedResult, bool parseExpected, bool exactEquality)
 		{
-			return checkFloatResult(expression, expectedResult, parseExpected, exactEquality, 64.0);
+			return checkFloatResult(expression, expectedResult, parseExpected, exactEquality, this->testContext);
 		}
 
 
@@ -113,9 +118,11 @@ namespace ConsoleCalculatorTests
 		[TestMethod]
 		void ImplicitMultTest()
 		{
-			Assert::IsTrue(checkFloatResult("8.5(6)(-7)4", "-1428", false, true));
+			ExpressionParser::ParsingContext multTestContext;
+			multTestContext.setFunction(FunctionSignature{ "test", 1 }, ExpressionParser::FunctionDefinition{ {"x"}, "x^2" });
+			Assert::IsTrue(checkFloatResult("8.5(6)cos(pi/12)2sin(pi/12)(-7)4", "-714", false, false));
 
-			Assert::IsTrue(checkFloatResult("-0.5(10)6+100(0.1)^2", "-29", false, true));
+			Assert::IsTrue(checkFloatResult("-0.5(10)6test(1/2)test(2)+100(0.1)^2", "-29", false, true, &multTestContext));
 
 			vector<calcFloat> resultVector;
 			CalcObj compareObj, result;
@@ -284,7 +291,7 @@ namespace ConsoleCalculatorTests
 		[TestMethod]
 		void DerivFunctionTest()
 		{
-			Assert::IsTrue(checkFloatResult("deriv(x^2,x,4.5)", "9", false, false, 16384.0));
+			Assert::IsTrue(checkFloatResult("deriv(x^2,x,4.5)", "9", false, false, this->testContext, 16384.0));
 
 			try
 			{
